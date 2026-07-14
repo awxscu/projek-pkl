@@ -1,7 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
-  <rect x="0" y="4" width="40" height="40" rx="8" fill="#0057B8"/>
-  <path d="M20 12 L28 28 L24 28 L22 24 L18 24 L16 28 L12 28 Z" fill="#E31E24"/>
-  <path d="M18 22 L22 22 L20 16 Z" fill="#FFFFFF"/>
-  <text x="48" y="22" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#0057B8">Pertamina</text>
-  <text x="48" y="38" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="600" fill="#E31E24">Patra Niaga</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" fill="none">
+  <!-- Pertamina Emblem -->
+  <g transform="translate(10, 15)">
+    <!-- Blue shape (bottom left) -->
+    <path d="M 10 95 C 10 95, 45 42, 47 40 C 50 36, 55 34, 60 34 L 115 34 C 122 34 125 38 122 43 L 87 90 C 84 94, 79 97, 74 97 L 15 97 C 10 97, 8 92, 10 95 Z" fill="#0057B8"/>
+    <!-- Green shape (middle) -->
+    <path d="M 85 73 C 85 73, 120 20, 122 18 C 125 14, 130 12, 135 12 L 190 12 C 197 12 200 16 197 21 L 162 68 C 159 72, 154 75, 149 75 L 90 75 C 85 75, 83 70, 85 73 Z" fill="#8CC63F"/>
+    <!-- Red shape (top right) -->
+    <path d="M 160 51 C 160 51, 195 -2, 197 -4 C 200 -8, 205 -10, 210 -10 L 265 -10 C 272 -10 275 -6 272 -1 L 237 46 C 234 50, 229 53, 224 53 L 165 53 C 160 53, 158 48, 160 51 Z" fill="#E31E24"/>
+  </g>
+  <!-- Text -->
+  <text x="295" y="60" font-family="'Poppins', 'Inter', 'Segoe UI', sans-serif" font-size="42" font-weight="900" fill="#111827" letter-spacing="0.5">PERTAMINA</text>
+  <text x="295" y="94" font-family="'Poppins', 'Inter', 'Segoe UI', sans-serif" font-size="25" font-weight="700" fill="#E31E24" letter-spacing="1">PATRA NIAGA</text>
 </svg>
