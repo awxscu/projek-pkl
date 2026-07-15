@@ -59,8 +59,34 @@
 </div>
 
 <div class="card-modern chart-card mb-4">
-    <div class="chart-title">Grafik Konsumsi BBM per Kapal</div>
-    <div class="chart-subtitle">Periode Juli 2026</div>
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+            <div class="chart-title">Grafik Konsumsi BBM per Kapal</div>
+            <div class="chart-subtitle mb-0" id="laporanChartSubtitle">Periode Juli 2026</div>
+        </div>
+        <div class="d-flex gap-1 flex-wrap">
+            <select class="form-select form-select-sm filter-laporan-month border-primary" style="width: 110px; font-size: 0.72rem; border-radius: 6px;">
+                <option value="all">Semua Bulan</option>
+                <option value="01">Januari</option>
+                <option value="02">Februari</option>
+                <option value="03">Maret</option>
+                <option value="04">April</option>
+                <option value="05">Mei</option>
+                <option value="06">Juni</option>
+                <option value="07" selected>Juli</option>
+                <option value="08">Agustus</option>
+                <option value="09">September</option>
+                <option value="10">Oktober</option>
+                <option value="11">November</option>
+                <option value="12">Desember</option>
+            </select>
+            <select class="form-select form-select-sm filter-laporan-year border-primary" style="width: 85px; font-size: 0.72rem; border-radius: 6px;">
+                <option value="all">Semua Tahun</option>
+                <option value="2026" selected>2026</option>
+                <option value="2025">2025</option>
+            </select>
+        </div>
+    </div>
     <div class="chart-container"><canvas id="laporanChart"></canvas></div>
 </div>
 
@@ -159,7 +185,7 @@
         easing: 'easeOutQuart'
     };
 
-    new Chart(document.getElementById('laporanChart'), {
+    const laporanChart = new Chart(document.getElementById('laporanChart'), {
         type: 'bar',
         data: {
             labels: ['VSL-001','VSL-002','VSL-003','VSL-004','VSL-005','VSL-006'],
@@ -184,5 +210,68 @@
             } 
         }
     });
+
+    const monthSelect = document.querySelector('.filter-laporan-month');
+    const yearSelect = document.querySelector('.filter-laporan-year');
+    const subtitleEl = document.getElementById('laporanChartSubtitle');
+    
+    function getMonthName(val) {
+        switch(val) {
+            case 'all': return 'Semua Bulan';
+            case '01': return 'Januari';
+            case '02': return 'Februari';
+            case '03': return 'Maret';
+            case '04': return 'April';
+            case '05': return 'Mei';
+            case '06': return 'Juni';
+            case '07': return 'Juli';
+            case '08': return 'Agustus';
+            case '09': return 'September';
+            case '10': return 'Oktober';
+            case '11': return 'November';
+            case '12': return 'Desember';
+            default: return '';
+        }
+    }
+    
+    function updateLaporanChart() {
+        const m = monthSelect.value;
+        const y = yearSelect.value;
+        
+        let periodText = 'Periode ';
+        if (m === 'all' && y === 'all') {
+            periodText += 'Semua Waktu';
+        } else if (m === 'all') {
+            periodText += 'Tahun ' + y;
+        } else if (y === 'all') {
+            periodText += getMonthName(m) + ' (Semua Tahun)';
+        } else {
+            periodText += getMonthName(m) + ' ' + y;
+        }
+        subtitleEl.textContent = periodText;
+        
+        let factor = 1.0;
+        if (m === '06') factor = 0.85;
+        if (m === '05') factor = 0.7;
+        if (m === '01' || m === '02') factor = 0.4;
+        if (m === 'all') factor = 3.5;
+        if (y === '2025') factor *= 0.8;
+        if (y === 'all') factor *= 1.8;
+        
+        const baseDO = [4200, 3850, 3100, 2980, 5100, 2800];
+        const baseFO = [800, 650, 500, 400, 520, 350];
+        const baseLube = [120, 95, 70, 80, 120, 60];
+        const baseCylinder = [150, 142, 160, 130, 90, 75];
+        
+        laporanChart.data.datasets[0].data = baseDO.map(v => Math.round(v * factor));
+        laporanChart.data.datasets[1].data = baseFO.map(v => Math.round(v * factor));
+        laporanChart.data.datasets[2].data = baseLube.map(v => Math.round(v * factor));
+        laporanChart.data.datasets[3].data = baseCylinder.map(v => Math.round(v * factor));
+        
+        laporanChart.update();
+    }
+    
+    monthSelect.addEventListener('change', updateLaporanChart);
+    yearSelect.addEventListener('change', updateLaporanChart);
 </script>
 @endpush
