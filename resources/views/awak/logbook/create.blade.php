@@ -38,22 +38,36 @@
                         <label for="tanggal" class="form-label">Tanggal Pencatatan</label>
                         <input type="date" class="form-control" id="tanggal" name="tanggal" value="2026-07-14" required>
                     </div>
-                    <div class="col-md-12">
-                        <label for="jadwal_perjalanan" class="form-label">Jadwal Perjalanan</label>
-                        <select class="form-select" id="jadwal_perjalanan" name="jadwal_perjalanan" required>
-                            <option value="" disabled>Pilih Jadwal Perjalanan</option>
-                            <option value="route1" selected data-asal="Surabaya" data-tujuan="Balikpapan">Surabaya → Balikpapan (Jadwal: 14/07/2026 06:00)</option>
-                            <option value="route2" data-asal="Balikpapan" data-tujuan="Surabaya">Balikpapan → Surabaya (Jadwal: 17/07/2026 10:00)</option>
-                            <option value="route3" data-asal="Surabaya" data-tujuan="Makassar">Surabaya → Makassar (Jadwal: 20/07/2026 13:00)</option>
-                        </select>
+                    <div class="col-md-6">
+                        <label for="tanggal_mulai" class="form-label">Tanggal Mulai Perjalanan</label>
+                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" value="2026-07-14" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tanggal_selesai" class="form-label">Tanggal Selesai Perjalanan</label>
+                        <input type="date" class="form-control" id="tanggal_selesai" name="tanggal_selesai" value="2026-07-16" required>
                     </div>
                     <div class="col-md-6">
                         <label for="pelabuhan_asal" class="form-label">Pelabuhan Asal</label>
-                        <input type="text" class="form-control bg-light" id="pelabuhan_asal" name="pelabuhan_asal" value="Surabaya" readonly>
+                        <select class="form-select" id="pelabuhan_asal" name="pelabuhan_asal" required>
+                            <option value="" disabled>Pilih Pelabuhan Asal</option>
+                            <option value="Surabaya" selected>Surabaya</option>
+                            <option value="Balikpapan">Balikpapan</option>
+                            <option value="Jakarta">Jakarta</option>
+                            <option value="Semarang">Semarang</option>
+                            <option value="Makassar">Makassar</option>
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label for="pelabuhan_tujuan" class="form-label">Pelabuhan Tujuan</label>
-                        <input type="text" class="form-control bg-light" id="pelabuhan_tujuan" name="pelabuhan_tujuan" value="Balikpapan" readonly>
+                        <select class="form-select" id="pelabuhan_tujuan" name="pelabuhan_tujuan" required>
+                            <option value="" disabled>Pilih Pelabuhan Tujuan</option>
+                            <option value="Surabaya">Surabaya</option>
+                            <option value="Balikpapan" selected>Balikpapan</option>
+                            <option value="Jakarta">Jakarta</option>
+                            <option value="Semarang">Semarang</option>
+                            <option value="Makassar">Makassar</option>
+                            <option value="Baubau">Baubau</option>
+                        </select>
                     </div>
                 </div>
 
@@ -245,18 +259,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Handle auto-fill port fields from Voyage selection
-        const routeSelect = document.getElementById('jadwal_perjalanan');
-        const portAsal = document.getElementById('pelabuhan_asal');
-        const portTujuan = document.getElementById('pelabuhan_tujuan');
-
-        routeSelect.addEventListener('change', function () {
-            const selectedOpt = routeSelect.options[routeSelect.selectedIndex];
-            if (selectedOpt) {
-                portAsal.value = selectedOpt.getAttribute('data-asal') || '';
-                portTujuan.value = selectedOpt.getAttribute('data-tujuan') || '';
-            }
-        });
+        // Independent Date inputs and Port dropdown selection (no route select code needed)
 
         // Auto-calculation logic for fuel types
         const types = ['do', 'fo', 'lube', 'cylinder'];

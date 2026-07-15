@@ -97,6 +97,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Logo styling */
+.logo-pertamina img { height: 42px; width: auto; transition: transform 0.2s ease; }
+.logo-pertamina.logo-sm img { height: 32px; }
+.logo-pertamina.logo-lg img { height: 50px; }
+.logo-pertamina.logo-xl img { height: 96px; }
+.logo-pertamina:hover img { transform: scale(1.02); }
+
 .logo-patra-niaga img { height: 42px; width: auto; }
 .logo-patra-niaga.logo-sm img { height: 32px; }
 .logo-patra-niaga.logo-lg img { height: 50px; }
@@ -122,10 +128,12 @@ h1, h2, h3, h4, h5, h6 {
     border-top: 4px solid var(--pertamina-blue);
     border-left: none;
 }
-.stat-card.stat-red { border-top-color: var(--pertamina-red); }
-.stat-card.stat-green { border-top-color: #10b981; }
-.stat-card.stat-yellow { border-top-color: #f59e0b; }
-.stat-card.stat-orange { border-top-color: #f97316; }
+.stat-card.stat-red,
+.stat-card.stat-green,
+.stat-card.stat-yellow,
+.stat-card.stat-orange {
+    border-top-color: var(--pertamina-blue);
+}
 
 .stat-card .stat-icon {
     width: 52px; height: 52px; border-radius: 12px;
@@ -343,6 +351,8 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
     box-shadow: var(--shadow-sm);
     background: #ffffff;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 /* Fullscreen Landing Page */
@@ -354,13 +364,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 .landing-logo-top {
     position: absolute;
-    top: 2rem;
-    right: 2rem;
+    top: 1.25rem;
+    right: 2.5rem;
     z-index: 10;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 0.75rem 1.5rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-md);
+    background: none;
+    padding: 0;
+    box-shadow: none;
 }
 .landing-hero {
     position: relative;
@@ -456,7 +465,7 @@ h1, h2, h3, h4, h5, h6 {
 .quick-action-card {
     background: linear-gradient(135deg, var(--pertamina-blue) 0%, var(--pertamina-blue-dark) 100%);
     color: #fff; border-radius: var(--radius);
-    padding: 2.25rem 2rem; text-align: center;
+    padding: 1.5rem; text-align: center;
     box-shadow: var(--shadow-md);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none; display: block;
@@ -466,7 +475,7 @@ h1, h2, h3, h4, h5, h6 {
     color: #fff;
     box-shadow: var(--shadow-lg);
 }
-.quick-action-card i { font-size: 2.75rem; margin-bottom: 0.75rem; display: block; color: #fff; }
+.quick-action-card i { font-size: 2.2rem; margin-bottom: 0.5rem; display: block; color: #fff; }
 .quick-action-card h5 { font-weight: 700; margin-bottom: 0.35rem; color: #fff; }
 
 /* Logbook Form Tabs */
@@ -502,4 +511,15 @@ h1, h2, h3, h4, h5, h6 {
     .navbar-horizontal .nav-menu .nav-link::after { display: none; }
     .navbar-horizontal .nav-menu .nav-link.active { border-left: 4px solid var(--pertamina-blue); padding-left: 0.75rem; }
     .dashboard-content { padding: 1.5rem 1rem; }
+}
+
+/* Unified Table Action Buttons */
+.btn-action-table {
+    width: 135px;
+    white-space: nowrap;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    font-size: 0.8rem !important;
 }

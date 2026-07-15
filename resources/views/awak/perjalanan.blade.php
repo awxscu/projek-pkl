@@ -68,7 +68,7 @@
                     <th>Jadwal Berangkat</th>
                     <th>Jadwal Kedatangan</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    <th style="width: 160px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,11 +77,11 @@
                     <td><strong>Surabaya → Balikpapan</strong></td>
                     <td>Tanjung Perak (SUB)</td>
                     <td>Semayang (BPN)</td>
-                    <td>14/07/2026 06:00</td>
-                    <td>15/07/2026 14:00</td>
+                    <td>14/07/2026</td>
+                    <td>15/07/2026</td>
                     <td><span class="badge" style="background:#dbeafe;color:#1d4ed8"><i class="bi bi-arrow-right-circle-fill me-1"></i>Berlangsung</span></td>
-                    <td>
-                        <a href="{{ route('logbook.create') }}" class="btn btn-sm btn-pertamina">
+                    <td class="text-center">
+                        <a href="{{ route('logbook.create') }}" class="btn btn-sm btn-pertamina btn-action-table">
                             <i class="bi bi-pencil-square me-1"></i>Tulis Logbook
                         </a>
                     </td>
@@ -91,11 +91,11 @@
                     <td><strong>Balikpapan → Surabaya</strong></td>
                     <td>Semayang (BPN)</td>
                     <td>Tanjung Perak (SUB)</td>
-                    <td>17/07/2026 10:00</td>
-                    <td>18/07/2026 18:00</td>
+                    <td>17/07/2026</td>
+                    <td>18/07/2026</td>
                     <td><span class="badge badge-pending"><i class="bi bi-calendar-check-fill me-1"></i>Terjadwal</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-secondary" disabled>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-secondary btn-action-table" disabled>
                             <i class="bi bi-lock-fill"></i> Logbook
                         </button>
                     </td>
@@ -105,11 +105,11 @@
                     <td><strong>Surabaya → Makassar</strong></td>
                     <td>Tanjung Perak (SUB)</td>
                     <td>Soekarno-Hatta (MAK)</td>
-                    <td>20/07/2026 13:00</td>
-                    <td>21/07/2026 21:00</td>
+                    <td>20/07/2026</td>
+                    <td>21/07/2026</td>
                     <td><span class="badge badge-pending"><i class="bi bi-calendar-check-fill me-1"></i>Terjadwal</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-secondary" disabled>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-secondary btn-action-table" disabled>
                             <i class="bi bi-lock-fill"></i> Logbook
                         </button>
                     </td>
@@ -119,11 +119,11 @@
                     <td><strong>Balikpapan → Surabaya</strong></td>
                     <td>Semayang (BPN)</td>
                     <td>Tanjung Perak (SUB)</td>
-                    <td>12/07/2026 10:00</td>
-                    <td>13/07/2026 18:00</td>
+                    <td>12/07/2026</td>
+                    <td>13/07/2026</td>
                     <td><span class="badge badge-verified"><i class="bi bi-check-circle-fill me-1"></i>Selesai</span></td>
-                    <td>
-                        <a href="{{ route('awak.riwayat') }}" class="btn btn-sm btn-outline-primary">
+                    <td class="text-center">
+                        <a href="{{ route('awak.riwayat') }}" class="btn btn-sm btn-outline-primary btn-action-table">
                             <i class="bi bi-eye-fill"></i> Lihat Log
                         </a>
                     </td>
@@ -133,11 +133,11 @@
                     <td><strong>Surabaya → Balikpapan</strong></td>
                     <td>Tanjung Perak (SUB)</td>
                     <td>Semayang (BPN)</td>
-                    <td>10/07/2026 06:00</td>
-                    <td>11/07/2026 14:00</td>
+                    <td>10/07/2026</td>
+                    <td>11/07/2026</td>
                     <td><span class="badge badge-verified"><i class="bi bi-check-circle-fill me-1"></i>Selesai</span></td>
-                    <td>
-                        <a href="{{ route('awak.riwayat') }}" class="btn btn-sm btn-outline-primary">
+                    <td class="text-center">
+                        <a href="{{ route('awak.riwayat') }}" class="btn btn-sm btn-outline-primary btn-action-table">
                             <i class="bi bi-eye-fill"></i> Lihat Log
                         </a>
                     </td>
@@ -147,11 +147,13 @@
                     <td><strong>Surabaya → Banjarmasin</strong></td>
                     <td>Tanjung Perak (SUB)</td>
                     <td>Trisakti (BDJ)</td>
-                    <td>08/07/2026 08:00</td>
-                    <td>09/07/2026 12:00</td>
+                    <td>08/07/2026</td>
+                    <td>09/07/2026</td>
                     <td><span class="badge badge-empty"><i class="bi bi-x-circle-fill me-1"></i>Batal</span></td>
-                    <td>
-                        <span class="text-muted small">Dibatalkan (Cuaca buruk)</span>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-light text-danger btn-action-table" disabled>
+                            <i class="bi bi-x-circle me-1"></i>Dibatalkan
+                        </button>
                     </td>
                 </tr>
             </tbody>

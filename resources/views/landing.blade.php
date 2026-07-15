@@ -4,9 +4,8 @@
 @section('body-class', 'landing-page-scroll')
 
 @section('content')
-<!-- LOGO POSITIONED TOP-RIGHT absolutely, since the navbar is removed -->
-<div class="landing-logo-top" style="position: absolute; top: 2rem; right: 2rem; z-index: 10; background: rgba(255, 255, 255, 0.95); padding: 0.75rem 1.5rem; border-radius: 16px; box-shadow: var(--shadow-md);">
-    @include('partials.logo', ['href' => route('landing')])
+<div class="landing-logo-top">
+    @include('partials.logo', ['href' => route('landing'), 'size' => 'logo-xl'])
 </div>
 
 <!-- HERO SECTION -->
@@ -14,20 +13,20 @@
     <div id="heroCarousel" class="carousel slide hero-carousel carousel-fade" data-bs-ride="carousel" data-bs-interval="5000" style="position: absolute; inset: 0; z-index: 0;">
         <div class="carousel-inner" style="height: 100vh;">
             <div class="carousel-item active" style="height: 100vh;">
-                <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80" alt="Kapal penumpang" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="https://infopublik.id/assets/upload/headline//IMG-20231001-WA0012.jpg" alt="Kapal penumpang" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="carousel-item" style="height: 100vh;">
-                <img src="https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?w=1920&q=80" alt="Kapal laut" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="https://pertaminapatraniaga.com/file/files/2026/06/img-20260619-wa0005.webp" alt="Kapal laut" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="carousel-item" style="height: 100vh;">
-                <img src="https://images.unsplash.com/photo-1494412519320-aa4fbab0a6e5?w=1920&q=80" alt="Pelabuhan kapal" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="https://cdn-jjmn.jawapos.com/images/16/2024/12/14/1000451803-1104496190.jpg" alt="Pelabuhan kapal" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="carousel-item" style="height: 100vh;">
-                <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&q=80" alt="Operasi kapal" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="https://pertaminapatraniaga.com/file/files/2026/06/pertamina-patra-niaga-tingkatkan-penyaluran-dan-perkuat-distribusi-bbm-di-sejumlah-wilayah.webp" alt="Operasi kapal" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
         </div>
     </div>
-    <div class="hero-overlay" style="position: absolute; inset: 0; z-index: 1; background: linear-gradient(135deg, rgba(0,87,184,0.8) 0%, rgba(15,23,42,0.85) 50%, rgba(227,30,36,0.65) 100%);"></div>
+    <div class="hero-overlay" style="position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0) 100%);"></div>
     <div class="container hero-content" style="position: relative; z-index: 2; color: #fff;">
         <div class="row">
             <div class="col-lg-9">
@@ -94,7 +93,7 @@
     <div class="container py-3">
         <div class="row align-items-center">
             <div class="col-lg-8">
-                <h3 class="fw-bold mb-2">Mengatasi Permasalahan Logbook Manual</h3>
+                <h3 class="fw-bold mb-2"style="color: #ffffff;">Mengatasi Permasalahan Logbook Manual</h3>
                 <p class="mb-0 opacity-90">Sistem ini mendigitalisasi logbook pemakaian BBM kapal penumpang, memungkinkan Pertamina memonitor aktivitas kapal secara real-time, menyediakan laporan konsumsi, dan menyimpan histori penggunaan BBM untuk analisis operasional.</p>
             </div>
             <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
@@ -105,23 +104,92 @@
 </section>
 
 <!-- FOOTER -->
-<footer class="footer-landing py-5 text-muted" style="background: #0f172a;">
+<footer class="footer-landing py-5 text-white" style="background: #002347; font-size: 0.85rem; line-height: 1.6;">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 mb-3 mb-md-0 d-flex align-items-center gap-3">
-                @include('partials.logo', ['href' => route('landing'), 'size' => 'logo-lg'])
-                <div>
-                    <p class="mb-0 small text-white-50">Sistem Monitoring dan Pengelolaan Logbook Kapal Berbasis Web</p>
+        <div class="row g-4 mb-5">
+            <!-- Col 1: Logo & Contact Info -->
+            <div class="col-lg-4 col-md-6">
+                <div class="mb-3" style="filter: brightness(0) invert(1); display: inline-block;">
+                    @include('partials.logo', ['size' => 'logo-lg'])
+                </div>
+                <p class="mb-4 text-white-50" style="font-size: 0.82rem; max-width: 320px;">
+                    Gedung Wisma Tugu II Lt. 2Jl. HR. Rasuna Said Kav. C7-9 Setiabudi, Kuningan, Jakarta Selatan
+                </p>
+                <p class="mb-1 text-white-50" style="font-size: 0.82rem;">Telepon: 135</p>
+                <p class="mb-4 text-white-50" style="font-size: 0.82rem;">Email: <a href="mailto:pcc135@pertamina.com" class="text-white-50 text-decoration-none">pcc135@pertamina.com</a></p>
+                <div class="d-flex gap-3 fs-5">
+                    <a href="#" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-tiktok"></i></a>
+                    <a href="#" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-youtube"></i></a>
                 </div>
             </div>
-            <div class="col-md-6 text-md-end">
-                <a href="{{ route('login') }}" class="me-3 text-muted text-decoration-none">Login</a>
-                <a href="#fitur" class="me-3 text-muted text-decoration-none">Fitur</a>
-                <a href="#tentang" class="text-muted text-decoration-none">Tentang</a>
+            
+            <!-- Col 2: Tautan -->
+            <div class="col-lg-2 col-md-6">
+                <h6 class="fw-bold mb-3" style="color: #fff; font-size: 0.95rem;">Tautan</h6>
+                <ul class="list-unstyled d-flex flex-column gap-2 text-white-50" style="font-size: 0.82rem;">
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Promosi</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pengadaan</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Subsidi Tepat</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Laporan Tahunan</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Keberlanjutan</a></li>
+                </ul>
+            </div>
+            
+            <!-- Col 3: Situs Terkait -->
+            <div class="col-lg-3 col-md-6">
+                <h6 class="fw-bold mb-3" style="color: #fff; font-size: 0.95rem;">Situs Terkait</h6>
+                <ul class="list-unstyled d-flex flex-column gap-2 text-white-50" style="font-size: 0.82rem;">
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina (Persero)</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">MyPertamina</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina Delivery Service</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina Lubricants</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina Retail</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina Petrochemical Trading</a></li>
+                </ul>
+            </div>
+            
+            <!-- Col 4: Situs Terkait (Cont.) & CC / WBS -->
+            <div class="col-lg-3 col-md-6 d-flex flex-column justify-content-between">
+                <ul class="list-unstyled d-flex flex-column gap-2 text-white-50 mb-4" style="font-size: 0.82rem; margin-top: 2.25rem;">
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina Trading & Services</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina Maintenance & Construction</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina Patra Logistik</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Patra SK</a></li>
+                    <li><a href="#" class="text-white-50 text-decoration-none hover-text-white">Pertamina International Timor SA</a></li>
+                </ul>
+                <div class="d-flex flex-column align-items-lg-end gap-3 mt-auto">
+                    <!-- Call Center 135 Badge -->
+                    <div style="filter: brightness(0) invert(1); width: 80px;">
+                        <img src="https://mypertamina.id/assets/img/logo-135.png" alt="Call Center 135" class="img-fluid" onerror="this.src='https://pertaminalubricants.com/assets/images/pertamina-call-center.png';">
+                    </div>
+                    <!-- Whistle Blowing System Pill -->
+                    <a href="https://pertaminaclean.tipoffs.info/" class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none border border-white border-opacity-25" style="border-radius: 50px; background: rgba(255,255,255,0.05); color: #fff; max-width: 250px;">
+                        <div class="bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.9rem; flex-shrink: 0;">
+                            <i class="bi bi-megaphone-fill"></i>
+                        </div>
+                        <div class="text-start">
+                            <div class="fw-bold" style="font-size: 0.72rem; line-height: 1;">Whistle Blowing System</div>
+                            <div style="font-size: 0.6rem; color: #cbd5e1;">pertaminaclean.tipoffs.info</div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-        <hr class="border-secondary my-4">
-        <p class="text-center mb-0 small">&copy; {{ date('Y') }} PT Pertamina Patra Niaga. All rights reserved.</p>
+        
+        <hr class="border-white border-opacity-20 my-4">
+        
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <p class="mb-0 text-white-50" style="font-size: 0.78rem;">
+                &copy; Copyright 2026 | Pertamina Patra Niaga. All Rights Reserved. <a href="#" class="text-white-50 text-decoration-none hover-text-white">Kebijakan Privasi</a>
+            </p>
+            <!-- Slogan Handwritten style -->
+            <div class="text-white fw-bold fs-5" style="font-family: 'Georgia', serif; font-style: italic; letter-spacing: 0.5px;">
+                Energizing Your Journey
+            </div>
+        </div>
     </div>
 </footer>
 @endsection

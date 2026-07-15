@@ -59,8 +59,8 @@
                     <td>VSL-001</td>
                     <td>Surabaya</td>
                     <td>Balikpapan</td>
-                    <td>14/07/2026 06:00</td>
-                    <td>15/07/2026 14:00</td>
+                    <td>14/07/2026</td>
+                    <td>15/07/2026</td>
                     <td><span class="badge" style="background:#dbeafe;color:#1d4ed8">Berlangsung</span></td>
                 </tr>
                 <tr>
@@ -68,8 +68,8 @@
                     <td>VSL-002</td>
                     <td>Jakarta</td>
                     <td>Semarang</td>
-                    <td>14/07/2026 08:00</td>
-                    <td>14/07/2026 20:00</td>
+                    <td>14/07/2026</td>
+                    <td>14/07/2026</td>
                     <td><span class="badge" style="background:#dbeafe;color:#1d4ed8">Berlangsung</span></td>
                 </tr>
                 <tr>
@@ -77,8 +77,8 @@
                     <td>VSL-003</td>
                     <td>Makassar</td>
                     <td>Baubau</td>
-                    <td>16/07/2026 07:00</td>
-                    <td>17/07/2026 10:00</td>
+                    <td>16/07/2026</td>
+                    <td>17/07/2026</td>
                     <td><span class="badge badge-pending">Terjadwal</span></td>
                 </tr>
                 <tr>
@@ -86,8 +86,8 @@
                     <td>VSL-004</td>
                     <td>Denpasar</td>
                     <td>Lombok</td>
-                    <td>13/07/2026 09:00</td>
-                    <td>13/07/2026 18:00</td>
+                    <td>13/07/2026</td>
+                    <td>13/07/2026</td>
                     <td><span class="badge badge-verified">Selesai</span></td>
                 </tr>
                 <tr>
@@ -95,8 +95,8 @@
                     <td>VSL-005</td>
                     <td>Pontianak</td>
                     <td>Ketapang</td>
-                    <td>15/07/2026 06:30</td>
-                    <td>15/07/2026 16:00</td>
+                    <td>15/07/2026</td>
+                    <td>15/07/2026</td>
                     <td><span class="badge badge-pending">Terjadwal</span></td>
                 </tr>
                 <tr>
@@ -104,7 +104,7 @@
                     <td>VSL-006</td>
                     <td>Balikpapan</td>
                     <td>Tarakan</td>
-                    <td>12/07/2026 10:00</td>
+                    <td>12/07/2026</td>
                     <td>—</td>
                     <td><span class="badge badge-empty">Batal</span></td>
                 </tr>

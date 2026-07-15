@@ -11,17 +11,17 @@
 
 <div class="row g-3 mb-4">
     <div class="col-md-4">
-        <div class="card-modern stat-card stat-yellow">
+        <div class="card-modern stat-card">
             <div class="d-flex justify-content-between align-items-center">
-                <div><div class="stat-label">Menunggu Verifikasi</div><div class="stat-value">5</div></div>
-                <div class="stat-icon" style="background:#fef3c7;color:#b45309"><i class="bi bi-hourglass-split"></i></div>
+                <div><div class="stat-label">Menunggu Verifikasi</div><div class="stat-value stat-value-animate" data-target="5">0</div></div>
+                <div class="stat-icon" style="background:var(--pertamina-blue-light);color:var(--pertamina-blue)"><i class="bi bi-hourglass-split"></i></div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="card-modern stat-card stat-green">
             <div class="d-flex justify-content-between align-items-center">
-                <div><div class="stat-label">Terverifikasi Hari Ini</div><div class="stat-value">9</div></div>
+                <div><div class="stat-label">Terverifikasi Hari Ini</div><div class="stat-value stat-value-animate" data-target="9">0</div></div>
                 <div class="stat-icon" style="background:#dcfce7;color:#15803d"><i class="bi bi-check-circle"></i></div>
             </div>
         </div>
@@ -29,7 +29,7 @@
     <div class="col-md-4">
         <div class="card-modern stat-card stat-red">
             <div class="d-flex justify-content-between align-items-center">
-                <div><div class="stat-label">Ditolak</div><div class="stat-value">1</div></div>
+                <div><div class="stat-label">Ditolak</div><div class="stat-value stat-value-animate" data-target="1">0</div></div>
                 <div class="stat-icon" style="background:#fee2e2;color:#E31E24"><i class="bi bi-x-circle"></i></div>
             </div>
         </div>

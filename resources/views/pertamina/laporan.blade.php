@@ -34,25 +34,25 @@
     </form>
 </div>
 
-<div class="row g-3 mb-4">
+<div class="row g-3 mb-4 align-items-stretch">
     <div class="col-md-4">
-        <div class="card-modern stat-card">
+        <div class="card-modern stat-card h-100">
             <div class="stat-label">Total Konsumsi BBM</div>
-            <div class="stat-value">58.420 <small class="text-muted" style="font-size:0.8rem">L</small></div>
+            <div class="stat-value stat-value-animate" data-target="58.420">0 <small class="text-muted" style="font-size:0.8rem">L</small></div>
             <small class="text-muted">Periode 1–14 Juli 2026</small>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card-modern stat-card stat-red">
+        <div class="card-modern stat-card stat-red h-100">
             <div class="stat-label">Kapal Paling Banyak Konsumsi</div>
-            <div class="stat-value" style="font-size:1.2rem">KM Citra Lautan</div>
-            <small class="text-muted">5.740 L total</small>
+            <div class="stat-value" style="font-size:1.25rem; font-weight: 800; line-height: 1.2; margin: 0.5rem 0;">KM Citra Lautan</div>
+            <small class="text-muted"><span class="stat-value-animate" data-target="5.740">0</span> L total</small>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card-modern stat-card stat-green">
+        <div class="card-modern stat-card stat-green h-100">
             <div class="stat-label">Rata-rata Konsumsi</div>
-            <div class="stat-value">3.246 <small class="text-muted" style="font-size:0.8rem">L/kapal</small></div>
+            <div class="stat-value stat-value-animate" data-target="3.246">0 <small class="text-muted" style="font-size:0.8rem">L/kapal</small></div>
             <small class="text-muted">18 kapal aktif</small>
         </div>
     </div>
@@ -124,17 +124,60 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
+    const tooltipConfig = {
+        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        titleFont: { size: 12, weight: 'bold', family: "'Poppins', sans-serif" },
+        bodyFont: { size: 11, family: "'Segoe UI', sans-serif" },
+        padding: 8,
+        cornerRadius: 8,
+        callbacks: {
+            label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) label += ': ';
+                if (context.parsed.y !== undefined) {
+                    label += context.parsed.y.toLocaleString('id-ID') + ' L';
+                }
+                return ' ' + label;
+            }
+        }
+    };
+
+    const progressiveAnimation = {
+        delay: (context) => {
+            let delay = 0;
+            if (context.type === 'data' && context.mode === 'default') {
+                delay = context.dataIndex * 120;
+            }
+            return delay;
+        },
+        duration: 1200,
+        easing: 'easeOutQuart'
+    };
+
     new Chart(document.getElementById('laporanChart'), {
         type: 'bar',
         data: {
             labels: ['VSL-001','VSL-002','VSL-003','VSL-004','VSL-005','VSL-006'],
             datasets: [
-                { label: 'DO', data: [4200,3850,3100,2980,5100,2800], backgroundColor: '#0057B8', borderRadius: 4 },
-                { label: 'FO', data: [800,650,500,400,520,350], backgroundColor: '#E31E24', borderRadius: 4 },
-                { label: 'Pelumas', data: [120,95,70,80,120,60], backgroundColor: '#64748b', borderRadius: 4 }
+                { label: 'Diesel Oil (DO)', data: [4200,3850,3100,2980,5100,2800], backgroundColor: '#0057B8', borderRadius: 4 },
+                { label: 'Fuel Oil (FO)', data: [800,650,500,400,520,350], backgroundColor: '#E31E24', borderRadius: 4 },
+                { label: 'Lube Oil', data: [120,95,70,80,120,60], backgroundColor: '#64748b', borderRadius: 4 },
+                { label: 'Cylinder Oil', data: [150,142,160,130,90,75], backgroundColor: '#eab308', borderRadius: 4 }
             ]
         },
-        options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, grid: { color: '#f1f5f9' } } }, plugins: { legend: { position: 'bottom' } } }
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            animation: progressiveAnimation,
+            scales: { 
+                x: { stacked: true, grid: { display: false } }, 
+                y: { stacked: true, grid: { color: '#f1f5f9' } } 
+            }, 
+            plugins: { 
+                legend: { position: 'bottom', labels: { padding: 12, usePointStyle: true, font: { size: 11, weight: '600' } } },
+                tooltip: tooltipConfig
+            } 
+        }
     });
 </script>
 @endpush

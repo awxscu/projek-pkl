@@ -13,7 +13,7 @@
     <div class="col-md-4">
         <div class="card-modern stat-card">
             <div class="d-flex justify-content-between align-items-center">
-                <div><div class="stat-label">Logbook Hari Ini</div><div class="stat-value">1 <small class="text-muted" style="font-size:0.8rem">/ 1</small></div></div>
+                <div><div class="stat-label">Logbook Hari Ini</div><div class="stat-value stat-value-animate" data-target="1">0 <small class="text-muted" style="font-size:0.8rem">/ 1</small></div></div>
                 <div class="stat-icon bg-pertamina-blue text-white"><i class="bi bi-journal-text"></i></div>
             </div>
         </div>
@@ -21,8 +21,8 @@
     <div class="col-md-4">
         <div class="card-modern stat-card stat-orange">
             <div class="d-flex justify-content-between align-items-center">
-                <div><div class="stat-label">Total Pemakaian BBM</div><div class="stat-value">320 <small class="text-muted" style="font-size:0.8rem">L</small></div></div>
-                <div class="stat-icon" style="background:#fef3c7;color:#b45309"><i class="bi bi-fuel-pump"></i></div>
+                <div><div class="stat-label">Total Pemakaian BBM</div><div class="stat-value stat-value-animate" data-target="320">0 <small class="text-muted" style="font-size:0.8rem">L</small></div></div>
+                <div class="stat-icon" style="background:#ffedd5;color:#ea580c"><i class="bi bi-fuel-pump"></i></div>
             </div>
         </div>
     </div>
@@ -48,14 +48,19 @@
         </a>
     </div>
     <div class="col-md-8">
-        <div class="card-modern p-3 h-100 d-flex align-items-center">
+        <div class="card-modern p-4 h-100 d-flex align-items-center">
             <div class="d-flex align-items-center gap-3 w-100">
-                <div class="stat-icon bg-pertamina-blue text-white flex-shrink-0"><i class="bi bi-calendar-event"></i></div>
+                <div class="stat-icon bg-pertamina-blue text-white flex-shrink-0" style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;"><i class="bi bi-calendar-event"></i></div>
                 <div class="flex-grow-1">
-                    <h6 class="fw-bold mb-1">Jadwal Perjalanan Aktif</h6>
-                    <p class="mb-0 text-muted small"><strong>Surabaya → Balikpapan</strong> | Berangkat: 14/07/2026 06:00 | Status: <span class="badge" style="background:#dbeafe;color:#1d4ed8">Berlangsung</span></p>
+                    <h5 class="fw-bold mb-2" style="font-size: 1.15rem; color: var(--pertamina-blue);">Jadwal Perjalanan Aktif</h5>
+                    <p class="mb-0 text-muted" style="font-size: 0.92rem; line-height: 1.4;">
+                        <strong class="text-dark" style="font-size: 1.05rem;">Surabaya &rarr; Balikpapan</strong>
+                        <span class="mx-2 text-muted">|</span>
+                        <span><i class="bi bi-calendar me-1"></i>Jadwal: 14/07/2026 &ndash; 16/07/2026</span>
+                        <span class="badge ms-2" style="background:#dbeafe;color:#1d4ed8;font-size:0.75rem;padding:0.35em 0.7em;">Berlangsung</span>
+                    </p>
                 </div>
-                <a href="{{ route('awak.perjalanan') }}" class="btn btn-pertamina-outline btn-sm flex-shrink-0">Detail</a>
+                <a href="{{ route('awak.perjalanan') }}" class="btn btn-pertamina-outline btn-sm flex-shrink-0 px-3">Detail</a>
             </div>
         </div>
     </div>

@@ -39,6 +39,51 @@
                     if (modal) modal.hide();
                 });
             }
+
+            // Counter-Up Animation for Stat Values
+            const counters = document.querySelectorAll('.stat-value-animate');
+            counters.forEach(counter => {
+                const targetText = counter.getAttribute('data-target');
+                const isFloat = targetText.includes('.') || targetText.includes(',');
+                
+                let target = parseFloat(targetText.replace(/\./g, '').replace(/,/g, '.'));
+                let start = 0;
+                const duration = 1500; // ms
+                const startTime = performance.now();
+                
+                const suffixEl = counter.querySelector('small') || counter.querySelector('span') || counter.querySelector('span.badge');
+                const suffixHTML = suffixEl ? suffixEl.outerHTML : '';
+                
+                function updateNumber(now) {
+                    const progress = Math.min((now - startTime) / duration, 1);
+                    const easeProgress = progress * (2 - progress);
+                    const current = start + easeProgress * (target - start);
+                    
+                    let displayValue = '';
+                    if (isFloat) {
+                        displayValue = Math.floor(current).toLocaleString('id-ID');
+                    } else {
+                        displayValue = Math.floor(current);
+                    }
+                    
+                    if (suffixEl) {
+                        counter.innerHTML = displayValue + ' ' + suffixHTML;
+                    } else {
+                        counter.textContent = displayValue;
+                    }
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateNumber);
+                    } else {
+                        if (suffixEl) {
+                            counter.innerHTML = targetText + ' ' + suffixHTML;
+                        } else {
+                            counter.textContent = targetText;
+                        }
+                    }
+                }
+                requestAnimationFrame(updateNumber);
+            });
         });
     </script>
     @stack('scripts')

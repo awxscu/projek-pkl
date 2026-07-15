@@ -5,18 +5,10 @@
 
 @section('content')
 <div class="login-page">
-    <div class="login-navbar">
-        <a href="{{ route('landing') }}" class="text-white text-decoration-none fw-semibold">
-            <i class="bi bi-arrow-left me-1"></i> Halaman Utama
-        </a>
-        @include('partials.logo', ['href' => route('landing')])
-    </div>
-
     <div class="login-body">
         <div class="login-card">
-            <div class="login-logo">
-                @include('partials.logo', ['href' => '#', 'size' => 'logo-lg'])
-                <p class="text-muted mt-3 mb-0 small">Masuk ke sistem monitoring logbook kapal</p>
+            <div class="login-logo" style="margin-bottom: 2rem;">
+                @include('partials.logo', ['href' => '#', 'size' => 'logo-xl'])
             </div>
 
             <form id="loginForm">
