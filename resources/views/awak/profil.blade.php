@@ -12,7 +12,7 @@
 <div class="row g-4">
     <!-- LEFT COLUMN: USER PROFILE CARD -->
     <div class="col-lg-4">
-        <div class="card-modern text-center p-4">
+        <div class="card-modern text-center p-4 h-100">
             <div class="mx-auto mb-3 user-avatar" style="width: 80px; height: 80px; font-size: 2.2rem; border-radius: 50%;">
                 BS
             </div>
@@ -40,13 +40,13 @@
             </div>
             
             <hr class="my-3">
-            <button class="btn btn-pertamina btn-sm w-100"><i class="bi bi-pencil-square me-1"></i>Edit Profil</button>
+            <button class="btn btn-pertamina btn-sm w-100" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-pencil-square me-1"></i>Edit Profil</button>
         </div>
     </div>
 
     <!-- RIGHT COLUMN: ASSIGNED VESSEL INFO -->
     <div class="col-lg-8">
-        <div class="card-modern p-4 mb-4">
+        <div class="card-modern p-4 h-100">
             <h5 class="fw-bold text-pertamina-blue mb-3">
                 <i class="bi bi-ship me-2"></i>Kapal Penugasan Aktif
             </h5>

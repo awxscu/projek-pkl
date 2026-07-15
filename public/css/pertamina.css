@@ -81,24 +81,44 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 6px 20px rgba(227, 30, 36, 0.2);
 }
 .btn-gradient-pertamina {
-    background: linear-gradient(135deg, var(--pertamina-blue) 0%, var(--pertamina-red) 100%);
+    background: linear-gradient(135deg, #5c0606 0%, #b91c1c 100%);
     border: none;
     color: #fff;
     font-weight: 700;
     border-radius: 10px;
     padding: 0.75rem 2rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 87, 184, 0.2);
+    box-shadow: 0 4px 15px rgba(185, 28, 28, 0.3);
 }
 .btn-gradient-pertamina:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(227, 30, 36, 0.3);
+    box-shadow: 0 8px 25px rgba(185, 28, 28, 0.45);
     color: #fff;
+}
+.btn-outline-pertamina-white {
+    background: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 0.75rem 2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-outline-pertamina-white:hover {
+    background: #ffffff;
+    color: var(--pertamina-blue) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25);
 }
 
 /* Logo styling */
 .logo-pertamina img { height: 42px; width: auto; transition: transform 0.2s ease; }
 .logo-pertamina.logo-sm img { height: 32px; }
+.logo-pertamina.logo-md img { height: 38px; }
 .logo-pertamina.logo-lg img { height: 50px; }
 .logo-pertamina.logo-xl img { height: 96px; }
 .logo-pertamina:hover img { transform: scale(1.02); }
@@ -216,6 +236,8 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     gap: 0.4rem;
     position: relative;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Hover & Active Effects (Blue color + Red bottom indicator) */
@@ -239,7 +261,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 .navbar-horizontal .nav-menu .nav-link.active {
     color: var(--pertamina-blue);
-    font-weight: 700;
+    font-weight: 600;
 }
 .navbar-horizontal .nav-menu .nav-link.active::after {
     width: 80%;
@@ -317,14 +339,19 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Welcome Banner */
 .welcome-banner {
-    background: linear-gradient(135deg, var(--pertamina-blue) 0%, var(--pertamina-blue-dark) 50%, var(--pertamina-red) 100%);
+    background: linear-gradient(135deg, #001124 0%, #001f3f 60%, var(--pertamina-blue) 100%);
     color: #fff;
     border-radius: var(--radius);
     padding: 2.25rem 2.5rem;
     margin-bottom: 2rem;
     box-shadow: var(--shadow-md);
 }
-.welcome-banner h4 { font-weight: 700; margin-bottom: 0.4rem; color: #fff; }
+.welcome-banner h4 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
 .welcome-banner p { opacity: 0.9; margin-bottom: 0; font-size: 1rem; }
 
 .page-header {
@@ -430,7 +457,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Login Page combo styling */
 .login-page {
     min-height: 100vh; display: flex; flex-direction: column;
-    background: linear-gradient(135deg, var(--pertamina-blue) 0%, #fff 45%, var(--pertamina-red) 100%);
+    background: linear-gradient(135deg, rgba(0, 87, 184, 0.95) 0%, rgba(15, 23, 42, 0.98) 50%, rgba(227, 30, 36, 0.9) 100%);
 }
 .login-page .login-navbar {
     padding: 1rem 2rem;
@@ -513,13 +540,17 @@ h1, h2, h3, h4, h5, h6 {
     .dashboard-content { padding: 1.5rem 1rem; }
 }
 
-/* Unified Table Action Buttons */
 .btn-action-table {
-    width: 135px;
-    white-space: nowrap;
+    width: 135px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    height: 32px;
-    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
 }

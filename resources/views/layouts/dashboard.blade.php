@@ -22,6 +22,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Dynamic Time-Based Greeting
+            const greetingEl = document.getElementById('welcomeGreetingTitle');
+            if (greetingEl) {
+                const hour = new Date().getHours();
+                let greeting = 'Selamat ';
+                if (hour >= 4 && hour < 11) {
+                    greeting += 'Pagi';
+                } else if (hour >= 11 && hour < 15) {
+                    greeting += 'Siang';
+                } else if (hour >= 15 && hour < 18.5) {
+                    greeting += 'Sore';
+                } else {
+                    greeting += 'Malam';
+                }
+                
+                const textContent = greetingEl.textContent.trim();
+                const userName = textContent.replace('Selamat Datang,', '').trim();
+                
+                greetingEl.textContent = `${greeting}, ${userName}`;
+            }
+
             const toggle = document.getElementById('navToggle');
             const menu = document.getElementById('navMenu');
             if (toggle && menu) {
@@ -132,9 +153,9 @@
                             </label>
                         </div>
                     </div>
-                    <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-pertamina btn-sm px-4">Simpan Perubahan</button>
+                    <div class="modal-footer bg-light d-flex justify-content-end gap-2 px-4 py-3">
+                        <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-pertamina px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;">Simpan Perubahan</button>
                     </div>
                 </form>
             </div>

@@ -22,17 +22,22 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('awak.riwayat') }}" class="nav-link {{ request()->routeIs('awak.riwayat') ? 'active' : '' }}">
                     <i class="bi bi-clock-history"></i> Riwayat Logbook
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('awak.perjalanan') }}" class="nav-link {{ request()->routeIs('awak.perjalanan') ? 'active' : '' }}">
                     <i class="bi bi-calendar-event"></i> Jadwal Perjalanan
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('perjalanan.create') }}" class="nav-link {{ request()->routeIs('perjalanan.create') ? 'active' : '' }}">
+                    <i class="bi bi-calendar-plus"></i> Tambah Jadwal Perjalanan
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('awak.profil') }}" class="nav-link {{ request()->routeIs('awak.profil') ? 'active' : '' }}">
                     <i class="bi bi-person"></i> Profil
                 </a>
             </li>

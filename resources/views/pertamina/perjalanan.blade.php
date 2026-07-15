@@ -26,7 +26,6 @@
                 <option>Terjadwal</option>
                 <option>Berlangsung</option>
                 <option>Selesai</option>
-                <option>Batal</option>
             </select>
         </div>
         <div class="col-md-3">
@@ -105,8 +104,8 @@
                     <td>Balikpapan</td>
                     <td>Tarakan</td>
                     <td>12/07/2026</td>
-                    <td>—</td>
-                    <td><span class="badge badge-empty">Batal</span></td>
+                    <td>13/07/2026</td>
+                    <td><span class="badge badge-verified">Selesai</span></td>
                 </tr>
             </tbody>
         </table>

@@ -58,6 +58,10 @@ Route::get('/dashboard/awak/perjalanan', function () {
     return view('awak.perjalanan');
 })->name('awak.perjalanan');
 
+Route::get('/dashboard/awak/perjalanan/create', function () {
+    return view('awak.perjalanan.create');
+})->name('perjalanan.create');
+
 Route::get('/dashboard/awak/profil', function () {
     return view('awak.profil');
 })->name('awak.profil');

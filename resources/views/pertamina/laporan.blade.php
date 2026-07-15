@@ -78,7 +78,8 @@
                     <th>Vessel Code</th>
                     <th>Total Konsumsi DO</th>
                     <th>Total Konsumsi FO</th>
-                    <th>Total Pelumas</th>
+                    <th>Total Lube Oil</th>
+                    <th>Total Cylinder Oil</th>
                     <th>Grand Total</th>
                 </tr>
             </thead>
@@ -89,7 +90,8 @@
                     <td>4.200 L</td>
                     <td>800 L</td>
                     <td>120 L</td>
-                    <td><strong>5.120 L</strong></td>
+                    <td>150 L</td>
+                    <td><strong>5.270 L</strong></td>
                 </tr>
                 <tr>
                     <td>KM Samudra Indah</td>
@@ -97,7 +99,8 @@
                     <td>3.850 L</td>
                     <td>650 L</td>
                     <td>95 L</td>
-                    <td><strong>4.595 L</strong></td>
+                    <td>142 L</td>
+                    <td><strong>4.737 L</strong></td>
                 </tr>
                 <tr>
                     <td>KM Citra Lautan</td>
@@ -105,7 +108,8 @@
                     <td>5.100 L</td>
                     <td>520 L</td>
                     <td>120 L</td>
-                    <td><strong>5.740 L</strong></td>
+                    <td>90 L</td>
+                    <td><strong>5.830 L</strong></td>
                 </tr>
                 <tr>
                     <td>KM Bahari Sejahtera</td>
@@ -113,7 +117,8 @@
                     <td>2.980 L</td>
                     <td>400 L</td>
                     <td>80 L</td>
-                    <td><strong>3.460 L</strong></td>
+                    <td>130 L</td>
+                    <td><strong>3.590 L</strong></td>
                 </tr>
             </tbody>
         </table>

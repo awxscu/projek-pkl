@@ -13,7 +13,7 @@
     <div id="heroCarousel" class="carousel slide hero-carousel carousel-fade" data-bs-ride="carousel" data-bs-interval="5000" style="position: absolute; inset: 0; z-index: 0;">
         <div class="carousel-inner" style="height: 100vh;">
             <div class="carousel-item active" style="height: 100vh;">
-                <img src="https://infopublik.id/assets/upload/headline//IMG-20231001-WA0012.jpg" alt="Kapal penumpang" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="https://pertaminapatraniaga.com/file/files/2026/07/pertamina-patra-niaga-datangkan-pertamina-gas-1-bawa-45-9-ribu-metrik-ton-lpg-2.webp" alt="Kapal penumpang" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="carousel-item" style="height: 100vh;">
                 <img src="https://pertaminapatraniaga.com/file/files/2026/06/img-20260619-wa0005.webp" alt="Kapal laut" style="width: 100%; height: 100%; object-fit: cover;">
@@ -22,7 +22,7 @@
                 <img src="https://cdn-jjmn.jawapos.com/images/16/2024/12/14/1000451803-1104496190.jpg" alt="Pelabuhan kapal" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <div class="carousel-item" style="height: 100vh;">
-                <img src="https://pertaminapatraniaga.com/file/files/2026/06/pertamina-patra-niaga-tingkatkan-penyaluran-dan-perkuat-distribusi-bbm-di-sejumlah-wilayah.webp" alt="Operasi kapal" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="https://pertaminapatraniaga.com/file/files/2026/06/img-20260619-wa0008.webp" alt="Operasi kapal" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
         </div>
     </div>
@@ -39,9 +39,9 @@
                 <p class="hero-subtitle mb-4 text-white-50" style="font-size: clamp(0.95rem, 2vw, 1.15rem); max-width: 650px;">
                     Digitalisasi pencatatan konsumsi BBM kapal untuk monitoring operasional yang lebih efektif
                 </p>
-                <div class="d-flex flex-wrap gap-2">
-                    <a href="{{ route('login') }}" class="btn btn-gradient-pertamina btn-lg"><i class="bi bi-box-arrow-in-right me-2"></i>Masuk ke Sistem</a>
-                    <a href="#fitur" class="btn btn-light btn-lg text-pertamina-blue"><i class="bi bi-info-circle me-2"></i>Pelajari Sistem</a>
+                <div class="d-flex flex-wrap gap-3 mt-2">
+                    <a href="{{ route('login') }}" class="btn-gradient-pertamina text-decoration-none d-inline-flex align-items-center justify-content-center"><i class="bi bi-box-arrow-in-right me-2"></i>Masuk ke Sistem</a>
+                    <a href="#fitur" class="btn-outline-pertamina-white"><i class="bi bi-info-circle me-2"></i>Pelajari Sistem</a>
                 </div>
             </div>
         </div>
@@ -89,7 +89,7 @@
 </section>
 
 <!-- ABOUT STRIP -->
-<section class="about-strip py-5 text-white" id="tentang" style="background: linear-gradient(90deg, var(--pertamina-blue), var(--pertamina-red));">
+<section class="about-strip py-5 text-white" id="tentang" style="background: linear-gradient(135deg, #001f3f 0%, #0057B8 50%, #3b82f6 100%);">
     <div class="container py-3">
         <div class="row align-items-center">
             <div class="col-lg-8">
@@ -162,8 +162,8 @@
                 </ul>
                 <div class="d-flex flex-column align-items-lg-end gap-3 mt-auto">
                     <!-- Call Center 135 Badge -->
-                    <div style="filter: brightness(0) invert(1); width: 80px;">
-                        <img src="https://mypertamina.id/assets/img/logo-135.png" alt="Call Center 135" class="img-fluid" onerror="this.src='https://pertaminalubricants.com/assets/images/pertamina-call-center.png';">
+                    <div class="px-3 py-2 bg-danger text-white fw-bold rounded-pill d-inline-flex align-items-center gap-2" style="font-size: 0.82rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-telephone-fill"></i> Call Center 135
                     </div>
                     <!-- Whistle Blowing System Pill -->
                     <a href="https://pertaminaclean.tipoffs.info/" class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none border border-white border-opacity-25" style="border-radius: 50px; background: rgba(255,255,255,0.05); color: #fff; max-width: 250px;">

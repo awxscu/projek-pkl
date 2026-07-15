@@ -7,9 +7,12 @@
 <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
     <div>
         <h4><i class="bi bi-calendar-event me-2 text-pertamina-blue"></i>Jadwal Perjalanan Kapal</h4>
-        <p>Daftar penugasan pelayaran untuk kapal KM Nusantara Jaya (VSL-001)</p>
+        <p>Kelola rute pelayaran aktif dan status pengisian logbook harian</p>
     </div>
-    <span class="badge bg-pertamina-blue px-3 py-2"><i class="bi bi-ship me-1"></i> Kapal Aktif: KM Nusantara Jaya</span>
+    <div class="d-flex gap-2 align-items-center">
+        <a href="{{ route('perjalanan.create') }}" class="btn btn-pertamina px-3 py-2 fw-semibold d-inline-flex align-items-center" style="font-size: 0.85rem; border-radius: 8px; height: 38px;"><i class="bi bi-plus-lg me-1"></i>Tambah Jadwal</a>
+        <span class="badge bg-pertamina-blue px-3 py-2 d-inline-flex align-items-center fw-semibold" style="font-size: 0.85rem; border-radius: 8px; height: 38px;"><i class="bi bi-ship me-1"></i> Kapal Aktif: KM Nusantara Jaya</span>
+    </div>
 </div>
 
 <!-- INFO STRIP -->
@@ -54,7 +57,6 @@
                 <option>Terjadwal</option>
                 <option>Berlangsung</option>
                 <option>Selesai</option>
-                <option>Batal</option>
             </select>
         </div>
     </div>
@@ -71,93 +73,140 @@
                     <th style="width: 160px; text-align: center;">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Voyage 1 -->
-                <tr>
-                    <td><strong>Surabaya → Balikpapan</strong></td>
-                    <td>Tanjung Perak (SUB)</td>
-                    <td>Semayang (BPN)</td>
-                    <td>14/07/2026</td>
-                    <td>15/07/2026</td>
-                    <td><span class="badge" style="background:#dbeafe;color:#1d4ed8"><i class="bi bi-arrow-right-circle-fill me-1"></i>Berlangsung</span></td>
-                    <td class="text-center">
-                        <a href="{{ route('logbook.create') }}" class="btn btn-sm btn-pertamina btn-action-table">
-                            <i class="bi bi-pencil-square me-1"></i>Tulis Logbook
-                        </a>
-                    </td>
-                </tr>
-                <!-- Voyage 2 -->
-                <tr>
-                    <td><strong>Balikpapan → Surabaya</strong></td>
-                    <td>Semayang (BPN)</td>
-                    <td>Tanjung Perak (SUB)</td>
-                    <td>17/07/2026</td>
-                    <td>18/07/2026</td>
-                    <td><span class="badge badge-pending"><i class="bi bi-calendar-check-fill me-1"></i>Terjadwal</span></td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-outline-secondary btn-action-table" disabled>
-                            <i class="bi bi-lock-fill"></i> Logbook
-                        </button>
-                    </td>
-                </tr>
-                <!-- Voyage 3 -->
-                <tr>
-                    <td><strong>Surabaya → Makassar</strong></td>
-                    <td>Tanjung Perak (SUB)</td>
-                    <td>Soekarno-Hatta (MAK)</td>
-                    <td>20/07/2026</td>
-                    <td>21/07/2026</td>
-                    <td><span class="badge badge-pending"><i class="bi bi-calendar-check-fill me-1"></i>Terjadwal</span></td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-outline-secondary btn-action-table" disabled>
-                            <i class="bi bi-lock-fill"></i> Logbook
-                        </button>
-                    </td>
-                </tr>
-                <!-- Voyage 4 -->
-                <tr>
-                    <td><strong>Balikpapan → Surabaya</strong></td>
-                    <td>Semayang (BPN)</td>
-                    <td>Tanjung Perak (SUB)</td>
-                    <td>12/07/2026</td>
-                    <td>13/07/2026</td>
-                    <td><span class="badge badge-verified"><i class="bi bi-check-circle-fill me-1"></i>Selesai</span></td>
-                    <td class="text-center">
-                        <a href="{{ route('awak.riwayat') }}" class="btn btn-sm btn-outline-primary btn-action-table">
-                            <i class="bi bi-eye-fill"></i> Lihat Log
-                        </a>
-                    </td>
-                </tr>
-                <!-- Voyage 5 -->
-                <tr>
-                    <td><strong>Surabaya → Balikpapan</strong></td>
-                    <td>Tanjung Perak (SUB)</td>
-                    <td>Semayang (BPN)</td>
-                    <td>10/07/2026</td>
-                    <td>11/07/2026</td>
-                    <td><span class="badge badge-verified"><i class="bi bi-check-circle-fill me-1"></i>Selesai</span></td>
-                    <td class="text-center">
-                        <a href="{{ route('awak.riwayat') }}" class="btn btn-sm btn-outline-primary btn-action-table">
-                            <i class="bi bi-eye-fill"></i> Lihat Log
-                        </a>
-                    </td>
-                </tr>
-                <!-- Voyage 6 -->
-                <tr>
-                    <td><strong>Surabaya → Banjarmasin</strong></td>
-                    <td>Tanjung Perak (SUB)</td>
-                    <td>Trisakti (BDJ)</td>
-                    <td>08/07/2026</td>
-                    <td>09/07/2026</td>
-                    <td><span class="badge badge-empty"><i class="bi bi-x-circle-fill me-1"></i>Batal</span></td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-light text-danger btn-action-table" disabled>
-                            <i class="bi bi-x-circle me-1"></i>Dibatalkan
-                        </button>
-                    </td>
-                </tr>
+            <tbody id="voyageTableBody">
+                <!-- Dynamically loaded from localStorage -->
             </tbody>
         </table>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Default voyages data
+    const defaultVoyages = [
+        {
+            rute: "Surabaya &rarr; Balikpapan",
+            asal: "Tanjung Perak (SUB)",
+            tujuan: "Semayang (BPN)",
+            mulai: "2026-07-14",
+            selesai: "2026-07-15",
+            status: "Berlangsung"
+        },
+        {
+            rute: "Balikpapan &rarr; Surabaya",
+            asal: "Semayang (BPN)",
+            tujuan: "Tanjung Perak (SUB)",
+            mulai: "2026-07-17",
+            selesai: "2026-07-18",
+            status: "Terjadwal"
+        },
+        {
+            rute: "Surabaya &rarr; Makassar",
+            asal: "Tanjung Perak (SUB)",
+            tujuan: "Soekarno-Hatta (MAK)",
+            mulai: "2026-07-20",
+            selesai: "2026-07-21",
+            status: "Terjadwal"
+        },
+        {
+            rute: "Balikpapan &rarr; Surabaya",
+            asal: "Semayang (BPN)",
+            tujuan: "Tanjung Perak (SUB)",
+            mulai: "2026-07-12",
+            selesai: "2026-07-13",
+            status: "Selesai"
+        },
+        {
+            rute: "Surabaya &rarr; Balikpapan",
+            asal: "Tanjung Perak (SUB)",
+            tujuan: "Semayang (BPN)",
+            mulai: "2026-07-10",
+            selesai: "2026-07-11",
+            status: "Selesai"
+        },
+        {
+            rute: "Surabaya &rarr; Banjarmasin",
+            asal: "Tanjung Perak (SUB)",
+            tujuan: "Trisakti (BDJ)",
+            mulai: "2026-07-08",
+            selesai: "2026-07-09",
+            status: "Selesai"
+        }
+    ];
+
+    // Check if voyages in localStorage
+    let voyages = localStorage.getItem('voyages');
+    if (!voyages) {
+        localStorage.setItem('voyages', JSON.stringify(defaultVoyages));
+        voyages = defaultVoyages;
+    } else {
+        voyages = JSON.parse(voyages);
+    }
+
+    const tbody = document.getElementById('voyageTableBody');
+    tbody.innerHTML = '';
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        if (dateStr.indexOf('/') !== -1) return dateStr; // already formatted
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return dateStr;
+    }
+
+    // Render each voyage
+    voyages.forEach(voyage => {
+        let statusBadge = '';
+        let actionBtn = '';
+
+        if (voyage.status === 'Berlangsung') {
+            statusBadge = `<span class="badge" style="background:#dbeafe;color:#1d4ed8"><i class="bi bi-arrow-right-circle-fill me-1"></i>Berlangsung</span>`;
+            actionBtn = `<a href="{{ route('logbook.create') }}" class="btn btn-sm btn-pertamina btn-action-table"><i class="bi bi-pencil-square me-1"></i>Tulis Logbook</a>`;
+        } else if (voyage.status === 'Terjadwal') {
+            statusBadge = `<span class="badge badge-pending"><i class="bi bi-calendar-check-fill me-1"></i>Terjadwal</span>`;
+            actionBtn = `<button class="btn btn-sm btn-outline-secondary btn-action-table" disabled><i class="bi bi-lock-fill"></i> Logbook</button>`;
+        } else if (voyage.status === 'Selesai') {
+            statusBadge = `<span class="badge badge-verified"><i class="bi bi-check-circle-fill me-1"></i>Selesai</span>`;
+            actionBtn = `<a href="{{ route('awak.riwayat') }}" class="btn btn-sm btn-outline-primary btn-action-table"><i class="bi bi-eye-fill"></i> Lihat Log</a>`;
+        } else {
+            // Batal
+            statusBadge = `<span class="badge badge-empty"><i class="bi bi-x-circle-fill me-1"></i>Batal</span>`;
+            actionBtn = `<button class="btn btn-sm btn-light text-danger btn-action-table" disabled><i class="bi bi-x-circle me-1"></i>Dibatalkan</button>`;
+        }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><strong>${voyage.rute}</strong></td>
+            <td>${voyage.asal}</td>
+            <td>${voyage.tujuan}</td>
+            <td>${formatDate(voyage.mulai)}</td>
+            <td>${formatDate(voyage.selesai)}</td>
+            <td>${statusBadge}</td>
+            <td class="text-center">${actionBtn}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Filter handling
+    const selectFilter = document.querySelector('.form-select');
+    if (selectFilter) {
+        selectFilter.addEventListener('change', function() {
+            const filterVal = this.value;
+            const rows = tbody.querySelectorAll('tr');
+            rows.forEach((row, index) => {
+                const voyage = voyages[index];
+                if (!filterVal || voyage.status === filterVal) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+</script>
+@endpush
 @endsection

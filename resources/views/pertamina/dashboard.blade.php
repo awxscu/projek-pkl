@@ -5,8 +5,8 @@
 
 @section('content')
 <div class="welcome-banner">
-    <h4><i class="bi bi-hand-wave me-2"></i>Selamat Datang, Pertamina Patra Niaga</h4>
-    <p>Pantau aktivitas logbook kapal penumpang dan konsumsi BBM secara real-time</p>
+    <h4 id="welcomeGreetingTitle">Selamat Datang, Pertamina Patra Niaga</h4>
+    <p class="mb-0 mt-2 opacity-90" id="welcomeGreetingSubtitle">Tetap semangat dalam memonitor dan mengoptimalkan energi di setiap lini pelayaran nusantara!</p>
 </div>
 
 <div class="row g-3 mb-4">
@@ -14,7 +14,11 @@
         <div class="card-modern stat-card">
             <div class="d-flex justify-content-between align-items-center">
                 <div><div class="stat-label">Total Kapal</div><div class="stat-value stat-value-animate" data-target="18">0</div></div>
-                <div class="stat-icon" style="background:var(--pertamina-blue-light);color:var(--pertamina-blue)"><i class="bi bi-ship"></i></div>
+                <div class="stat-icon" style="background:var(--pertamina-blue-light);color:var(--pertamina-blue)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-ship" viewBox="0 0 16 16">
+                        <path d="M11.782.002a.5.5 0 0 1 .37.171l2.5 3a.5.5 0 0 1-.37.827h-.132l-.248 1.488a.5.5 0 0 1-.036.115l-1.6 3A.5.5 0 0 1 11 9H5a.5.5 0 0 1-.4-.8l-1.6-3a.5.5 0 0 1-.036-.115l-.248-1.488h-.132a.5.5 0 0 1-.37-.827l2.5-3a.5.5 0 0 1 .37-.171h6.982zM2.085 4.708l.228 1.368H3.5a.5.5 0 0 1 .424.237L5.39 8.784A.5.5 0 0 1 5 9.5H3a.5.5 0 0 1-.4-.8l-1.2-2.25a.5.5 0 0 1-.036-.115L1.085 4.708H2.085zm11.83 0h1.002l-.279 1.674a.5.5 0 0 1-.036.115l-1.2 2.25a.5.5 0 0 1-.4.8H11a.5.5 0 0 1-.39-.716l1.465-2.547A.5.5 0 0 1 12.5 6.076h1.187l.228-1.368zM12 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-5 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 12a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm6 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
@@ -46,7 +50,7 @@
 
 <div class="row g-3 mb-4">
     <div class="col-lg-6">
-        <div class="card-modern chart-card">
+        <div class="card-modern chart-card h-100">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <div>
                     <div class="chart-title"><i class="bi bi-bar-chart-line me-1 text-pertamina-blue"></i> Pemakaian BBM Berdasarkan Kapal</div>
@@ -59,17 +63,26 @@
                         <option value="lube">Lube Oil</option>
                         <option value="cylinder">Cylinder Oil</option>
                     </select>
-                    <select class="form-select form-select-sm filter-bbm-date" style="width: 120px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
-                        <option value="all" selected>Semua Tanggal</option>
+                    <select class="form-select form-select-sm filter-bbm-date" style="width: 75px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
+                        <option value="all" selected>All</option>
                         @for ($d = 1; $d <= 31; $d++)
-                            <option value="{{ $d }}">Tanggal {{ $d }}</option>
+                            <option value="{{ $d }}">{{ $d }}</option>
                         @endfor
                     </select>
-                    <select class="form-select form-select-sm filter-bbm-month" style="width: 85px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
+                    <select class="form-select form-select-sm filter-bbm-month" style="width: 110px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
                         <option value="all">Semua Bulan</option>
-                        <option value="07" selected>Juli</option>
-                        <option value="06">Juni</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
                         <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07" selected>Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
                     </select>
                     <select class="form-select form-select-sm filter-bbm-year" style="width: 75px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
                         <option value="all">Semua Tahun</option>
@@ -82,24 +95,33 @@
         </div>
     </div>
     <div class="col-lg-6">
-        <div class="card-modern chart-card">
+        <div class="card-modern chart-card h-100">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <div>
                     <div class="chart-title"><i class="bi bi-graph-up me-1 text-pertamina-blue"></i> Tren Konsumsi BBM Harian</div>
                     <div class="chart-subtitle mb-0">Total pemakaian harian (liter)</div>
                 </div>
                 <div class="d-flex gap-1">
-                    <select class="form-select form-select-sm filter-trend-date" style="width: 120px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
-                        <option value="all" selected>Semua Tanggal</option>
+                    <select class="form-select form-select-sm filter-trend-date" style="width: 75px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
+                        <option value="all" selected>All</option>
                         @for ($d = 1; $d <= 31; $d++)
-                            <option value="{{ $d }}">Tanggal {{ $d }}</option>
+                            <option value="{{ $d }}">{{ $d }}</option>
                         @endfor
                     </select>
-                    <select class="form-select form-select-sm filter-trend-month" style="width: 85px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
+                    <select class="form-select form-select-sm filter-trend-month" style="width: 110px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
                         <option value="all">Semua Bulan</option>
-                        <option value="07" selected>Juli</option>
-                        <option value="06">Juni</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
                         <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07" selected>Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
                     </select>
                     <select class="form-select form-select-sm filter-trend-year" style="width: 75px; font-size: 0.72rem; border-radius: 6px; border-color: var(--pertamina-blue);">
                         <option value="all">Semua Tahun</option>
@@ -113,26 +135,35 @@
     </div>
 </div>
 
-<div class="row g-3">
+<div class="row g-3 mb-4">
     <div class="col-lg-4">
-        <div class="card-modern chart-card">
+        <div class="card-modern chart-card h-100">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <div>
                     <div class="chart-title"><i class="bi bi-pie-chart me-1 text-pertamina-blue"></i> Status Pengisian Logbook</div>
                     <div class="chart-subtitle mb-0">Persentase verifikasi harian</div>
                 </div>
                 <div class="d-flex gap-1">
-                    <select class="form-select form-select-sm filter-status-date" style="width: 110px; font-size: 0.7rem; padding: 0.25rem; border-radius: 6px; border-color: var(--pertamina-blue);">
-                        <option value="all" selected>Semua Tgl</option>
+                    <select class="form-select form-select-sm filter-status-date" style="width: 70px; font-size: 0.7rem; padding: 0.25rem; border-radius: 6px; border-color: var(--pertamina-blue);">
+                        <option value="all" selected>All</option>
                         @for ($d = 1; $d <= 31; $d++)
-                            <option value="{{ $d }}">Tgl {{ $d }}</option>
+                            <option value="{{ $d }}">{{ $d }}</option>
                         @endfor
                     </select>
-                    <select class="form-select form-select-sm filter-status-month" style="width: 78px; font-size: 0.7rem; padding: 0.25rem; border-radius: 6px; border-color: var(--pertamina-blue);">
-                        <option value="all">Semua Bln</option>
-                        <option value="07" selected>Juli</option>
-                        <option value="06">Juni</option>
+                    <select class="form-select form-select-sm filter-status-month" style="width: 110px; font-size: 0.7rem; padding: 0.25rem; border-radius: 6px; border-color: var(--pertamina-blue);">
+                        <option value="all">Semua Bulan</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
                         <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07" selected>Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
                     </select>
                     <select class="form-select form-select-sm filter-status-year" style="width: 70px; font-size: 0.7rem; padding: 0.25rem; border-radius: 6px; border-color: var(--pertamina-blue);">
                         <option value="all">Semua Thn</option>
@@ -145,7 +176,7 @@
         </div>
     </div>
     <div class="col-lg-8">
-        <div class="card-modern chart-card">
+        <div class="card-modern chart-card h-100">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <div>
                     <div class="chart-title"><i class="bi bi-droplet me-1 text-pertamina-blue"></i> Stok BBM Kapal</div>

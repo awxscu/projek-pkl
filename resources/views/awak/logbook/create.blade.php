@@ -14,15 +14,14 @@
                     </h5>
                     <p class="text-muted mb-0 small">Masukkan pencatatan pemakaian BBM dan pelumas kapal penumpang secara lengkap</p>
                 </div>
-                <span class="badge bg-pertamina-blue px-3 py-2"><i class="bi bi-info-circle me-1"></i> Kapal: KM Nusantara Jaya</span>
             </div>
 
             <form action="#" method="POST" id="logbookForm">
                 @csrf
                 
-                <!-- SECTION 1: DATA UTAMA & DATA PERJALANAN -->
+                <!-- SECTION 1: DATA UTAMA -->
                 <div class="form-section-title">
-                    <i class="bi bi-card-heading me-2"></i>1. Data Utama & Perjalanan
+                    <i class="bi bi-card-heading me-2"></i>1. Data Utama
                 </div>
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
@@ -37,37 +36,6 @@
                     <div class="col-md-6">
                         <label for="tanggal" class="form-label">Tanggal Pencatatan</label>
                         <input type="date" class="form-control" id="tanggal" name="tanggal" value="2026-07-14" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="tanggal_mulai" class="form-label">Tanggal Mulai Perjalanan</label>
-                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" value="2026-07-14" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="tanggal_selesai" class="form-label">Tanggal Selesai Perjalanan</label>
-                        <input type="date" class="form-control" id="tanggal_selesai" name="tanggal_selesai" value="2026-07-16" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="pelabuhan_asal" class="form-label">Pelabuhan Asal</label>
-                        <select class="form-select" id="pelabuhan_asal" name="pelabuhan_asal" required>
-                            <option value="" disabled>Pilih Pelabuhan Asal</option>
-                            <option value="Surabaya" selected>Surabaya</option>
-                            <option value="Balikpapan">Balikpapan</option>
-                            <option value="Jakarta">Jakarta</option>
-                            <option value="Semarang">Semarang</option>
-                            <option value="Makassar">Makassar</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="pelabuhan_tujuan" class="form-label">Pelabuhan Tujuan</label>
-                        <select class="form-select" id="pelabuhan_tujuan" name="pelabuhan_tujuan" required>
-                            <option value="" disabled>Pilih Pelabuhan Tujuan</option>
-                            <option value="Surabaya">Surabaya</option>
-                            <option value="Balikpapan" selected>Balikpapan</option>
-                            <option value="Jakarta">Jakarta</option>
-                            <option value="Semarang">Semarang</option>
-                            <option value="Makassar">Makassar</option>
-                            <option value="Baubau">Baubau</option>
-                        </select>
                     </div>
                 </div>
 
@@ -314,7 +282,8 @@
         // Form submission demo response
         formEl.addEventListener('submit', function (e) {
             e.preventDefault();
-            alert('Logbook Kapal berhasil disimpan ke dalam sistem! (Demo data)');
+            sessionStorage.setItem('logbook_filled_today', 'true');
+            alert('Logbook Kapal berhasil disimpan ke dalam sistem!');
             window.location.href = "{{ route('dashboard.awak') }}";
         });
     });

@@ -39,7 +39,7 @@
             </div>
 
             <!-- Pertamina Patra Niaga Logo -->
-            @include('partials.logo', ['href' => route('dashboard.pertamina'), 'size' => 'logo-sm'])
+            @include('partials.logo', ['href' => route('dashboard.pertamina'), 'size' => 'logo-md'])
         </div>
     </div>
 </nav>

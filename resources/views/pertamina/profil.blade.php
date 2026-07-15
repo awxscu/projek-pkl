@@ -12,7 +12,7 @@
 <div class="row g-4">
     <!-- LEFT COLUMN: USER PROFILE CARD -->
     <div class="col-lg-4">
-        <div class="card-modern text-center p-4">
+        <div class="card-modern text-center p-4 h-100">
             <div class="mx-auto mb-3 user-avatar" style="width: 80px; height: 80px; font-size: 2.2rem; border-radius: 50%;">
                 PN
             </div>
@@ -48,7 +48,7 @@
 
     <!-- RIGHT COLUMN: SYSTEM ROLES & ACCESS SUMMARY -->
     <div class="col-lg-8">
-        <div class="card-modern p-4 mb-4">
+        <div class="card-modern p-4 h-100">
             <h5 class="fw-bold text-pertamina-blue mb-3">
                 <i class="bi bi-shield-lock me-2"></i>Hak Akses & Otoritas Sistem
             </h5>
@@ -61,19 +61,19 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="p-3 bg-light rounded border-start border-danger border-3">
+                    <div class="p-3 bg-light rounded border-start border-primary border-3">
                         <small class="text-muted d-block">Cakupan Pengawasan</small>
                         <span class="fw-bold fs-6">Seluruh Armada Kapal Penumpang</span>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="p-3 bg-light rounded border-start border-success border-3">
+                    <div class="p-3 bg-light rounded border-start border-primary border-3">
                         <small class="text-muted d-block">Fungsi Utama</small>
                         <span class="fw-bold fs-6">Verifikasi Logbook & Monitoring Stok Real-time</span>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="p-3 bg-light rounded border-start border-warning border-3">
+                    <div class="p-3 bg-light rounded border-start border-primary border-3">
                         <small class="text-muted d-block">Kelompok Laporan</small>
                         <span class="fw-bold fs-6">Rekapitulasi Konsumsi Harian & Bulanan</span>
                     </div>
