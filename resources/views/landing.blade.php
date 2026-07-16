@@ -1,5 +1,44 @@
 @extends('layouts.app')
 
+@push('styles')
+<style>
+    /* FAQ Accordion Custom Styling */
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(0, 87, 184, 0.05) !important;
+        color: var(--pertamina-blue) !important;
+        box-shadow: none !important;
+    }
+    .accordion-button:focus {
+        box-shadow: none !important;
+        border-color: rgba(0, 87, 184, 0.1) !important;
+    }
+    .accordion-item {
+        border-radius: 12px !important;
+        margin-bottom: 0.5rem;
+        border: 1px solid #e2e8f0 !important;
+        overflow: hidden;
+    }
+    .accordion-item:last-child {
+        margin-bottom: 0;
+    }
+    .accordion-button {
+        font-family: 'Poppins', sans-serif;
+    }
+    .accordion-button i {
+        font-size: 1.2rem;
+    }
+
+    /* Equal height cards visual padding balance */
+    .feature-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 220px;
+    }
+</style>
+@endpush
+
 @section('title', 'Sistem Monitoring Logbook Kapal - Pertamina Patra Niaga')
 @section('body-class', 'landing-page-scroll')
 
@@ -33,7 +72,7 @@
                 <span class="badge bg-white text-pertamina-blue mb-3 px-3 py-2 fw-bold" style="border-radius: 30px;">
                     <i class="bi bg-pertamina-red text-white p-1 rounded-circle bi-shield-check me-1"></i> Pertamina Patra Niaga
                 </span>
-                <h1 class="hero-title fw-bold text-white mb-3" style="font-family: 'Poppins', sans-serif; font-size: clamp(1.8rem, 4.5vw, 3rem); line-height: 1.2;">
+                <h1 class="hero-title fw-bold text-white mb-3" style="font-family: 'Poppins', sans-serif; font-size: clamp(1.8rem, 4.5vw, 3rem); line-height: 1.2; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 0, 0, 0.4);">
                     Sistem Monitoring dan Pengelolaan Logbook Kapal
                 </h1>
                 <p class="hero-subtitle mb-4 text-white-50" style="font-size: clamp(0.95rem, 2vw, 1.15rem); max-width: 650px;">
@@ -57,31 +96,120 @@
         </div>
         <div class="row g-4">
             <div class="col-md-6 col-lg-3">
-                <div class="card-modern feature-card text-center p-4">
+                <div class="card-modern feature-card text-center p-4 h-100">
                     <div class="feature-icon mx-auto mb-3" style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, var(--pertamina-blue), var(--pertamina-blue-dark)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.6rem;"><i class="bi bi-journal-text"></i></div>
                     <h5 class="fw-bold mb-2">Digital Logbook</h5>
                     <p class="text-muted small mb-0">Input konsumsi BBM kapal secara digital</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
-                <div class="card-modern feature-card text-center p-4">
+                <div class="card-modern feature-card text-center p-4 h-100">
                     <div class="feature-icon mx-auto mb-3" style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, var(--pertamina-red), #c4191f); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.6rem;"><i class="bi bi-broadcast"></i></div>
                     <h5 class="fw-bold mb-2">Real-time Monitoring</h5>
                     <p class="text-muted small mb-0">Pertamina dapat memantau aktivitas kapal</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
-                <div class="card-modern feature-card text-center p-4">
+                <div class="card-modern feature-card text-center p-4 h-100">
                     <div class="feature-icon mx-auto mb-3" style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, var(--pertamina-blue), var(--pertamina-blue-dark)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.6rem;"><i class="bi bi-fuel-pump"></i></div>
                     <h5 class="fw-bold mb-2">Fuel Management</h5>
                     <p class="text-muted small mb-0">Monitoring konsumsi dan stok bahan bakar</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
-                <div class="card-modern feature-card text-center p-4">
+                <div class="card-modern feature-card text-center p-4 h-100">
                     <div class="feature-icon mx-auto mb-3" style="width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg, var(--pertamina-red), #c4191f); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.6rem;"><i class="bi bi-file-earmark-bar-graph"></i></div>
                     <h5 class="fw-bold mb-2">Reporting</h5>
                     <p class="text-muted small mb-0">Laporan operasional kapal</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="faq-section py-5" id="faq" style="background: #f8fafc; border-top: 1px solid #edf2f7; border-bottom: 1px solid #edf2f7;">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <h2 class="section-title fw-bold text-pertamina-blue mb-2">FAQ Penggunaan</h2>
+            <p class="section-subtitle text-muted">Pertanyaan yang sering diajukan mengenai penggunaan sistem monitoring logbook</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <div class="accordion accordion-flush" id="faqAccordion" style="border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                    
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item border-bottom" style="background: #blank;">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="font-size: 1.05rem; transition: all 0.2s ease;">
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana cara awak kapal mengisi logbook harian?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
+                                Awak kapal dapat masuk ke dashboard menggunakan akun resmi mereka, lalu menuju ke menu <strong>Jadwal Perjalanan</strong>. Pada baris pelayaran yang berstatus <em>Berlangsung</em>, klik tombol <strong>Tulis Logbook</strong> untuk membuka formulir. Isi data pemakaian bahan bakar/pelumas lalu klik simpan untuk mengirimkan logbook ke sistem.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item border-bottom" style="background: #blank;">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="font-size: 1.05rem; transition: all 0.2s ease;">
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Apakah data logbook yang sudah terverifikasi dapat diubah?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
+                                <strong>Tidak bisa.</strong> Logbook yang sudah disetujui atau berstatus <strong>Verified</strong> oleh pihak Pertamina tidak dapat diedit atau dihapus oleh awak kapal untuk menjamin integritas dan akuntabilitas data. Awak kapal hanya diperbolehkan mengupdate atau menghapus logbook yang masih berstatus <strong>Pending</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item border-bottom" style="background: #blank;">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="font-size: 1.05rem; transition: all 0.2s ease;">
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana Pertamina memantau dan memverifikasi logbook kapal?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
+                                Pengawas Pertamina dapat memantau grafik konsumsi harian melalui halaman <strong>Monitoring</strong> secara real-time. Pada menu <strong>Verifikasi</strong>, pengawas dapat memeriksa rincian logbook dari masing-masing kapal, lalu memilih untuk melakukan verifikasi (menyetujui) atau menolaknya dengan menyertakan catatan/alasan penolakan.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="accordion-item border-bottom" style="background: #blank;">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style="font-size: 1.05rem; transition: all 0.2s ease;">
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana sistem menghitung "Jumlah Sekarang" di formulir logbook?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
+                                Sistem menghitung Jumlah Sekarang (stok sisa total di tanki) berdasarkan formula: <br>
+                                <code>Jumlah Sekarang = Sisa Sekarang (riil sounding) + Ditambah (bunkering)</code>.<br>
+                                Sedangkan Sisa Sekarang akan secara default dihitung otomatis berdasarkan sisa kemarin dikurangi total pemakaian hari ini, namun awak kapal tetap dapat mengeditnya secara manual.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="accordion-item" style="background: #blank;">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" style="font-size: 1.05rem; transition: all 0.2s ease;">
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Apa yang harus dilakukan jika logbook ditolak (Rejected)?
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
+                                Apabila Pertamina menolak entri logbook, status logbook akan berubah menjadi <strong>Pending/Rejected</strong> disertai alasan penolakan. Awak kapal dapat melihat alasan penolakan tersebut di menu riwayat, lalu menekan tombol <strong>Edit</strong> untuk memperbaiki data konsumsi dan mengirimkannya kembali untuk diverifikasi ulang.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

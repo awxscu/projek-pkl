@@ -39,6 +39,10 @@
                             <option value="VSL-004">KM Bahari Sejahtera (VSL-004)</option>
                         </select>
                     </div>
+                    <div class="col-md-12">
+                        <label for="no_surat_jalan" class="form-label fw-semibold">No Surat Jalan Kapal</label>
+                        <input type="text" class="form-control" id="no_surat_jalan" name="no_surat_jalan" placeholder="Contoh: SPK-2026-0045" required>
+                    </div>
                     <div class="col-md-6">
                         <label for="pelabuhan_asal" class="form-label fw-semibold">Pelabuhan Asal</label>
                         <select class="form-select" id="pelabuhan_asal" name="pelabuhan_asal" required>
@@ -73,8 +77,10 @@
                 </div>
 
                 <div class="d-flex justify-content-end gap-2 border-top pt-3">
-                    <a href="{{ route('awak.perjalanan') }}" class="btn btn-outline-secondary px-4">Batal</a>
-                    <button type="submit" class="btn btn-pertamina px-4">
+                    <a href="{{ route('awak.perjalanan') }}" class="btn btn-outline-secondary" style="border-radius: 10px; font-weight: 600; padding: 0.65rem 1.6rem; transition: all 0.3s ease;">
+                        <i class="bi bi-x-lg me-1"></i>Batal
+                    </a>
+                    <button type="submit" class="btn btn-pertamina" style="border-radius: 10px; font-weight: 600; padding: 0.65rem 1.6rem; transition: all 0.3s ease;">
                         <i class="bi bi-save me-1"></i>Simpan Jadwal
                     </button>
                 </div>
@@ -179,6 +185,7 @@
         
         // Add new voyage to the beginning of the list
         voyages.unshift({
+            no_surat_jalan: document.getElementById('no_surat_jalan').value,
             rute: `${asal} &rarr; ${tujuan}`,
             asal: `${asal} (${getCode(asal)})`,
             tujuan: `${tujuan} (${getCode(tujuan)})`,

@@ -51,7 +51,6 @@
 <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
     <div>
         <h4><i class="bi bi-clock-history me-2 text-pertamina-blue"></i>Riwayat Logbook Kapal</h4>
-        <p class="text-muted mb-0 small">Riwayat pengisian logbook pemakaian BBM & pelumas kapal KM Nusantara Jaya</p>
     </div>
     <a href="{{ route('logbook.create') }}" class="btn btn-pertamina btn-sm">
         <i class="bi bi-plus-lg me-1"></i>Tulis Logbook Baru
@@ -121,23 +120,25 @@
                             <button class="btn btn-sm btn-outline-primary px-2" data-bs-toggle="modal" data-bs-target="#detailModal{{ $i }}" title="Detail">
                                 <i class="bi bi-eye"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-warning edit-logbook-btn px-2" 
-                                data-id="{{ $i }}" 
-                                data-date="{{ $dates[$i] }}" 
-                                data-route="{{ $routes[$i] }}"
-                                data-do-kemarin="{{ $do_kemarin[$i] }}" data-do-induk="{{ $do_induk[$i] }}" data-do-bantu="{{ $do_bantu[$i] }}" data-do-lain="{{ $do_lain[$i] }}" data-do-tambah="{{ $do_tambah[$i] }}"
-                                data-fo-kemarin="{{ $fo_kemarin[$i] }}" data-fo-induk="{{ $fo_induk[$i] }}" data-fo-bantu="{{ $fo_bantu[$i] }}" data-fo-lain="{{ $fo_lain[$i] }}" data-fo-tambah="{{ $fo_tambah[$i] }}"
-                                data-lube-kemarin="{{ $lube_kemarin[$i] }}" data-lube-induk="{{ $lube_induk[$i] }}" data-lube-bantu="{{ $lube_bantu[$i] }}" data-lube-lain="{{ $lube_lain[$i] }}" data-lube-tambah="{{ $lube_tambah[$i] }}"
-                                data-cyl-kemarin="{{ $cyl_kemarin[$i] }}" data-cyl-induk="{{ $cyl_induk[$i] }}" data-cyl-bantu="{{ $cyl_bantu[$i] }}" data-cyl-lain="{{ $cyl_lain[$i] }}" data-cyl-tambah="{{ $cyl_tambah[$i] }}"
-                                data-catatan="{{ $catatan[$i] }}" 
-                                title="Edit">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger delete-logbook-btn px-2" 
-                                data-id="{{ $i }}" 
-                                title="Hapus">
-                                <i class="bi bi-trash"></i>
-                            </button>
+                            @if ($status[$i] != 'Verified')
+                                <button class="btn btn-sm btn-outline-warning edit-logbook-btn px-2" 
+                                    data-id="{{ $i }}" 
+                                    data-date="{{ $dates[$i] }}" 
+                                    data-route="{{ $routes[$i] }}"
+                                    data-do-kemarin="{{ $do_kemarin[$i] }}" data-do-induk="{{ $do_induk[$i] }}" data-do-bantu="{{ $do_bantu[$i] }}" data-do-lain="{{ $do_lain[$i] }}" data-do-tambah="{{ $do_tambah[$i] }}"
+                                    data-fo-kemarin="{{ $fo_kemarin[$i] }}" data-fo-induk="{{ $fo_induk[$i] }}" data-fo-bantu="{{ $fo_bantu[$i] }}" data-fo-lain="{{ $fo_lain[$i] }}" data-fo-tambah="{{ $fo_tambah[$i] }}"
+                                    data-lube-kemarin="{{ $lube_kemarin[$i] }}" data-lube-induk="{{ $lube_induk[$i] }}" data-lube-bantu="{{ $lube_bantu[$i] }}" data-lube-lain="{{ $lube_lain[$i] }}" data-lube-tambah="{{ $lube_tambah[$i] }}"
+                                    data-cyl-kemarin="{{ $cyl_kemarin[$i] }}" data-cyl-induk="{{ $cyl_induk[$i] }}" data-cyl-bantu="{{ $cyl_bantu[$i] }}" data-cyl-lain="{{ $cyl_lain[$i] }}" data-cyl-tambah="{{ $cyl_tambah[$i] }}"
+                                    data-catatan="{{ $catatan[$i] }}" 
+                                    title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger delete-logbook-btn px-2" 
+                                    data-id="{{ $i }}" 
+                                    title="Hapus">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            @endif
                         </div>
                     </td>
                 </tr>

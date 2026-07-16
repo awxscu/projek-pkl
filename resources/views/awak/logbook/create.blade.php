@@ -90,14 +90,18 @@
                                 <input type="number" class="form-control calc-input" id="do_lain_lain" name="do_lain_lain" value="40" min="0">
                             </div>
                             <div class="col-md-6 col-lg-4">
+                                <label for="do_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
+                                <input type="number" class="form-control calc-input" id="do_sisa_sekarang" name="do_sisa_sekarang" value="930" min="0">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
                                 <label for="do_ditambah" class="form-label">Ditambah (L)</label>
                                 <input type="number" class="form-control calc-input" id="do_ditambah" name="do_ditambah" value="0" min="0">
                             </div>
                             <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-pertamina-blue">Sisa Sekarang (L)</label>
+                                <label class="form-label fw-bold text-pertamina-blue">Jumlah Sekarang (L)</label>
                                 <div class="calc-result border-primary py-2 px-3">
-                                    <div class="calc-value text-pertamina-blue" id="do_sisa_sekarang_display">930</div>
-                                    <input type="hidden" id="do_sisa_sekarang" name="do_sisa_sekarang" value="930">
+                                    <div class="calc-value text-pertamina-blue" id="do_jumlah_sekarang_display">930</div>
+                                    <input type="hidden" id="do_jumlah_sekarang" name="do_jumlah_sekarang" value="930">
                                 </div>
                             </div>
                         </div>
@@ -123,14 +127,18 @@
                                 <input type="number" class="form-control calc-input" id="fo_lain_lain" name="fo_lain_lain" value="0" min="0">
                             </div>
                             <div class="col-md-6 col-lg-4">
+                                <label for="fo_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
+                                <input type="number" class="form-control calc-input" id="fo_sisa_sekarang" name="fo_sisa_sekarang" value="800" min="0">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
                                 <label for="fo_ditambah" class="form-label">Ditambah (L)</label>
                                 <input type="number" class="form-control calc-input" id="fo_ditambah" name="fo_ditambah" value="0" min="0">
                             </div>
                             <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-pertamina-red">Sisa Sekarang (L)</label>
+                                <label class="form-label fw-bold text-pertamina-red">Jumlah Sekarang (L)</label>
                                 <div class="calc-result border-danger py-2 px-3" style="background:#fee2e2;border-color:var(--pertamina-red)">
-                                    <div class="calc-value text-pertamina-red" id="fo_sisa_sekarang_display">800</div>
-                                    <input type="hidden" id="fo_sisa_sekarang" name="fo_sisa_sekarang" value="800">
+                                    <div class="calc-value text-pertamina-red" id="fo_jumlah_sekarang_display">800</div>
+                                    <input type="hidden" id="fo_jumlah_sekarang" name="fo_jumlah_sekarang" value="800">
                                 </div>
                             </div>
                         </div>
@@ -156,14 +164,18 @@
                                 <input type="number" class="form-control calc-input" id="lube_lain_lain" name="lube_lain_lain" value="2" min="0">
                             </div>
                             <div class="col-md-6 col-lg-4">
+                                <label for="lube_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
+                                <input type="number" class="form-control calc-input" id="lube_sisa_sekarang" name="lube_sisa_sekarang" value="283" min="0">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
                                 <label for="lube_ditambah" class="form-label">Ditambah (L)</label>
                                 <input type="number" class="form-control calc-input" id="lube_ditambah" name="lube_ditambah" value="0" min="0">
                             </div>
                             <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-warning">Sisa Sekarang (L)</label>
+                                <label class="form-label fw-bold text-warning">Jumlah Sekarang (L)</label>
                                 <div class="calc-result py-2 px-3" style="background:#fef3c7;border-color:#f59e0b">
-                                    <div class="calc-value text-warning" id="lube_sisa_sekarang_display">283</div>
-                                    <input type="hidden" id="lube_sisa_sekarang" name="lube_sisa_sekarang" value="283">
+                                    <div class="calc-value text-warning" id="lube_jumlah_sekarang_display">283</div>
+                                    <input type="hidden" id="lube_jumlah_sekarang" name="lube_jumlah_sekarang" value="283">
                                 </div>
                             </div>
                         </div>
@@ -189,14 +201,18 @@
                                 <input type="number" class="form-control calc-input" id="cylinder_lain_lain" name="cylinder_lain_lain" value="1" min="0">
                             </div>
                             <div class="col-md-6 col-lg-4">
+                                <label for="cylinder_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
+                                <input type="number" class="form-control calc-input" id="cylinder_sisa_sekarang" name="cylinder_sisa_sekarang" value="142" min="0">
+                            </div>
+                            <div class="col-md-6 col-lg-4">
                                 <label for="cylinder_ditambah" class="form-label">Ditambah (L)</label>
                                 <input type="number" class="form-control calc-input" id="cylinder_ditambah" name="cylinder_ditambah" value="0" min="0">
                             </div>
                             <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-secondary">Sisa Sekarang (L)</label>
+                                <label class="form-label fw-bold text-secondary">Jumlah Sekarang (L)</label>
                                 <div class="calc-result py-2 px-3" style="background:#f1f5f9;border-color:#64748b">
-                                    <div class="calc-value text-secondary" id="cylinder_sisa_sekarang_display">142</div>
-                                    <input type="hidden" id="cylinder_sisa_sekarang" name="cylinder_sisa_sekarang" value="142">
+                                    <div class="calc-value text-secondary" id="cylinder_jumlah_sekarang_display">142</div>
+                                    <input type="hidden" id="cylinder_jumlah_sekarang" name="cylinder_jumlah_sekarang" value="142">
                                 </div>
                             </div>
                         </div>
@@ -232,42 +248,71 @@
         // Auto-calculation logic for fuel types
         const types = ['do', 'fo', 'lube', 'cylinder'];
 
-        function hitungSisaSekarang(type) {
+        // Calculate Jumlah Sekarang = Sisa Sekarang + Ditambah
+        function hitungJumlahSekarang(type) {
+            const sisaEl = document.getElementById(type + '_sisa_sekarang');
+            const tambahEl = document.getElementById(type + '_ditambah');
+            const displayEl = document.getElementById(type + '_jumlah_sekarang_display');
+            const hiddenEl = document.getElementById(type + '_jumlah_sekarang');
+
+            if (sisaEl && tambahEl && displayEl && hiddenEl) {
+                const sisa = parseFloat(sisaEl.value) || 0;
+                const tambah = parseFloat(tambahEl.value) || 0;
+                const jumlah = sisa + tambah;
+
+                displayEl.textContent = jumlah.toLocaleString('id-ID', { maximumFractionDigits: 2 });
+                hiddenEl.value = jumlah;
+            }
+        }
+
+        // Calculate default Sisa Sekarang = Sisa Kemarin - (Motor Induk + Motor Bantu + Lain-lain)
+        function autoCalculateSisaSekarang(type) {
             const kemarin = parseFloat(document.getElementById(type + '_sisa_kemarin').value) || 0;
             const induk = parseFloat(document.getElementById(type + '_motor_induk').value) || 0;
             const bantu = parseFloat(document.getElementById(type + '_motor_bantu').value) || 0;
             const lain = parseFloat(document.getElementById(type + '_lain_lain').value) || 0;
-            const tambah = parseFloat(document.getElementById(type + '_ditambah').value) || 0;
 
-            // sisa_sekarang = sisa_kemarin - (motor_induk + motor_bantu + lain_lain) + ditambah
-            const sekarang = kemarin - (induk + bantu + lain) + tambah;
+            const sisa = kemarin - (induk + bantu + lain);
+            const sisaEl = document.getElementById(type + '_sisa_sekarang');
 
-            const displayEl = document.getElementById(type + '_sisa_sekarang_display');
-            const hiddenEl = document.getElementById(type + '_sisa_sekarang');
-
-            if (displayEl && hiddenEl) {
-                displayEl.textContent = sekarang.toLocaleString('id-ID', { maximumFractionDigits: 2 });
-                hiddenEl.value = sekarang;
+            if (sisaEl) {
+                sisaEl.value = Math.max(0, sisa);
             }
+
+            // Always recalculate Jumlah Sekarang after updating Sisa Sekarang
+            hitungJumlahSekarang(type);
         }
 
         // Add event listeners to all calculation inputs
         types.forEach(type => {
-            const inputs = [
+            // Inputs that trigger default Sisa Sekarang auto-calculation
+            const autoSisaInputs = [
                 type + '_sisa_kemarin',
                 type + '_motor_induk',
                 type + '_motor_bantu',
-                type + '_lain_lain',
-                type + '_ditambah'
+                type + '_lain_lain'
             ];
-            inputs.forEach(id => {
+
+            autoSisaInputs.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
-                    el.addEventListener('input', () => hitungSisaSekarang(type));
+                    el.addEventListener('input', () => autoCalculateSisaSekarang(type));
                 }
             });
+
+            // Inputs that trigger Jumlah Sekarang calculation
+            const sisaEl = document.getElementById(type + '_sisa_sekarang');
+            if (sisaEl) {
+                sisaEl.addEventListener('input', () => hitungJumlahSekarang(type));
+            }
+
+            const tambahEl = document.getElementById(type + '_ditambah');
+            if (tambahEl) {
+                tambahEl.addEventListener('input', () => hitungJumlahSekarang(type));
+            }
+
             // Initial calculations
-            hitungSisaSekarang(type);
+            autoCalculateSisaSekarang(type);
         });
 
         // Recalculate on reset
@@ -275,7 +320,7 @@
         formEl.addEventListener('reset', function () {
             // Wait for call stack to clear so inputs get reset values first
             setTimeout(() => {
-                types.forEach(type => hitungSisaSekarang(type));
+                types.forEach(type => autoCalculateSisaSekarang(type));
             }, 50);
         });
 

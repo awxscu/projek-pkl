@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Default voyages data
     const defaultVoyages = [
         {
+            no_surat_jalan: "SPK-2026-0045",
             rute: "Surabaya &rarr; Balikpapan",
             asal: "Tanjung Perak (SUB)",
             tujuan: "Semayang (BPN)",
@@ -94,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
             status: "Berlangsung"
         },
         {
+            no_surat_jalan: "SPK-2026-0044",
             rute: "Balikpapan &rarr; Surabaya",
             asal: "Semayang (BPN)",
             tujuan: "Tanjung Perak (SUB)",
@@ -102,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
             status: "Terjadwal"
         },
         {
+            no_surat_jalan: "SPK-2026-0043",
             rute: "Surabaya &rarr; Makassar",
             asal: "Tanjung Perak (SUB)",
             tujuan: "Soekarno-Hatta (MAK)",
@@ -110,6 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
             status: "Terjadwal"
         },
         {
+            no_surat_jalan: "SPK-2026-0042",
             rute: "Balikpapan &rarr; Surabaya",
             asal: "Semayang (BPN)",
             tujuan: "Tanjung Perak (SUB)",
@@ -118,6 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             status: "Selesai"
         },
         {
+            no_surat_jalan: "SPK-2026-0041",
             rute: "Surabaya &rarr; Balikpapan",
             asal: "Tanjung Perak (SUB)",
             tujuan: "Semayang (BPN)",
@@ -126,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
             status: "Selesai"
         },
         {
+            no_surat_jalan: "SPK-2026-0040",
             rute: "Surabaya &rarr; Banjarmasin",
             asal: "Tanjung Perak (SUB)",
             tujuan: "Trisakti (BDJ)",
@@ -179,7 +185,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><strong>${voyage.rute}</strong></td>
+            <td>
+                <strong>${voyage.rute}</strong><br>
+                <small class="text-muted"><i class="bi bi-file-earmark-text me-1"></i>No. Surat Jalan: ${voyage.no_surat_jalan || '—'}</small>
+            </td>
             <td>${voyage.asal}</td>
             <td>${voyage.tujuan}</td>
             <td>${formatDate(voyage.mulai)}</td>

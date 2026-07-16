@@ -55,87 +55,56 @@
                     <th>Rute Perjalanan</th>
                     <th>Pemakaian BBM</th>
                     <th>Status</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr id="row-monitoring-1">
                     <td><strong>KM Nusantara Jaya</strong><br><small class="text-muted">VSL-001</small></td>
                     <td>Budi Santoso</td>
                     <td>14/07/2026</td>
                     <td>Surabaya → Balikpapan</td>
                     <td>320 L</td>
-                    <td><span class="badge badge-verified">Verified</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                    </td>
+                    <td><span class="badge badge-verified status-badge">Verified</span></td>
                 </tr>
-                <tr>
+                <tr id="row-monitoring-2">
                     <td><strong>KM Samudra Indah</strong><br><small class="text-muted">VSL-002</small></td>
                     <td>Andi Wijaya</td>
                     <td>14/07/2026</td>
                     <td>Jakarta → Semarang</td>
                     <td>285 L</td>
-                    <td><span class="badge badge-verified">Verified</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                    </td>
+                    <td><span class="badge badge-verified status-badge">Verified</span></td>
                 </tr>
-                <tr>
+                <tr id="row-monitoring-3">
                     <td><strong>KM Bahari Sejahtera</strong><br><small class="text-muted">VSL-004</small></td>
                     <td>Rudi Hartono</td>
                     <td>14/07/2026</td>
                     <td>Denpasar → Lombok</td>
                     <td>198 L</td>
-                    <td><span class="badge badge-pending">Pending</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                    </td>
+                    <td><span class="badge badge-pending status-badge">Pending</span></td>
                 </tr>
-                <tr>
+                <tr id="row-monitoring-4">
                     <td><strong>KM Pelangi Nusantara</strong><br><small class="text-muted">VSL-003</small></td>
                     <td>Siti Aminah</td>
                     <td>14/07/2026</td>
                     <td>Makassar → Baubau</td>
                     <td>—</td>
-                    <td><span class="badge badge-empty">Belum Mengisi</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success disabled"><i class="bi bi-check-lg"></i></button>
-                        <button class="btn btn-sm btn-outline-danger disabled"><i class="bi bi-x-lg"></i></button>
-                    </td>
+                    <td><span class="badge badge-empty status-badge">Belum Mengisi</span></td>
                 </tr>
-                <tr>
+                <tr id="row-monitoring-5">
                     <td><strong>KM Citra Lautan</strong><br><small class="text-muted">VSL-005</small></td>
                     <td>Dedi Kurniawan</td>
                     <td>14/07/2026</td>
                     <td>Pontianak → Ketapang</td>
                     <td>410 L</td>
-                    <td><span class="badge badge-pending">Pending</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                    </td>
+                    <td><span class="badge badge-pending status-badge">Pending</span></td>
                 </tr>
-                <tr>
+                <tr id="row-monitoring-6">
                     <td><strong>KM Lautan Biru</strong><br><small class="text-muted">VSL-006</small></td>
                     <td>Hendra Gunawan</td>
                     <td>13/07/2026</td>
                     <td>Balikpapan → Tarakan</td>
                     <td>350 L</td>
-                    <td><span class="badge badge-verified">Verified</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                    </td>
+                    <td><span class="badge badge-verified status-badge">Verified</span></td>
                 </tr>
             </tbody>
         </table>
