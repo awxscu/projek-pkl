@@ -13,15 +13,19 @@
     <form class="row g-3 align-items-end">
         <div class="col-md-4">
             <label class="form-label">Kapal</label>
-            <select class="form-select">
+            <select class="form-select" id="filter_kapal">
                 <option value="">Semua Kapal</option>
                 <option>KM Nusantara Jaya</option>
                 <option>KM Samudra Indah</option>
+                <option>KM Pelangi Nusantara</option>
+                <option>KM Bahari Sejahtera</option>
+                <option>KM Citra Lautan</option>
+                <option>KM Lautan Biru</option>
             </select>
         </div>
         <div class="col-md-3">
             <label class="form-label">Status</label>
-            <select class="form-select">
+            <select class="form-select" id="filter_status">
                 <option value="">Semua</option>
                 <option>Terjadwal</option>
                 <option>Berlangsung</option>
@@ -30,10 +34,10 @@
         </div>
         <div class="col-md-3">
             <label class="form-label">Tanggal</label>
-            <input type="date" class="form-control" value="2026-07-14">
+            <input type="date" class="form-control" id="filter_tanggal" value="2026-07-14">
         </div>
         <div class="col-md-2">
-            <button type="button" class="btn btn-pertamina w-100"><i class="bi bi-search me-1"></i>Filter</button>
+            <button type="button" class="btn btn-pertamina w-100" id="btn_filter_perjalanan"><i class="bi bi-search me-1"></i>Filter</button>
         </div>
     </form>
 </div>
@@ -112,3 +116,47 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnFilter = document.getElementById('btn_filter_perjalanan');
+        if (btnFilter) {
+            btnFilter.addEventListener('click', function() {
+                const kapalVal = document.getElementById('filter_kapal').value.toLowerCase().trim();
+                const statusVal = document.getElementById('filter_status').value.toLowerCase().trim();
+                const tanggalVal = document.getElementById('filter_tanggal').value;
+                
+                let formattedTanggal = '';
+                if (tanggalVal) {
+                    const parts = tanggalVal.split('-');
+                    if (parts.length === 3) {
+                        formattedTanggal = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                    }
+                }
+
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    const kapalCell = row.cells[0];
+                    const kapalText = kapalCell ? kapalCell.textContent.toLowerCase() : '';
+                    
+                    const berangkatCell = row.cells[4];
+                    const berangkatText = berangkatCell ? berangkatCell.textContent.trim() : '';
+
+                    const tibaCell = row.cells[5];
+                    const tibaText = tibaCell ? tibaCell.textContent.trim() : '';
+                    
+                    const statusCell = row.cells[6];
+                    const statusText = statusCell ? statusCell.textContent.toLowerCase().trim() : '';
+
+                    let visible = true;
+                    if (kapalVal && !kapalText.includes(kapalVal)) visible = false;
+                    if (statusVal && statusText !== statusVal) visible = false;
+                    if (formattedTanggal && berangkatText !== formattedTanggal && tibaText !== formattedTanggal) visible = false;
+
+                    row.style.display = visible ? '' : 'none';
+                });
+            });
+        }
+    });
+</script>
+@endpush

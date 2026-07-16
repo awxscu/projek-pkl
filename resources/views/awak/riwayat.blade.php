@@ -62,14 +62,14 @@
     <form class="row g-3 align-items-end">
         <div class="col-md-4">
             <label class="form-label">Tanggal Mulai</label>
-            <input type="date" class="form-control" value="2026-07-01">
+            <input type="date" class="form-control" id="filter_tanggal_mulai" value="2026-07-01">
         </div>
         <div class="col-md-4">
             <label class="form-label">Tanggal Selesai</label>
-            <input type="date" class="form-control" value="2026-07-14">
+            <input type="date" class="form-control" id="filter_tanggal_selesai" value="2026-07-14">
         </div>
         <div class="col-md-4">
-            <button type="button" class="btn btn-pertamina w-100">
+            <button type="button" class="btn btn-pertamina w-100" id="btn_filter_riwayat">
                 <i class="bi bi-search me-1"></i>Filter Riwayat
             </button>
         </div>
@@ -562,6 +562,42 @@
                 const bsAlert = new bootstrap.Alert(alertDiv);
                 bsAlert.close();
             }, 3000);
+        }
+
+        // Filter handler
+        const btnFilter = document.getElementById('btn_filter_riwayat');
+        if (btnFilter) {
+            btnFilter.addEventListener('click', function() {
+                const startDateVal = document.getElementById('filter_tanggal_mulai').value;
+                const endDateVal = document.getElementById('filter_tanggal_selesai').value;
+                
+                const startDate = startDateVal ? new Date(startDateVal) : null;
+                const endDate = endDateVal ? new Date(endDateVal) : null;
+                
+                if (startDate) startDate.setHours(0,0,0,0);
+                if (endDate) endDate.setHours(23,59,59,999);
+                
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    // Skip detail modal rows or rows without cells
+                    if (!row.cells || row.cells.length < 5) return;
+                    
+                    const dateCell = row.cells[0];
+                    if (dateCell) {
+                        const dateText = dateCell.textContent.trim();
+                        const parts = dateText.split('/');
+                        if (parts.length === 3) {
+                            const rowDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                            rowDate.setHours(0,0,0,0);
+                            
+                            let visible = true;
+                            if (startDate && rowDate < startDate) visible = false;
+                            if (endDate && rowDate > endDate) visible = false;
+                            
+                            row.style.display = visible ? '' : 'none';
+                        }
+                    }
+                });
+            });
         }
     });
 </script>

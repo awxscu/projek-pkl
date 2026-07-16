@@ -69,9 +69,6 @@
     <div class="container hero-content" style="position: relative; z-index: 2; color: #fff;">
         <div class="row">
             <div class="col-lg-9">
-                <span class="badge bg-white text-pertamina-blue mb-3 px-3 py-2 fw-bold" style="border-radius: 30px;">
-                    <i class="bi bg-pertamina-red text-white p-1 rounded-circle bi-shield-check me-1"></i> Pertamina Patra Niaga
-                </span>
                 <h1 class="hero-title fw-bold text-white mb-3" style="font-family: 'Poppins', sans-serif; font-size: clamp(1.8rem, 4.5vw, 3rem); line-height: 1.2; text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 0, 0, 0.4);">
                     Sistem Monitoring dan Pengelolaan Logbook Kapal
                 </h1>

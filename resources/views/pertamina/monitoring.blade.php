@@ -13,7 +13,7 @@
     <form class="row g-3 align-items-end">
         <div class="col-md-3">
             <label class="form-label">Kapal</label>
-            <select class="form-select">
+            <select class="form-select" id="filter_kapal">
                 <option value="">Semua Kapal</option>
                 <option>KM Nusantara Jaya</option>
                 <option>KM Samudra Indah</option>
@@ -23,15 +23,15 @@
         </div>
         <div class="col-md-2">
             <label class="form-label">Vessel Code</label>
-            <input type="text" class="form-control" placeholder="VSL-001">
+            <input type="text" class="form-control" id="filter_vessel" placeholder="VSL-001">
         </div>
         <div class="col-md-2">
             <label class="form-label">Tanggal</label>
-            <input type="date" class="form-control" value="2026-07-14">
+            <input type="date" class="form-control" id="filter_tanggal" value="2026-07-14">
         </div>
         <div class="col-md-3">
             <label class="form-label">Status Verifikasi</label>
-            <select class="form-select">
+            <select class="form-select" id="filter_status">
                 <option value="">Semua Status</option>
                 <option>Verified</option>
                 <option>Pending</option>
@@ -39,7 +39,7 @@
             </select>
         </div>
         <div class="col-md-2">
-            <button type="button" class="btn btn-pertamina w-100"><i class="bi bi-search me-1"></i>Filter</button>
+            <button type="button" class="btn btn-pertamina w-100" id="btn_filter_monitoring"><i class="bi bi-search me-1"></i>Filter</button>
         </div>
     </form>
 </div>
@@ -111,3 +111,47 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnFilter = document.getElementById('btn_filter_monitoring');
+        if (btnFilter) {
+            btnFilter.addEventListener('click', function() {
+                const kapalVal = document.getElementById('filter_kapal').value.toLowerCase().trim();
+                const vesselVal = document.getElementById('filter_vessel').value.toLowerCase().trim();
+                const tanggalVal = document.getElementById('filter_tanggal').value;
+                const statusVal = document.getElementById('filter_status').value.toLowerCase().trim();
+                
+                let formattedTanggal = '';
+                if (tanggalVal) {
+                    const parts = tanggalVal.split('-');
+                    if (parts.length === 3) {
+                        formattedTanggal = `${parts[2]}/${parts[1]}/${parts[0]}`;
+                    }
+                }
+
+                document.querySelectorAll('tbody tr').forEach(row => {
+                    const kapalCell = row.cells[0];
+                    const kapalText = kapalCell ? kapalCell.querySelector('strong').textContent.toLowerCase() : '';
+                    const vesselText = kapalCell ? kapalCell.querySelector('small').textContent.toLowerCase() : '';
+                    
+                    const tanggalCell = row.cells[2];
+                    const tanggalText = tanggalCell ? tanggalCell.textContent.trim() : '';
+                    
+                    const statusCell = row.cells[5];
+                    const statusText = statusCell ? statusCell.querySelector('.status-badge').textContent.toLowerCase().trim() : '';
+
+                    let visible = true;
+                    if (kapalVal && !kapalText.includes(kapalVal)) visible = false;
+                    if (vesselVal && !vesselText.includes(vesselVal)) visible = false;
+                    if (formattedTanggal && tanggalText !== formattedTanggal) visible = false;
+                    if (statusVal && statusText !== statusVal) visible = false;
+
+                    row.style.display = visible ? '' : 'none';
+                });
+            });
+        }
+    });
+</script>
+@endpush
