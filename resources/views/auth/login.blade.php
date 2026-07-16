@@ -1,5 +1,30 @@
 @extends('layouts.app')
 
+@push('styles')
+<style>
+    /* Force login page background to soft light grey */
+    .login-page {
+        background: #f1f5f9 !important;
+    }
+    
+    /* Make login card stand out with a beautiful premium shadow and border */
+    .login-card {
+        border: 1px solid #edf2f7;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08), 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+        transition: all 0.3s ease;
+    }
+    .login-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 25px 60px rgba(15, 23, 42, 0.12), 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+    }
+    
+    /* Enlarge logo on the login page */
+    .logo-pertamina.logo-xl img {
+        height: 125px !important; /* Enlarged from 96px */
+    }
+</style>
+@endpush
+
 @section('title', 'Login - Logbook Kapal Pertamina')
 @section('body-class', '')
 

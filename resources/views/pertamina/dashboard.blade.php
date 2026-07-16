@@ -53,7 +53,7 @@
         <div class="card-modern chart-card h-100">
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                 <div>
-                    <div class="chart-title"><i class="bi bi-bar-chart-line me-1 text-pertamina-blue"></i> Pemakaian BBM Berdasarkan Kapal</div>
+                    <div class="chart-title"><i class="bi bi-bar-chart-line me-1 text-pertamina-blue"></i> Pemakaian BBM dan Pelumas Berdasarkan Kapal</div>
                     <div class="chart-subtitle mb-0" id="bbmChartSubtitle">Konsumsi Diesel Oil (liter)</div>
                 </div>
                 <div class="d-flex gap-1 flex-wrap">
