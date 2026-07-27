@@ -139,12 +139,12 @@
                     <div class="accordion-item border-bottom" style="background: #blank;">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="font-size: 1.05rem; transition: all 0.2s ease;">
-                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana cara awak kapal mengisi logbook harian?
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana cara awak kapal menulis logbook baru?
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
                             <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
-                                Awak kapal dapat masuk ke dashboard menggunakan akun resmi mereka, lalu menuju ke menu <strong>Jadwal Perjalanan</strong>. Pada baris pelayaran yang berstatus <em>Berlangsung</em>, klik tombol <strong>Tulis Logbook</strong> untuk membuka formulir. Isi data pemakaian bahan bakar/pelumas lalu klik simpan untuk mengirimkan logbook ke sistem.
+                                Awak kapal dapat masuk ke dashboard menggunakan ID mereka (seperti <strong>AK001</strong>), lalu menuju ke menu <strong>Tulis Logbook</strong>. Di sana, awak kapal dapat memilih nama perusahaan dan nama kapal secara cepat melalui kolom pencarian dropdown dinamis, menginput data pemakaian, lalu menekan tombol simpan tanpa dialihkan dari halaman pengisian.
                             </div>
                         </div>
                     </div>
@@ -153,12 +153,12 @@
                     <div class="accordion-item border-bottom" style="background: #blank;">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="font-size: 1.05rem; transition: all 0.2s ease;">
-                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Apakah data logbook yang sudah terverifikasi dapat diubah?
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Apakah awak kapal dapat mengubah logbook yang sudah dikirim?
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
                             <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
-                                <strong>Tidak bisa.</strong> Logbook yang sudah disetujui atau berstatus <strong>Verified</strong> oleh pihak Pertamina tidak dapat diedit atau dihapus oleh awak kapal untuk menjamin integritas dan akuntabilitas data. Awak kapal hanya diperbolehkan mengupdate atau menghapus logbook yang masih berstatus <strong>Pending</strong>.
+                                Ya. Awak kapal dapat membuka menu <strong>Riwayat Logbook</strong>, lalu mengeklik tombol <strong>Edit</strong> (ikon pensil kuning) di baris logbook yang ingin diperbaiki. Setelah diubah secara manual, klik simpan untuk memperbarui data pemakaian di database secara langsung.
                             </div>
                         </div>
                     </div>
@@ -167,12 +167,12 @@
                     <div class="accordion-item border-bottom" style="background: #blank;">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="font-size: 1.05rem; transition: all 0.2s ease;">
-                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana Pertamina memantau dan memverifikasi logbook kapal?
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana Pertamina memantau keakuratan pengisian logbook kapal?
                             </button>
                         </h2>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
                             <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
-                                Pengawas Pertamina dapat memantau grafik konsumsi harian melalui halaman <strong>Monitoring</strong> secara real-time. Pada menu <strong>Verifikasi</strong>, pengawas dapat memeriksa rincian logbook dari masing-masing kapal, lalu memilih untuk melakukan verifikasi (menyetujui) atau menolaknya dengan menyertakan catatan/alasan penolakan.
+                                Pihak Pertamina memantau status pengisian bulanan kapal di halaman <strong>Monitoring</strong> yang terbagi menjadi tiga tingkat: <strong>Belum Mengisi</strong> (jika logbook kosong), <strong>Belum Lengkap</strong> (jika terisi sebagian hari), dan <strong>Selesai</strong> (jika terisi penuh). Sistem juga membandingkan input manual dengan perhitungan sistem untuk memantau adanya selisih (discrepancy) pemakaian BBM secara otomatis.
                             </div>
                         </div>
                     </div>
@@ -181,14 +181,12 @@
                     <div class="accordion-item border-bottom" style="background: #blank;">
                         <h2 class="accordion-header" id="headingFour">
                             <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style="font-size: 1.05rem; transition: all 0.2s ease;">
-                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana sistem menghitung "Jumlah Sekarang" di formulir logbook?
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Bagaimana cara mengunduh laporan rekapitulasi penggunaan BBM?
                             </button>
                         </h2>
                         <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
                             <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
-                                Sistem menghitung Jumlah Sekarang (stok sisa total di tanki) berdasarkan formula: <br>
-                                <code>Jumlah Sekarang = Sisa Sekarang (riil sounding) + Ditambah (bunkering)</code>.<br>
-                                Sedangkan Sisa Sekarang akan secara default dihitung otomatis berdasarkan sisa kemarin dikurangi total pemakaian hari ini, namun awak kapal tetap dapat mengeditnya secara manual.
+                                Pada menu <strong>Laporan</strong>, pihak Pertamina dapat mengeklik tombol unduh untuk kapal pilihan atau mengekspor rekapitulasi tahunan secara keseluruhan. Laporan dapat langsung diunduh dalam format berkas **Excel (CSV)** atau disimpan rapi dalam format **PDF** melalui dialog cetak peramban.
                             </div>
                         </div>
                     </div>
@@ -197,12 +195,12 @@
                     <div class="accordion-item" style="background: #blank;">
                         <h2 class="accordion-header" id="headingFive">
                             <button class="accordion-button collapsed fw-semibold text-pertamina-blue py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive" style="font-size: 1.05rem; transition: all 0.2s ease;">
-                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Apa yang harus dilakukan jika logbook ditolak (Rejected)?
+                                <i class="bi bi-question-circle text-pertamina-red me-2"></i> Apakah kolom total pemakaian BBM terisi secara otomatis?
                             </button>
                         </h2>
                         <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
                             <div class="accordion-body px-4 pb-4 text-muted small" style="line-height: 1.6;">
-                                Apabila Pertamina menolak entri logbook, status logbook akan berubah menjadi <strong>Pending/Rejected</strong> disertai alasan penolakan. Awak kapal dapat melihat alasan penolakan tersebut di menu riwayat, lalu menekan tombol <strong>Edit</strong> untuk memperbaiki data konsumsi dan mengirimkannya kembali untuk diverifikasi ulang.
+                                Tidak. Untuk memastikan akurasi data riil sounding di lapangan, kolom **Total Penggunaan** pada formulir pengisian logbook baru dan pengeditan logbook kini diisi secara <strong>manual 100%</strong> oleh awak kapal tanpa kalkulasi otomatis.
                             </div>
                         </div>
                     </div>

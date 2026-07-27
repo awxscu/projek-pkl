@@ -1,44 +1,46 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Data Kapal')
+@section('title', 'Data User')
 @section('navbar') @include('partials.navbar-pertamina') @endsection
 
 @section('content')
-<div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-2">
+<div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-2 mb-4">
     <div>
-        <h4><i class="bi bi-ship me-2 text-pertamina-blue"></i>Data Kapal di Regional Jatimbalinus</h4>
-        <p class="text-muted mb-0 small">Daftar kapal yang terdaftar dalam sistem</p>
+        <h4><i class="bi bi-people me-2 text-pertamina-blue"></i>Data User</h4>
+        <p class="text-muted mb-0 small">Daftar pengguna terdaftar dalam sistem monitoring logbook</p>
     </div>
-    <button class="btn btn-pertamina btn-sm" data-bs-toggle="modal" data-bs-target="#tambahKapalModal">
+    <button class="btn btn-pertamina btn-sm" data-bs-toggle="modal" data-bs-target="#tambahUserModal">
         <i class="bi bi-plus-lg me-1"></i>Tambah Data
     </button>
 </div>
 
+<!-- TABLE CARD -->
 <div class="card-modern">
     <div class="table-responsive">
         <table class="table table-modern">
             <thead>
                 <tr>
-                    <th>Nama Kapal</th>
+                    <th>ID User</th>
+                    <th>Nama User</th>
                     <th>Nama Perusahaan</th>
-                    <th>FTIT</th>
-                    <th>Status</th>
+                    <th>Role</th>
                 </tr>
             </thead>
-            <tbody id="kapalTableBody">
-                @forelse ($kapal as $k)
+            <tbody id="userTableBody">
+                @forelse ($users as $u)
                     @php
-                        $badgeClass = $k->status === 'Aktif' ? 'badge-filled' : 'badge-pending';
+                        $roleBadge = $u->role === 'admin' ? 'badge-filled' : 'badge-pending';
+                        $roleLabel = $u->role === 'admin' ? 'Admin' : 'Awak Kapal';
                     @endphp
                     <tr>
-                        <td><i class="bi bi-ship me-1 text-pertamina-blue"></i> {{ $k->nama_kapal }}</td>
-                        <td>{{ $k->perusahaan->nama_perusahaan ?? '—' }}</td>
-                        <td>{{ $k->ftit->nama_ftit ?? '—' }}</td>
-                        <td><span class="badge {{ $badgeClass }}">{{ $k->status }}</span></td>
+                        <td><strong>{{ $u->id_user }}</strong></td>
+                        <td><i class="bi bi-person me-2 text-pertamina-blue"></i> {{ $u->nama_user }}</td>
+                        <td>{{ $u->perusahaan->nama_perusahaan ?? '—' }}</td>
+                        <td><span class="badge {{ $roleBadge }}">{{ $roleLabel }}</span></td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center text-muted">Tidak ada data kapal.</td>
+                        <td colspan="4" class="text-center text-muted py-4">Tidak ada data user.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -46,23 +48,39 @@
     </div>
 </div>
 
-<!-- TAMBAH KAPAL MODAL -->
-<div class="modal fade" id="tambahKapalModal" tabindex="-1" aria-labelledby="tambahKapalModalLabel" aria-hidden="true">
+<!-- TAMBAH USER MODAL -->
+<div class="modal fade" id="tambahUserModal" tabindex="-1" aria-labelledby="tambahUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="border-radius: 20px; overflow: hidden;">
             <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold text-pertamina-blue" id="tambahKapalModalLabel">
-                    <i class="bi bi-ship me-2"></i>Tambah Data Baru
+                <h5 class="modal-title fw-bold text-pertamina-blue" id="tambahUserModalLabel">
+                    <i class="bi bi-person-fill-add me-2"></i>Tambah Data Baru
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="tambahKapalForm">
+            <form id="tambahUserForm">
                 @csrf
                 <div class="modal-body p-4">
-                    <!-- DROPDOWN NAMA PERUSAHAAN -->
+                    <!-- NAMA USER -->
                     <div class="mb-3">
+                        <label for="nama_user" class="form-label fw-bold">Nama User</label>
+                        <input type="text" class="form-control" id="nama_user" required placeholder="Contoh: Ahmad Wijaya">
+                    </div>
+
+                    <!-- ROLE -->
+                    <div class="mb-3">
+                        <label for="role" class="form-label fw-bold">Role</label>
+                        <select id="role" class="form-select" required>
+                            <option value="">-- Pilih Role --</option>
+                            <option value="admin">Admin</option>
+                            <option value="awak_kapal">Awak Kapal</option>
+                        </select>
+                    </div>
+
+                    <!-- NAMA PERUSAHAAN -->
+                    <div class="mb-3" id="company_wrapper" style="display: none;">
                         <label for="id_perusahaan" class="form-label fw-bold">Nama Perusahaan</label>
-                        <select id="id_perusahaan" required style="width: 100%; display: none;">
+                        <select id="id_perusahaan" style="width: 100%; display: none;">
                             <option value="">-- Pilih Perusahaan --</option>
                             @foreach ($companies as $company)
                                 <option value="{{ $company->id_perusahaan }}">{{ $company->nama_perusahaan }}</option>
@@ -77,27 +95,10 @@
                         <input type="text" class="form-control" id="nama_perusahaan_baru" placeholder="Masukkan nama perusahaan baru">
                     </div>
 
-                    <!-- DROPDOWN FTIT -->
+                    <!-- PASSWORD -->
                     <div class="mb-3">
-                        <label for="id_ftit" class="form-label fw-bold">Depot / Terminal FTIT</label>
-                        <select id="id_ftit" class="form-select" required>
-                            <option value="">-- Pilih Depot/Terminal FTIT --</option>
-                            @foreach ($ftits as $ft)
-                                <option value="{{ $ft->id_ftit }}">{{ $ft->nama_ftit }} ({{ $ft->id_ftit }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- NAMA KAPAL (MANUAL) -->
-                    <div class="mb-3">
-                        <label for="nama_kapal" class="form-label fw-bold">Nama Kapal</label>
-                        <input type="text" class="form-control" id="nama_kapal" required placeholder="Contoh: KM Samudera Jaya">
-                    </div>
-
-                    <!-- KODE VESSEL (MANUAL) -->
-                    <div class="mb-3">
-                        <label for="kode_vessel" class="form-label fw-bold">Kode Vessel</label>
-                        <input type="text" class="form-control" id="kode_vessel" required placeholder="Contoh: VSL-007">
+                        <label for="password" class="form-label fw-bold">Password</label>
+                        <input type="password" class="form-control" id="password" required placeholder="Minimal 6 karakter">
                     </div>
                 </div>
                 <div class="modal-footer bg-light px-4 py-3 d-flex justify-content-end gap-2">
@@ -108,7 +109,6 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @push('styles')
@@ -182,9 +182,21 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Initialize Select2
         $('#id_perusahaan').select2({
-            dropdownParent: $('#tambahKapalModal'),
+            dropdownParent: $('#tambahUserModal'),
             placeholder: '-- Pilih Perusahaan --',
             allowClear: true
+        });
+
+        // Clear/Show/Hide company fields based on role selection
+        document.getElementById('role').addEventListener('change', function () {
+            if (this.value === 'admin') {
+                $('#company_wrapper').slideDown();
+            } else {
+                $('#company_wrapper').slideUp();
+                $('#id_perusahaan').val(null).trigger('change');
+                $('#new_company_wrapper').slideUp();
+                $('#nama_perusahaan_baru').val('');
+            }
         });
 
         // Show/hide manual company name field based on choice
@@ -198,59 +210,62 @@
             }
         });
 
-        const form = document.getElementById('tambahKapalForm');
+        const form = document.getElementById('tambahUserForm');
         
         form.addEventListener('submit', function (e) {
             e.preventDefault();
             
             // Get values
-            const nama = document.getElementById('nama_kapal').value;
-            const kode = document.getElementById('kode_vessel').value;
-            const perusahaanSelect = document.getElementById('id_perusahaan');
-            const perusahaanId = perusahaanSelect.value;
+            const nama = document.getElementById('nama_user').value;
+            const role = document.getElementById('role').value;
+            const password = document.getElementById('password').value;
+            const perusahaanId = document.getElementById('id_perusahaan').value;
             const namaPerusahaanBaru = document.getElementById('nama_perusahaan_baru').value;
-            const idFtit = document.getElementById('id_ftit').value;
             
             // Strict Validation
-            if (!perusahaanId) {
-                showToast('Nama Perusahaan wajib dipilih!', 'danger');
+            if (!nama.trim()) {
+                showToast('Nama User wajib diisi!', 'danger');
                 return;
             }
-            if (perusahaanId === 'lainnya' && !namaPerusahaanBaru.trim()) {
+            if (!role) {
+                showToast('Role wajib dipilih!', 'danger');
+                return;
+            }
+            if (role === 'admin' && !perusahaanId) {
+                showToast('Nama Perusahaan wajib dipilih untuk Admin!', 'danger');
+                return;
+            }
+            if (role === 'admin' && perusahaanId === 'lainnya' && !namaPerusahaanBaru.trim()) {
                 showToast('Nama Perusahaan Baru wajib diisi!', 'danger');
                 return;
             }
-            if (!idFtit) {
-                showToast('Depot / Terminal FTIT wajib dipilih!', 'danger');
+            if (!password) {
+                showToast('Password wajib diisi!', 'danger');
                 return;
             }
-            if (!nama.trim()) {
-                showToast('Nama Kapal wajib diisi!', 'danger');
-                return;
-            }
-            if (!kode.trim()) {
-                showToast('Kode Vessel wajib diisi!', 'danger');
+            if (password.length < 6) {
+                showToast('Password minimal harus 6 karakter!', 'danger');
                 return;
             }
             
-            fetch('/dashboard/pertamina/kapal/tambah', {
+            fetch('/dashboard/pertamina/user/tambah', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                 },
                 body: JSON.stringify({
-                    nama_kapal: nama,
-                    kode_vessel: kode,
-                    id_perusahaan: perusahaanId,
-                    nama_perusahaan_baru: namaPerusahaanBaru,
-                    id_ftit: idFtit
+                    nama_user: nama,
+                    role: role,
+                    password: password,
+                    id_perusahaan: role === 'admin' ? perusahaanId : null,
+                    nama_perusahaan_baru: role === 'admin' ? namaPerusahaanBaru : null
                 })
             })
             .then(response => {
                 return response.json().then(data => {
                     if (!response.ok) {
-                        let errMsg = 'Gagal menambahkan kapal';
+                        let errMsg = 'Gagal menambahkan user';
                         if (data.errors) {
                             errMsg = Object.values(data.errors).flat().join(', ');
                         } else if (data.message) {
@@ -263,16 +278,16 @@
             })
             .then(data => {
                 if (data.success) {
-                    const dynamicCompany = data.data.perusahaan ? data.data.perusahaan.nama_perusahaan : '';
+                    const displayCompany = data.data.perusahaan ? data.data.perusahaan.nama_perusahaan : '—';
                     
                     // Add new company option dynamically to Select2 if it was added manually
-                    if (perusahaanId === 'lainnya' && data.data.id_perusahaan) {
-                        const newOption = new Option(dynamicCompany, data.data.id_perusahaan, false, false);
+                    if (role === 'admin' && perusahaanId === 'lainnya' && data.data.id_perusahaan) {
+                        const newOption = new Option(displayCompany, data.data.id_perusahaan, false, false);
                         $('#id_perusahaan').prepend(newOption).trigger('change');
                     }
 
                     // Create new row
-                    const tbody = document.getElementById('kapalTableBody');
+                    const tbody = document.getElementById('userTableBody');
                     
                     // Remove "tidak ada data" row if it exists
                     if (tbody.children.length === 1 && tbody.children[0].cells.length === 1) {
@@ -284,27 +299,29 @@
                     tr.style.transform = 'translateY(10px)';
                     tr.style.transition = 'all 0.4s ease';
                     
-                    const ftitNama = data.data.ftit ? data.data.ftit.nama_ftit : '—';
+                    const roleLabel = data.data.role === 'admin' ? 'Admin' : 'Awak Kapal';
+                    const roleBadge = data.data.role === 'admin' ? 'badge-filled' : 'badge-pending';
                     
                     tr.innerHTML = `
-                        <td><i class="bi bi-ship me-1 text-pertamina-blue"></i> ${nama}</td>
-                        <td>${dynamicCompany}</td>
-                        <td>${ftitNama}</td>
-                        <td><span class="badge badge-filled">Aktif</span></td>
+                        <td><strong>${data.data.id_user}</strong></td>
+                        <td><i class="bi bi-person me-2 text-pertamina-blue"></i> ${nama}</td>
+                        <td>${displayCompany}</td>
+                        <td><span class="badge ${roleBadge}">${roleLabel}</span></td>
                     `;
                     
                     // Insert at the beginning of the table body
                     tbody.insertBefore(tr, tbody.firstChild);
                     
                     // Hide modal
-                    const modalEl = document.getElementById('tambahKapalModal');
+                    const modalEl = document.getElementById('tambahUserModal');
                     const modal = bootstrap.Modal.getInstance(modalEl);
                     modal.hide();
                     
-                    // Reset form and Select2
+                    // Reset form and select2
                     form.reset();
                     $('#id_perusahaan').val(null).trigger('change');
-                    $('#id_ftit').val('');
+                    $('#company_wrapper').hide();
+                    $('#new_company_wrapper').hide();
                     
                     // Trigger animation
                     setTimeout(() => {
@@ -313,7 +330,7 @@
                     }, 100);
                     
                     // Show toast message
-                    showToast('Kapal baru berhasil ditambahkan!', 'success');
+                    showToast('User baru berhasil ditambahkan!', 'success');
                 }
             })
             .catch(error => {

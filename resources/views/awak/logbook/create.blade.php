@@ -12,7 +12,7 @@
                     <h5 class="fw-bold text-pertamina-blue mb-1">
                         <i class="bi bi-journal-plus me-2"></i>Sistem Monitoring Logbook — Input Baru
                     </h5>
-                    <p class="text-muted mb-0 small">Masukkan pencatatan pemakaian BBM dan pelumas kapal penumpang secara lengkap</p>
+                    <p class="text-muted mb-0 small">Masukkan pencatatan pemakaian Fuel Oil (FO) kapal secara lengkap</p>
                 </div>
             </div>
 
@@ -24,198 +24,102 @@
                     <i class="bi bi-card-heading me-2"></i>1. Data Utama
                 </div>
                 <div class="row g-3 mb-4">
-                    <div class="col-md-6">
-                        <label for="kapal" class="form-label">Kapal</label>
-                        <select class="form-select" id="kapal" name="kapal" required>
-                            <option value="VSL-001" selected>KM Nusantara Jaya (VSL-001)</option>
-                            <option value="VSL-002">KM Samudra Indah (VSL-002)</option>
-                            <option value="VSL-003">KM Pelangi Nusantara (VSL-003)</option>
-                            <option value="VSL-004">KM Bahari Sejahtera (VSL-004)</option>
-                        </select>
+                    <!-- NAMA PERUSAHAAN -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold"><i class="bi bi-building me-2"></i>Nama Perusahaan</label>
+                        <div class="dropdown" id="searchableCompanyDropdown">
+                            <input type="text" class="form-select text-start" id="companySelectBtn" data-bs-toggle="dropdown" aria-expanded="false" readonly placeholder="Pilih Perusahaan..." style="cursor: pointer;">
+                            <input type="hidden" name="company" id="company">
+                            <div class="dropdown-menu p-3" style="width: 100%; min-width: 250px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                                <input type="text" class="form-control form-control-sm mb-2" id="companySearchInput" placeholder="Cari perusahaan...">
+                                <div style="max-height: 200px; overflow-y: auto;" id="companyOptionsList">
+                                    @foreach ($companies as $company)
+                                        <button class="dropdown-item company-option-item text-start py-2" type="button" data-value="{{ $company->nama_perusahaan }}">{{ $company->nama_perusahaan }}</button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="tanggal" class="form-label">Tanggal Pencatatan</label>
-                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="2026-07-14" required>
+
+                    <!-- KAPAL -->
+                    <div class="col-md-4">
+                        <label for="kapal" class="form-label fw-bold"><i class="bi bi-ship me-2"></i>Kapal</label>
+                        <div class="dropdown" id="searchableShipDropdown">
+                            <input type="text" class="form-select text-start" id="kapalSelectBtn" data-bs-toggle="dropdown" aria-expanded="false" readonly placeholder="Pilih Kapal..." style="cursor: pointer;">
+                            <input type="hidden" name="kapal" id="kapal" required>
+                            <div class="dropdown-menu p-3" style="width: 100%; min-width: 250px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                                <input type="text" class="form-control form-control-sm mb-2" id="shipSearchInput" placeholder="Cari kapal...">
+                                <div style="max-height: 200px; overflow-y: auto;" id="shipOptionsList">
+                                    @foreach ($vessels as $v)
+                                        @php
+                                            $shipCompany = $v->perusahaan->nama_perusahaan ?? 'PT Pelayaran Nasional';
+                                        @endphp
+                                        <button class="dropdown-item ship-option-item text-start py-2" type="button" data-value="{{ $v->kode_vessel }}" data-company="{{ $shipCompany }}">{{ $v->nama_kapal }} ({{ $v->kode_vessel }})</button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TANGGAL PENCATATAN -->
+                    <div class="col-md-4">
+                        <label for="tanggal" class="form-label fw-bold"><i class="bi bi-calendar-event me-2"></i>Tanggal Pencatatan</label>
+                        <input type="date" class="form-control" id="tanggal" name="tanggal" value="2026-07-20" required>
                     </div>
                 </div>
 
-                <!-- SECTION 2: DETAIL PEMAKAIAN BBM (TAB LAYOUT) -->
+                <!-- SECTION 2: DETAIL PEMAKAIAN FUEL OIL (FO) -->
                 <div class="form-section-title">
-                    <i class="bi bi-fuel-pump me-2"></i>2. Detail Pemakaian BBM & Pelumas
+                    <i class="bi bi-fuel-pump me-2"></i>2. Detail Pemakaian Fuel Oil (FO)
                 </div>
                 
-                <p class="text-muted small mb-3">Masukkan rincian pemakaian untuk masing-masing jenis bahan bakar / pelumas di bawah ini. Sisa sekarang dihitung secara otomatis.</p>
+                <p class="text-muted small mb-4">Masukkan rincian pemakaian Fuel Oil (FO) secara manual pada kolom di bawah ini.</p>
+                <div class="mb-4">
+                    <!-- SISA KEMARIN -->
+                    <div class="mb-4">
+                        <label for="fo_sisa_kemarin" class="form-label fw-bold"><i class="bi bi-arrow-left me-1"></i>Sisa Kemarin (L)</label>
+                        <input type="number" class="form-control" id="fo_sisa_kemarin" name="fo_sisa_kemarin" value="0" min="0" required>
+                    </div>
 
-                <ul class="nav nav-tabs mb-3" id="bbmTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="do-tab" data-bs-toggle="tab" data-bs-target="#do-content" type="button" role="tab" aria-selected="true">
-                            <i class="bi bi-droplet-fill text-pertamina-blue me-1"></i>Diesel Oil (DO)
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="fo-tab" data-bs-toggle="tab" data-bs-target="#fo-content" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-droplet-half text-pertamina-red me-1"></i>Fuel Oil (FO)
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="lube-tab" data-bs-toggle="tab" data-bs-target="#lube-content" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-oil-barrel text-warning me-1"></i>Lube Oil
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="cylinder-tab" data-bs-toggle="tab" data-bs-target="#cylinder-content" type="button" role="tab" aria-selected="false">
-                            <i class="bi bi-gear-wide-connected text-secondary me-1"></i>Cylinder Oil
-                        </button>
-                    </li>
-                </ul>
-
-                <div class="tab-content border p-3 rounded bg-white mb-4" id="bbmTabsContent">
-                    <!-- DIESEL OIL (DO) TAB -->
-                    <div class="tab-pane fade show active" id="do-content" role="tabpanel" aria-labelledby="do-tab">
+                    <!-- PENGGUNAAN -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark d-block"><i class="bi bi-activity me-1"></i>Penggunaan (L)</label>
                         <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <label for="do_sisa_kemarin" class="form-label">Sisa Kemarin (L)</label>
-                                <input type="number" class="form-control calc-input" id="do_sisa_kemarin" name="do_sisa_kemarin" value="1250" min="0">
+                            <div class="col-md-3">
+                                <label for="fo_motor_induk" class="form-label small text-muted">Mesin Induk</label>
+                                <input type="number" class="form-control" id="fo_motor_induk" name="fo_motor_induk" value="0" min="0" required>
                             </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="do_motor_induk" class="form-label">Motor Induk (L)</label>
-                                <input type="number" class="form-control calc-input" id="do_motor_induk" name="do_motor_induk" value="200" min="0">
+                            <div class="col-md-3">
+                                <label for="fo_motor_bantu" class="form-label small text-muted">Mesin Bantu</label>
+                                <input type="number" class="form-control" id="fo_motor_bantu" name="fo_motor_bantu" value="0" min="0" required>
                             </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="do_motor_bantu" class="form-label">Motor Bantu (L)</label>
-                                <input type="number" class="form-control calc-input" id="do_motor_bantu" name="do_motor_bantu" value="80" min="0">
+                            <div class="col-md-3">
+                                <label for="fo_lain_lain" class="form-label small text-muted">Lain-lain</label>
+                                <input type="number" class="form-control" id="fo_lain_lain" name="fo_lain_lain" value="0" min="0" required>
                             </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="do_lain_lain" class="form-label">Lain-lain (L)</label>
-                                <input type="number" class="form-control calc-input" id="do_lain_lain" name="do_lain_lain" value="40" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="do_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
-                                <input type="number" class="form-control calc-input" id="do_sisa_sekarang" name="do_sisa_sekarang" value="930" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="do_ditambah" class="form-label">Ditambah (L)</label>
-                                <input type="number" class="form-control calc-input" id="do_ditambah" name="do_ditambah" value="0" min="0">
-                            </div>
-                            <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-pertamina-blue">Jumlah Sekarang (L)</label>
-                                <div class="calc-result border-primary py-2 px-3">
-                                    <div class="calc-value text-pertamina-blue" id="do_jumlah_sekarang_display">930</div>
-                                    <input type="hidden" id="do_jumlah_sekarang" name="do_jumlah_sekarang" value="930">
-                                </div>
+                            <div class="col-md-3">
+                                <label for="fo_total_penggunaan" class="form-label small text-muted">Total</label>
+                                <input type="number" class="form-control" id="fo_total_penggunaan" name="fo_total_penggunaan" value="0" min="0" required>
                             </div>
                         </div>
                     </div>
 
-                    <!-- FUEL OIL (FO) TAB -->
-                    <div class="tab-pane fade" id="fo-content" role="tabpanel" aria-labelledby="fo-tab">
-                        <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <label for="fo_sisa_kemarin" class="form-label">Sisa Kemarin (L)</label>
-                                <input type="number" class="form-control calc-input" id="fo_sisa_kemarin" name="fo_sisa_kemarin" value="800" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="fo_motor_induk" class="form-label">Motor Induk (L)</label>
-                                <input type="number" class="form-control calc-input" id="fo_motor_induk" name="fo_motor_induk" value="0" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="fo_motor_bantu" class="form-label">Motor Bantu (L)</label>
-                                <input type="number" class="form-control calc-input" id="fo_motor_bantu" name="fo_motor_bantu" value="0" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="fo_lain_lain" class="form-label">Lain-lain (L)</label>
-                                <input type="number" class="form-control calc-input" id="fo_lain_lain" name="fo_lain_lain" value="0" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="fo_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
-                                <input type="number" class="form-control calc-input" id="fo_sisa_sekarang" name="fo_sisa_sekarang" value="800" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="fo_ditambah" class="form-label">Ditambah (L)</label>
-                                <input type="number" class="form-control calc-input" id="fo_ditambah" name="fo_ditambah" value="0" min="0">
-                            </div>
-                            <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-pertamina-red">Jumlah Sekarang (L)</label>
-                                <div class="calc-result border-danger py-2 px-3" style="background:#fee2e2;border-color:var(--pertamina-red)">
-                                    <div class="calc-value text-pertamina-red" id="fo_jumlah_sekarang_display">800</div>
-                                    <input type="hidden" id="fo_jumlah_sekarang" name="fo_jumlah_sekarang" value="800">
-                                </div>
-                            </div>
-                        </div>
+                    <!-- SISA SEKARANG -->
+                    <div class="mb-4">
+                        <label for="fo_sisa_sekarang" class="form-label fw-bold"><i class="bi bi-clock me-1"></i>Sisa Sekarang (L)</label>
+                        <input type="number" class="form-control" id="fo_sisa_sekarang" name="fo_sisa_sekarang" value="0" min="0" required>
                     </div>
 
-                    <!-- LUBE OIL TAB -->
-                    <div class="tab-pane fade" id="lube-content" role="tabpanel" aria-labelledby="lube-tab">
-                        <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <label for="lube_sisa_kemarin" class="form-label">Sisa Kemarin (L)</label>
-                                <input type="number" class="form-control calc-input" id="lube_sisa_kemarin" name="lube_sisa_kemarin" value="300" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="lube_motor_induk" class="form-label">Motor Induk (L)</label>
-                                <input type="number" class="form-control calc-input" id="lube_motor_induk" name="lube_motor_induk" value="10" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="lube_motor_bantu" class="form-label">Motor Bantu (L)</label>
-                                <input type="number" class="form-control calc-input" id="lube_motor_bantu" name="lube_motor_bantu" value="5" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="lube_lain_lain" class="form-label">Lain-lain (L)</label>
-                                <input type="number" class="form-control calc-input" id="lube_lain_lain" name="lube_lain_lain" value="2" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="lube_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
-                                <input type="number" class="form-control calc-input" id="lube_sisa_sekarang" name="lube_sisa_sekarang" value="283" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="lube_ditambah" class="form-label">Ditambah (L)</label>
-                                <input type="number" class="form-control calc-input" id="lube_ditambah" name="lube_ditambah" value="0" min="0">
-                            </div>
-                            <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-warning">Jumlah Sekarang (L)</label>
-                                <div class="calc-result py-2 px-3" style="background:#fef3c7;border-color:#f59e0b">
-                                    <div class="calc-value text-warning" id="lube_jumlah_sekarang_display">283</div>
-                                    <input type="hidden" id="lube_jumlah_sekarang" name="lube_jumlah_sekarang" value="283">
-                                </div>
-                            </div>
-                        </div>
+                    <!-- DITAMBAH -->
+                    <div class="mb-4">
+                        <label for="fo_ditambah" class="form-label fw-bold"><i class="bi bi-plus-circle me-1"></i>Ditambah (L)</label>
+                        <input type="number" class="form-control" id="fo_ditambah" name="fo_ditambah" value="0" min="0" required>
                     </div>
 
-                    <!-- CYLINDER OIL TAB -->
-                    <div class="tab-pane fade" id="cylinder-content" role="tabpanel" aria-labelledby="cylinder-tab">
-                        <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <label for="cylinder_sisa_kemarin" class="form-label">Sisa Kemarin (L)</label>
-                                <input type="number" class="form-control calc-input" id="cylinder_sisa_kemarin" name="cylinder_sisa_kemarin" value="150" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="cylinder_motor_induk" class="form-label">Motor Induk (L)</label>
-                                <input type="number" class="form-control calc-input" id="cylinder_motor_induk" name="cylinder_motor_induk" value="5" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="cylinder_motor_bantu" class="form-label">Motor Bantu (L)</label>
-                                <input type="number" class="form-control calc-input" id="cylinder_motor_bantu" name="cylinder_motor_bantu" value="2" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="cylinder_lain_lain" class="form-label">Lain-lain (L)</label>
-                                <input type="number" class="form-control calc-input" id="cylinder_lain_lain" name="cylinder_lain_lain" value="1" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="cylinder_sisa_sekarang" class="form-label fw-semibold">Sisa Sekarang (L)</label>
-                                <input type="number" class="form-control calc-input" id="cylinder_sisa_sekarang" name="cylinder_sisa_sekarang" value="142" min="0">
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <label for="cylinder_ditambah" class="form-label">Ditambah (L)</label>
-                                <input type="number" class="form-control calc-input" id="cylinder_ditambah" name="cylinder_ditambah" value="0" min="0">
-                            </div>
-                            <div class="col-md-12 col-lg-4">
-                                <label class="form-label fw-bold text-secondary">Jumlah Sekarang (L)</label>
-                                <div class="calc-result py-2 px-3" style="background:#f1f5f9;border-color:#64748b">
-                                    <div class="calc-value text-secondary" id="cylinder_jumlah_sekarang_display">142</div>
-                                    <input type="hidden" id="cylinder_jumlah_sekarang" name="cylinder_jumlah_sekarang" value="142">
-                                </div>
-                            </div>
-                        </div>
+                    <!-- JUMLAH SEKARANG -->
+                    <div class="mb-4">
+                        <label for="fo_jumlah_sekarang" class="form-label fw-bold text-pertamina-red"><i class="bi bi-check2-circle me-1"></i>Jumlah Sekarang (L)</label>
+                        <input type="number" class="form-control fw-bold" id="fo_jumlah_sekarang" name="fo_jumlah_sekarang" value="0" min="0" required>
                     </div>
                 </div>
 
@@ -243,93 +147,129 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Independent Date inputs and Port dropdown selection (no route select code needed)
+        // Searchable Company Dropdown Logic
+        const companySearchInput = document.getElementById('companySearchInput');
+        const companyOptionsList = document.getElementById('companyOptionsList');
+        const companySelectBtn = document.getElementById('companySelectBtn');
+        const companyHiddenInput = document.getElementById('company');
 
-        // Auto-calculation logic for fuel types
-        const types = ['do', 'fo', 'lube', 'cylinder'];
+        // Searchable Ship Dropdown Logic
+        const shipSearchInput = document.getElementById('shipSearchInput');
+        const shipOptionsList = document.getElementById('shipOptionsList');
+        const kapalSelectBtn = document.getElementById('kapalSelectBtn');
+        const kapalHiddenInput = document.getElementById('kapal');
 
-        // Calculate Jumlah Sekarang = Sisa Sekarang + Ditambah
-        function hitungJumlahSekarang(type) {
-            const sisaEl = document.getElementById(type + '_sisa_sekarang');
-            const tambahEl = document.getElementById(type + '_ditambah');
-            const displayEl = document.getElementById(type + '_jumlah_sekarang_display');
-            const hiddenEl = document.getElementById(type + '_jumlah_sekarang');
-
-            if (sisaEl && tambahEl && displayEl && hiddenEl) {
-                const sisa = parseFloat(sisaEl.value) || 0;
-                const tambah = parseFloat(tambahEl.value) || 0;
-                const jumlah = sisa + tambah;
-
-                displayEl.textContent = jumlah.toLocaleString('id-ID', { maximumFractionDigits: 2 });
-                hiddenEl.value = jumlah;
-            }
-        }
-
-        // Calculate default Sisa Sekarang = Sisa Kemarin - (Motor Induk + Motor Bantu + Lain-lain)
-        function autoCalculateSisaSekarang(type) {
-            const kemarin = parseFloat(document.getElementById(type + '_sisa_kemarin').value) || 0;
-            const induk = parseFloat(document.getElementById(type + '_motor_induk').value) || 0;
-            const bantu = parseFloat(document.getElementById(type + '_motor_bantu').value) || 0;
-            const lain = parseFloat(document.getElementById(type + '_lain_lain').value) || 0;
-
-            const sisa = kemarin - (induk + bantu + lain);
-            const sisaEl = document.getElementById(type + '_sisa_sekarang');
-
-            if (sisaEl) {
-                sisaEl.value = Math.max(0, sisa);
-            }
-
-            // Always recalculate Jumlah Sekarang after updating Sisa Sekarang
-            hitungJumlahSekarang(type);
-        }
-
-        // Add event listeners to all calculation inputs
-        types.forEach(type => {
-            // Inputs that trigger default Sisa Sekarang auto-calculation
-            const autoSisaInputs = [
-                type + '_sisa_kemarin',
-                type + '_motor_induk',
-                type + '_motor_bantu',
-                type + '_lain_lain'
-            ];
-
-            autoSisaInputs.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', () => autoCalculateSisaSekarang(type));
-                }
+        if (companySearchInput && companyOptionsList && companySelectBtn) {
+            companySearchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                companyOptionsList.querySelectorAll('.company-option-item').forEach(item => {
+                    if (item.textContent.toLowerCase().includes(query)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
             });
 
-            // Inputs that trigger Jumlah Sekarang calculation
-            const sisaEl = document.getElementById(type + '_sisa_sekarang');
-            if (sisaEl) {
-                sisaEl.addEventListener('input', () => hitungJumlahSekarang(type));
-            }
+            companyOptionsList.addEventListener('click', function(e) {
+                const button = e.target.closest('.company-option-item');
+                if (button) {
+                    const value = button.getAttribute('data-value');
+                    companySelectBtn.value = value;
+                    companyHiddenInput.value = value;
 
-            const tambahEl = document.getElementById(type + '_ditambah');
-            if (tambahEl) {
-                tambahEl.addEventListener('input', () => hitungJumlahSekarang(type));
-            }
+                    // Filter ship options based on selected company
+                    const shipOptions = shipOptionsList.querySelectorAll('.ship-option-item');
+                    shipOptions.forEach(opt => {
+                        const optCompany = opt.getAttribute('data-company');
+                        if (optCompany === value) {
+                            opt.style.display = '';
+                        } else {
+                            opt.style.display = 'none';
+                        }
+                    });
 
-            // Initial calculations
-            autoCalculateSisaSekarang(type);
-        });
+                    // Clear currently selected ship if it doesn't match the new company
+                    if (kapalHiddenInput.value) {
+                        const currentShipOpt = shipOptionsList.querySelector(`.ship-option-item[data-value="${kapalHiddenInput.value}"]`);
+                        if (currentShipOpt && currentShipOpt.getAttribute('data-company') !== value) {
+                            kapalHiddenInput.value = '';
+                            kapalSelectBtn.value = '';
+                        }
+                    }
+                }
+            });
+        }
 
-        // Recalculate on reset
+        if (shipSearchInput && shipOptionsList && kapalSelectBtn && kapalHiddenInput) {
+            shipSearchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                const selectedCompany = companyHiddenInput.value;
+                shipOptionsList.querySelectorAll('.ship-option-item').forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    const optCompany = item.getAttribute('data-company');
+                    
+                    // Match query and company constraint
+                    const matchesQuery = text.includes(query);
+                    const matchesCompany = !selectedCompany || optCompany === selectedCompany;
+
+                    if (matchesQuery && matchesCompany) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+
+            shipOptionsList.addEventListener('click', function(e) {
+                const button = e.target.closest('.ship-option-item');
+                if (button) {
+                    const value = button.getAttribute('data-value');
+                    const text = button.textContent;
+                    
+                    kapalHiddenInput.value = value;
+                    kapalSelectBtn.value = text;
+
+                    // Auto-fill company if not selected yet
+                    const optCompany = button.getAttribute('data-company');
+                    if (optCompany && (!companyHiddenInput.value || companyHiddenInput.value !== optCompany)) {
+                        companyHiddenInput.value = optCompany;
+                        companySelectBtn.value = optCompany;
+                    }
+                }
+            });
+        }
+
+
+
+        // Form submission AJAX response
         const formEl = document.getElementById('logbookForm');
-        formEl.addEventListener('reset', function () {
-            // Wait for call stack to clear so inputs get reset values first
-            setTimeout(() => {
-                types.forEach(type => autoCalculateSisaSekarang(type));
-            }, 50);
-        });
-
-        // Form submission demo response
         formEl.addEventListener('submit', function (e) {
             e.preventDefault();
-            sessionStorage.setItem('logbook_filled_today', 'true');
-            alert('Logbook Kapal berhasil disimpan ke dalam sistem!');
-            window.location.href = "{{ route('dashboard.awak') }}";
+            
+            const formData = new FormData(formEl);
+            
+            fetch("{{ route('logbook.store') }}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Gagal menyimpan logbook');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    sessionStorage.setItem('logbook_filled_today', 'true');
+                    alert('Logbook Kapal berhasil disimpan ke dalam sistem!');
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                alert(error.message);
+            });
         });
     });
 </script>

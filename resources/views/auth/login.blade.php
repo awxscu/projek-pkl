@@ -37,21 +37,14 @@
             </div>
 
             <form id="loginForm">
+                @csrf
                 <div class="mb-3">
-                    <label class="form-label"><i class="bi bi-envelope me-1"></i> Email</label>
-                    <input type="email" class="form-control" id="email" placeholder="nama@pertamina.com" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label"><i class="bi bi-lock me-1"></i> Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                    <label class="form-label"><i class="bi bi-person-badge me-1"></i> ID User</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="PR001 atau AK001" required autocomplete="off">
                 </div>
                 <div class="mb-4">
-                    <label class="form-label"><i class="bi bi-person-badge me-1"></i> Role</label>
-                    <select class="form-select" id="role" required>
-                        <option value="" disabled selected>Pilih role</option>
-                        <option value="pertamina">Pertamina</option>
-                        <option value="awak">Awak Kapal</option>
-                    </select>
+                    <label class="form-label"><i class="bi bi-lock me-1"></i> Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan password" required>
                 </div>
                 <button type="submit" class="btn btn-pertamina w-100 py-2 mb-3">
                     <i class="bi bi-box-arrow-in-right me-2"></i>Masuk
@@ -71,10 +64,32 @@
 <script>
     document.getElementById('loginForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        const role = document.getElementById('role').value;
-        window.location.href = role === 'pertamina'
-            ? '{{ route("dashboard.pertamina") }}'
-            : '{{ route("dashboard.awak") }}';
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            },
+            body: JSON.stringify({ username, password })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.message || 'Login gagal'); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                window.location.href = data.redirect;
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+        });
     });
 </script>
 @endpush

@@ -13,15 +13,23 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $table = 'user';
+    protected $primaryKey = 'id_user';
+    protected $keyType = 'string';
+    public $incrementing = false;
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'id_user',
+        'nama_user',
         'password',
+        'role',
+        'id_perusahaan',
     ];
 
     /**
@@ -31,7 +39,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -42,8 +49,22 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function perusahaan()
+    {
+        return $this->belongsTo(Perusahaan::class, 'id_perusahaan', 'id_perusahaan');
+    }
+
+    public function logbooks()
+    {
+        return $this->hasMany(Logbook::class, 'id_user', 'id_user');
+    }
+
+    public function verifications()
+    {
+        return $this->hasMany(Verifikasi::class, 'id_user', 'id_user');
     }
 }

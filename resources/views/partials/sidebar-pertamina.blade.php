@@ -17,32 +17,18 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('pertamina.monitoring') }}" class="nav-link {{ request()->routeIs('pertamina.monitoring') ? 'active' : '' }}">
                     <i class="bi bi-journal-text"></i> Monitoring Logbook
                 </a>
             </li>
+
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="bi bi-patch-check"></i> Verifikasi
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="bi bi-ship"></i> Data Kapal
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="bi bi-calendar-event"></i> Jadwal Perjalanan
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('pertamina.laporan') }}" class="nav-link {{ request()->routeIs('pertamina.laporan') ? 'active' : '' }}">
                     <i class="bi bi-file-earmark-bar-graph"></i> Laporan
                 </a>
             </li>
             <li class="nav-item mt-3">
-                <a href="{{ route('landing') }}" class="nav-link logout-link">
+                <a href="{{ route('logout') }}" class="nav-link logout-link">
                     <i class="bi bi-box-arrow-left"></i> Logout
                 </a>
             </li>

@@ -5,62 +5,57 @@
 
 @section('content')
 <div class="welcome-banner mb-4">
-    <h4 class="mb-0" id="welcomeGreetingTitle">Selamat Datang, Budi Santoso</h4>
-    <p class="mb-0 mt-2 opacity-90" id="welcomeGreetingSubtitle">Semoga pelayaran hari ini berjalan aman, lancar, dan selalu mengutamakan keselamatan kerja!</p>
+    <h4 class="mb-0" id="welcomeGreetingTitle">Selamat Datang, {{ $user->nama_user }}</h4>
+    <p class="mb-0 mt-2 opacity-90" id="welcomeGreetingSubtitle">Semoga pelayaran kapal <strong>{{ $vessel->nama_kapal }}</strong> hari ini berjalan aman, lancar, dan selalu mengutamakan keselamatan kerja!</p>
 </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="card-modern stat-card h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div><div class="stat-label">Logbook Hari Ini</div><div class="stat-value stat-value-animate" data-target="1">0 <small class="text-muted" style="font-size:0.8rem">/ 1</small></div></div>
-                <div class="stat-icon bg-pertamina-blue text-white"><i class="bi bi-journal-text"></i></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card-modern stat-card stat-orange h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div><div class="stat-label">Total Pemakaian BBM</div><div class="stat-value stat-value-animate" data-target="320">0 <small class="text-muted" style="font-size:0.8rem">L</small></div></div>
-                <div class="stat-icon" style="background:#ffedd5;color:#ea580c"><i class="bi bi-fuel-pump"></i></div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card-modern stat-card stat-green h-100">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <div class="stat-label">Status Verifikasi</div>
-                    <div class="stat-value"><span class="badge badge-verified" style="font-size: 1.1rem; padding: 0.4em 0.8em; border-radius: 8px;">Verified</span></div>
+<div class="row g-4 mb-4">
+    <!-- LEFT SIDE: STAT CARDS & QUICK ACTION -->
+    <div class="col-lg-8">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <div class="card-modern stat-card h-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div><div class="stat-label">Logbook Terisi Sampai {{ $todayFormatted }}</div><div class="stat-value stat-value-animate" data-target="{{ $logbookYearCount }}">{{ $logbookYearCount }} <small class="text-muted" style="font-size:0.8rem">/ {{ $totalDaysSinceJan1 }}</small></div></div>
+                        <div class="stat-icon bg-pertamina-blue text-white"><i class="bi bi-journal-text"></i></div>
+                    </div>
                 </div>
-                <div class="stat-icon" style="background:#dcfce7;color:#15803d"><i class="bi bi-patch-check"></i></div>
+            </div>
+            <div class="col-md-6">
+                <div class="card-modern stat-card stat-orange h-100">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div><div class="stat-label">Total Pemakaian BBM</div><div class="stat-value stat-value-animate" data-target="{{ $totalBBM }}">{{ $totalBBM }} <small class="text-muted" style="font-size:0.8rem">L</small></div></div>
+                        <div class="stat-icon" style="background:#ffedd5;color:#ea580c"><i class="bi bi-fuel-pump"></i></div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <a href="{{ route('logbook.create') }}" class="quick-action-card">
-            <i class="bi bi-pencil-square"></i>
-            <h5>Tulis Logbook Baru</h5>
-            <p class="mb-0 small opacity-75">Input pemakaian BBM hari ini</p>
-        </a>
+        <div class="row g-3">
+            <div class="col-12">
+                <a href="{{ route('logbook.create') }}" class="quick-action-card d-flex align-items-center justify-content-between p-4 text-decoration-none">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-pencil-square fs-3 text-white"></i>
+                        <div class="text-start">
+                            <h5 class="mb-1 fw-bold text-white">Tulis Logbook Baru</h5>
+                            <p class="mb-0 text-white opacity-80 small">Input pemakaian BBM hari ini</p>
+                        </div>
+                    </div>
+                    <i class="bi bi-chevron-right text-white opacity-85"></i>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="col-md-8">
-        <div class="card-modern p-4 h-100 d-flex align-items-center">
-            <div class="d-flex align-items-center gap-3 w-100">
-                <div class="stat-icon bg-pertamina-blue text-white flex-shrink-0" style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;"><i class="bi bi-calendar-event"></i></div>
-                <div class="flex-grow-1">
-                    <h5 class="fw-bold mb-2" style="font-size: 1.15rem; color: var(--pertamina-blue);">Jadwal Perjalanan Aktif</h5>
-                    <p class="mb-0 text-muted" style="font-size: 0.92rem; line-height: 1.4;">
-                        <strong class="text-dark" style="font-size: 1.05rem;">Surabaya &rarr; Balikpapan</strong>
-                        <span class="mx-2 text-muted">|</span>
-                        <span><i class="bi bi-calendar me-1"></i>Jadwal: 14/07/2026 &ndash; 16/07/2026</span>
-                        <span class="badge ms-2" style="background:#dbeafe;color:#1d4ed8;font-size:0.75rem;padding:0.35em 0.7em;">Berlangsung</span>
-                    </p>
-                </div>
-                <a href="{{ route('awak.perjalanan') }}" class="btn btn-pertamina-outline btn-sm flex-shrink-0 px-3">Detail</a>
+
+    <!-- RIGHT SIDE: DONUT CHART -->
+    <div class="col-lg-4">
+        <div class="card-modern chart-card h-100 p-3 d-flex flex-column justify-content-center text-center">
+            <div class="mb-2">
+                <div class="chart-title fw-bold" style="font-size: 0.9rem;"><i class="bi bi-pie-chart-fill me-1 text-pertamina-blue"></i> Persentase Kepatuhan</div>
+                <div class="chart-subtitle text-muted mb-0" style="font-size: 0.72rem; line-height: 1.2;">Rasio keterisian logbook </div>
+            </div>
+            <div class="chart-container position-relative" style="width: 100%; height: 130px; margin: 0 auto;">
+                <canvas id="crewDonutChart"></canvas>
             </div>
         </div>
     </div>
@@ -76,48 +71,34 @@
             <thead>
                 <tr>
                     <th>Tanggal</th>
-                    <th>Vessel</th>
-                    <th>Rute</th>
-                    <th>Konsumsi BBM</th>
-                    <th>Status</th>
+                    <th>Nama Kapal</th>
+                    <th>Konsumsi Fuel Oil (FO)</th>
+                    <th>Jumlah Sekarang (FO)</th>
+                    <th>Catatan</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>14/07/2026</td>
-                    <td>VSL-001</td>
-                    <td>Surabaya → Balikpapan</td>
-                    <td>320 L</td>
-                    <td><span class="badge badge-verified">Verified</span></td>
-                </tr>
-                <tr>
-                    <td>13/07/2026</td>
-                    <td>VSL-001</td>
-                    <td>Surabaya (persiapan)</td>
-                    <td>45 L</td>
-                    <td><span class="badge badge-verified">Verified</span></td>
-                </tr>
-                <tr>
-                    <td>12/07/2026</td>
-                    <td>VSL-001</td>
-                    <td>Balikpapan → Surabaya</td>
-                    <td>310 L</td>
-                    <td><span class="badge badge-verified">Verified</span></td>
-                </tr>
-                <tr>
-                    <td>11/07/2026</td>
-                    <td>VSL-001</td>
-                    <td>Balikpapan (sandar)</td>
-                    <td>25 L</td>
-                    <td><span class="badge badge-pending">Pending</span></td>
-                </tr>
-                <tr>
-                    <td>10/07/2026</td>
-                    <td>VSL-001</td>
-                    <td>Surabaya → Balikpapan</td>
-                    <td>295 L</td>
-                    <td><span class="badge badge-verified">Verified</span></td>
-                </tr>
+                @forelse ($latestLogbooks as $log)
+                    @php
+                        $fo = $log->detailPemakaians->where('id_jenis', 2)->first() ?? new \App\Models\DetailPemakaian();
+                        $fo_cons = $fo->motor_induk + $fo->motor_bantu + $fo->lain_lain;
+                    @endphp
+                    <tr>
+                        <td>{{ $log->tanggal_pencataan->format('d/m/Y') }}</td>
+                        <td><strong>{{ $log->kapal->nama_kapal ?? $log->kode_vessel }}</strong></td>
+                        <td>
+                            <span class="badge bg-danger">FO: {{ $fo_cons }} L</span>
+                        </td>
+                        <td>
+                            <strong>{{ $fo->jumlah_sekarang ?: 0 }} L</strong>
+                        </td>
+                        <td>{{ $log->catatan ?: '—' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">Belum ada riwayat logbook.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -139,7 +120,7 @@
                 </div>
                 <h5 class="fw-bold mb-2">Anda Belum Mengisi Logbook!</h5>
                 <p class="text-muted mb-0 small" style="line-height: 1.5;">
-                    Sistem mendeteksi bahwa Anda belum menginput data pemakaian BBM & pelumas kapal untuk hari ini (<strong>{{ date('d F Y') }}</strong>). Silakan segera isi untuk menjaga keakuratan sisa kuota kapal.
+                    Sistem mendeteksi bahwa Anda belum mengisi logbook <strong>{{ $missingRangeText }}</strong>. Silakan segera isi untuk menjaga keakuratan data logbook Anda.
                 </p>
             </div>
             <div class="modal-footer border-0 bg-light d-flex justify-content-center gap-2 p-3">
@@ -153,17 +134,70 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if logbook has been filled in this session
+    const isFilledDb = {{ $logbookTodayCount }};
     const filledToday = sessionStorage.getItem('logbook_filled_today');
     
-    if (filledToday !== 'true') {
+    if (isFilledDb === 0 && filledToday !== 'true') {
         const reminderModal = new bootstrap.Modal(document.getElementById('logbookReminderModal'));
         setTimeout(() => {
             reminderModal.show();
         }, 800); // Slight delay for premium feel
     }
+
+    // Crew Donut Chart
+    const crewStatusData = @json($crewStatusPercentages);
+    new Chart(document.getElementById('crewDonutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Sudah Mengisi', 'Belum Mengisi'],
+            datasets: [{ 
+                data: crewStatusData, 
+                backgroundColor: ['#0057B8', '#cbd5e1'], 
+                borderWidth: 0, 
+                hoverOffset: 6 
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            cutout: '70%',
+            plugins: { 
+                legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, font: { size: 10, weight: '600' } } },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ' ' + context.label + ': ' + context.raw + '%';
+                        }
+                    }
+                }
+            } 
+        },
+        plugins: [{
+            id: 'textCenter',
+            beforeDraw: function(chart) {
+                var width = chart.width,
+                    height = chart.height,
+                    ctx = chart.ctx;
+                ctx.restore();
+                
+                ctx.font = "bold 20px sans-serif";
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = "#0057B8";
+                
+                var text = chart.data.datasets[0].data[0] + "%";
+                var chartArea = chart.chartArea;
+                if (chartArea) {
+                    var textX = Math.round((chartArea.left + chartArea.right - ctx.measureText(text).width) / 2);
+                    var textY = Math.round((chartArea.top + chartArea.bottom) / 2);
+                    ctx.fillText(text, textX, textY);
+                }
+                ctx.save();
+            }
+        }]
+    });
 });
 </script>
 @endpush

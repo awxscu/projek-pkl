@@ -57,60 +57,31 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>KM Nusantara Jaya</td>
-                    <td>VSL-001</td>
-                    <td>Surabaya</td>
-                    <td>Balikpapan</td>
-                    <td>14/07/2026</td>
-                    <td>15/07/2026</td>
-                    <td><span class="badge" style="background:#dbeafe;color:#1d4ed8">Berlangsung</span></td>
-                </tr>
-                <tr>
-                    <td>KM Samudra Indah</td>
-                    <td>VSL-002</td>
-                    <td>Jakarta</td>
-                    <td>Semarang</td>
-                    <td>14/07/2026</td>
-                    <td>14/07/2026</td>
-                    <td><span class="badge" style="background:#dbeafe;color:#1d4ed8">Berlangsung</span></td>
-                </tr>
-                <tr>
-                    <td>KM Pelangi Nusantara</td>
-                    <td>VSL-003</td>
-                    <td>Makassar</td>
-                    <td>Baubau</td>
-                    <td>16/07/2026</td>
-                    <td>17/07/2026</td>
-                    <td><span class="badge badge-pending">Terjadwal</span></td>
-                </tr>
-                <tr>
-                    <td>KM Bahari Sejahtera</td>
-                    <td>VSL-004</td>
-                    <td>Denpasar</td>
-                    <td>Lombok</td>
-                    <td>13/07/2026</td>
-                    <td>13/07/2026</td>
-                    <td><span class="badge badge-verified">Selesai</span></td>
-                </tr>
-                <tr>
-                    <td>KM Citra Lautan</td>
-                    <td>VSL-005</td>
-                    <td>Pontianak</td>
-                    <td>Ketapang</td>
-                    <td>15/07/2026</td>
-                    <td>15/07/2026</td>
-                    <td><span class="badge badge-pending">Terjadwal</span></td>
-                </tr>
-                <tr>
-                    <td>KM Lautan Biru</td>
-                    <td>VSL-006</td>
-                    <td>Balikpapan</td>
-                    <td>Tarakan</td>
-                    <td>12/07/2026</td>
-                    <td>13/07/2026</td>
-                    <td><span class="badge badge-verified">Selesai</span></td>
-                </tr>
+                @forelse ($perjalanan as $p)
+                    @php
+                        $statusText = $p->statusPerjalanan ? $p->statusPerjalanan->nama_status : 'Terjadwal';
+                        if ($statusText === 'Berlangsung') {
+                            $badgeStyle = 'background:#dbeafe;color:#1d4ed8';
+                        } elseif ($statusText === 'Selesai') {
+                            $badgeStyle = 'background:#dcfce7;color:#15803d';
+                        } else {
+                            $badgeStyle = 'background:#fef3c7;color:#b45309';
+                        }
+                    @endphp
+                    <tr>
+                        <td>{{ $p->kapal->nama_kapal }}</td>
+                        <td>{{ $p->kode_vessel }}</td>
+                        <td>{{ $p->pelabuhanAsal->nama_pelabuhan }}</td>
+                        <td>{{ $p->pelabuhanTujuan->nama_pelabuhan }}</td>
+                        <td>{{ $p->jadwal_berangkat->format('d/m/Y') }}</td>
+                        <td>{{ $p->jadwal_tiba->format('d/m/Y') }}</td>
+                        <td><span class="badge" style="{{ $badgeStyle }}">{{ $statusText }}</span></td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">Tidak ada data jadwal perjalanan.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

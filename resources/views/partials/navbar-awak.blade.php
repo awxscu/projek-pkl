@@ -11,9 +11,8 @@
             <ul class="nav-menu">
                 <li><a href="{{ route('dashboard.awak') }}" class="nav-link {{ request()->routeIs('dashboard.awak') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
                 <li><a href="{{ route('logbook.create') }}" class="nav-link {{ request()->routeIs('logbook.create') ? 'active' : '' }}"><i class="bi bi-plus-circle"></i> Tambah Logbook</a></li>
-                <li><a href="{{ route('perjalanan.create') }}" class="nav-link {{ request()->routeIs('perjalanan.create') ? 'active' : '' }}"><i class="bi bi-calendar-plus"></i> Tambah Jadwal Perjalanan</a></li>
+                <li><a href="{{ route('awak.upload-pdf') }}" class="nav-link {{ request()->routeIs('awak.upload-pdf') ? 'active' : '' }}"><i class="bi bi-file-earmark-pdf"></i> Upload PDF Logbook</a></li>
                 <li><a href="{{ route('awak.riwayat') }}" class="nav-link {{ request()->routeIs('awak.riwayat') ? 'active' : '' }}"><i class="bi bi-clock-history"></i> Riwayat Logbook</a></li>
-                <li><a href="{{ route('awak.perjalanan') }}" class="nav-link {{ request()->routeIs('awak.perjalanan') ? 'active' : '' }}"><i class="bi bi-calendar-event"></i> Jadwal Perjalanan</a></li>
             </ul>
         </div>
 
@@ -33,7 +32,7 @@
                     <li><a class="dropdown-item" href="{{ route('awak.profil') }}"><i class="bi bi-person"></i> Profil</a></li>
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-gear"></i> Pengaturan</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item logout-link-dropdown" href="{{ route('landing') }}"><i class="bi bi-box-arrow-left"></i> Keluar</a></li>
+                    <li><a class="dropdown-item logout-link-dropdown" href="{{ route('logout') }}"><i class="bi bi-box-arrow-left"></i> Keluar</a></li>
                 </ul>
             </div>
 

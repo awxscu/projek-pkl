@@ -22,6 +22,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="{{ route('awak.upload-pdf') }}" class="nav-link {{ request()->routeIs('awak.upload-pdf') ? 'active' : '' }}">
+                    <i class="bi bi-file-earmark-pdf"></i> Upload PDF Logbook
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="{{ route('awak.riwayat') }}" class="nav-link {{ request()->routeIs('awak.riwayat') ? 'active' : '' }}">
                     <i class="bi bi-clock-history"></i> Riwayat Logbook
                 </a>
@@ -42,7 +47,7 @@
                 </a>
             </li>
             <li class="nav-item mt-3">
-                <a href="{{ route('landing') }}" class="nav-link logout-link">
+                <a href="{{ route('logout') }}" class="nav-link logout-link">
                     <i class="bi bi-box-arrow-left"></i> Logout
                 </a>
             </li>

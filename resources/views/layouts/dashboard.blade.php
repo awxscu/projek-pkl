@@ -54,10 +54,37 @@
             if (settingsForm) {
                 settingsForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    alert('Pengaturan akun berhasil disimpan!');
-                    const modalEl = document.getElementById('settingsModal');
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) modal.hide();
+                    
+                    const old_password = document.getElementById('old_password').value;
+                    const new_password = document.getElementById('new_password').value;
+                    const confirm_password = document.getElementById('confirm_password').value;
+                    
+                    fetch('{{ route("profile.update-password") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ old_password, new_password, confirm_password })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(err => { throw new Error(err.message || 'Gagal mengubah password'); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert(data.message);
+                            settingsForm.reset();
+                            const modalEl = document.getElementById('settingsModal');
+                            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                            if (modal) modal.hide();
+                        }
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
                 });
             }
 

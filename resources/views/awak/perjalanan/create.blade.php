@@ -33,10 +33,9 @@
                     <div class="col-md-12">
                         <label for="kapal" class="form-label fw-semibold">Kapal</label>
                         <select class="form-select" id="kapal" name="kapal" required>
-                            <option value="VSL-001" selected>KM Nusantara Jaya (VSL-001)</option>
-                            <option value="VSL-002">KM Samudra Indah (VSL-002)</option>
-                            <option value="VSL-003">KM Pelangi Nusantara (VSL-003)</option>
-                            <option value="VSL-004">KM Bahari Sejahtera (VSL-004)</option>
+                            @foreach ($vessels as $v)
+                                <option value="{{ $v->kode_vessel }}">{{ $v->nama_kapal }} ({{ $v->kode_vessel }})</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-12">
@@ -47,23 +46,18 @@
                         <label for="pelabuhan_asal" class="form-label fw-semibold">Pelabuhan Asal</label>
                         <select class="form-select" id="pelabuhan_asal" name="pelabuhan_asal" required>
                             <option value="" disabled selected>Pilih Pelabuhan Asal</option>
-                            <option value="Surabaya">Surabaya</option>
-                            <option value="Balikpapan">Balikpapan</option>
-                            <option value="Jakarta">Jakarta</option>
-                            <option value="Semarang">Semarang</option>
-                            <option value="Makassar">Makassar</option>
+                            @foreach ($pelabuhans as $p)
+                                <option value="{{ $p->nama_pelabuhan }}">{{ $p->nama_pelabuhan }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
                         <label for="pelabuhan_tujuan" class="form-label fw-semibold">Pelabuhan Tujuan</label>
                         <select class="form-select" id="pelabuhan_tujuan" name="pelabuhan_tujuan" required>
                             <option value="" disabled selected>Pilih Pelabuhan Tujuan</option>
-                            <option value="Surabaya">Surabaya</option>
-                            <option value="Balikpapan">Balikpapan</option>
-                            <option value="Jakarta">Jakarta</option>
-                            <option value="Semarang">Semarang</option>
-                            <option value="Makassar">Makassar</option>
-                            <option value="Baubau">Baubau</option>
+                            @foreach ($pelabuhans as $p)
+                                <option value="{{ $p->nama_pelabuhan }}">{{ $p->nama_pelabuhan }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -105,111 +99,54 @@
     document.getElementById('perjalananForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const kapalSelect = document.getElementById('kapal');
-        const kapalText = kapalSelect.options[kapalSelect.selectedIndex].text;
-        const kapalVal = kapalSelect.value;
         const asal = document.getElementById('pelabuhan_asal').value;
         const tujuan = document.getElementById('pelabuhan_tujuan').value;
         const tglMulai = document.getElementById('tanggal_mulai').value;
         const tglSelesai = document.getElementById('tanggal_selesai').value;
-        
-        // Retrieve existing voyages
-        let voyages = localStorage.getItem('voyages');
-        if (voyages) {
-            voyages = JSON.parse(voyages);
-        } else {
-            voyages = [
-                {
-                    rute: "Surabaya &rarr; Balikpapan",
-                    asal: "Tanjung Perak (SUB)",
-                    tujuan: "Semayang (BPN)",
-                    mulai: "2026-07-14",
-                    selesai: "2026-07-15",
-                    status: "Berlangsung"
-                },
-                {
-                    rute: "Balikpapan &rarr; Surabaya",
-                    asal: "Semayang (BPN)",
-                    tujuan: "Tanjung Perak (SUB)",
-                    mulai: "2026-07-17",
-                    selesai: "2026-07-18",
-                    status: "Terjadwal"
-                },
-                {
-                    rute: "Surabaya &rarr; Makassar",
-                    asal: "Tanjung Perak (SUB)",
-                    tujuan: "Soekarno-Hatta (MAK)",
-                    mulai: "2026-07-20",
-                    selesai: "2026-07-21",
-                    status: "Terjadwal"
-                },
-                {
-                    rute: "Balikpapan &rarr; Surabaya",
-                    asal: "Semayang (BPN)",
-                    tujuan: "Tanjung Perak (SUB)",
-                    mulai: "2026-07-12",
-                    selesai: "2026-07-13",
-                    status: "Selesai"
-                },
-                {
-                    rute: "Surabaya &rarr; Balikpapan",
-                    asal: "Tanjung Perak (SUB)",
-                    tujuan: "Semayang (BPN)",
-                    mulai: "2026-07-10",
-                    selesai: "2026-07-11",
-                    status: "Selesai"
-                },
-                {
-                    rute: "Surabaya &rarr; Banjarmasin",
-                    asal: "Tanjung Perak (SUB)",
-                    tujuan: "Trisakti (BDJ)",
-                    mulai: "2026-07-08",
-                    selesai: "2026-07-09",
-                    status: "Batal"
-                }
-            ];
-        }
-        
-        function getCode(name) {
-            switch (name) {
-                case 'Surabaya': return 'SUB';
-                case 'Balikpapan': return 'BPN';
-                case 'Jakarta': return 'JKT';
-                case 'Semarang': return 'SRG';
-                case 'Makassar': return 'MAK';
-                case 'Baubau': return 'WUB';
-                case 'Banjarmasin': return 'BDJ';
-                default: return 'PRT';
-            }
-        }
-        
-        // Add new voyage to the beginning of the list
-        voyages.unshift({
-            no_surat_jalan: document.getElementById('no_surat_jalan').value,
-            rute: `${asal} &rarr; ${tujuan}`,
-            asal: `${asal} (${getCode(asal)})`,
-            tujuan: `${tujuan} (${getCode(tujuan)})`,
-            mulai: tglMulai,
-            selesai: tglSelesai,
-            status: "Terjadwal"
-        });
-        
-        // Save back to localStorage
-        localStorage.setItem('voyages', JSON.stringify(voyages));
-        
-        // Show Success Toast
-        const toast = document.getElementById('toastContainer');
-        toast.style.display = 'flex';
-        
+        const kapal = document.getElementById('kapal').value;
+        const no_surat_jalan = document.getElementById('no_surat_jalan').value;
+
         // Disable submit button to prevent double submit
         const submitBtn = this.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Menyimpan...';
 
-        // Redirect after delay
-        setTimeout(() => {
-            window.location.href = "{{ route('awak.perjalanan') }}";
-        }, 1500);
+        fetch("{{ route('awak.perjalanan.create.post') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                kapal: kapal,
+                no_surat_jalan: no_surat_jalan,
+                pelabuhan_asal: asal,
+                pelabuhan_tujuan: tujuan,
+                tanggal_mulai: tglMulai,
+                tanggal_selesai: tglSelesai
+            })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Gagal mendaftarkan jadwal perjalanan');
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Show Success Toast
+                const toast = document.getElementById('toastContainer');
+                toast.style.display = 'flex';
+                
+                // Redirect after delay
+                setTimeout(() => {
+                    window.location.href = "{{ route('awak.perjalanan') }}";
+                }, 1500);
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="bi bi-save me-1"></i>Simpan Jadwal';
+        });
     });
 </script>
 @endpush

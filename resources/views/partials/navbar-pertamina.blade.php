@@ -11,10 +11,16 @@
             <ul class="nav-menu">
                 <li><a href="{{ route('dashboard.pertamina') }}" class="nav-link {{ request()->routeIs('dashboard.pertamina') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
                 <li><a href="{{ route('pertamina.monitoring') }}" class="nav-link {{ request()->routeIs('pertamina.monitoring') ? 'active' : '' }}"><i class="bi bi-eye"></i> Monitoring</a></li>
-                <li><a href="{{ route('pertamina.verifikasi') }}" class="nav-link {{ request()->routeIs('pertamina.verifikasi') ? 'active' : '' }}"><i class="bi bi-patch-check"></i> Verifikasi</a></li>
-                <li><a href="{{ route('pertamina.kapal') }}" class="nav-link {{ request()->routeIs('pertamina.kapal') ? 'active' : '' }}"><i class="bi bi-ship"></i> Data Kapal</a></li>
-                <li><a href="{{ route('pertamina.perjalanan') }}" class="nav-link {{ request()->routeIs('pertamina.perjalanan') ? 'active' : '' }}"><i class="bi bi-signpost-split"></i> Perjalanan</a></li>
                 <li><a href="{{ route('pertamina.laporan') }}" class="nav-link {{ request()->routeIs('pertamina.laporan') ? 'active' : '' }}"><i class="bi bi-file-earmark-bar-graph"></i> Laporan</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle {{ request()->routeIs('pertamina.kapal') || request()->routeIs('pertamina.user') ? 'active' : '' }}" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-database-fill-gear"></i> Kelola Data
+                    </a>
+                    <ul class="dropdown-menu profile-dropdown-menu animate slideIn">
+                        <li><a class="dropdown-item" href="{{ route('pertamina.kapal') }}"><i class="bi bi-ship"></i> Data Kapal</a></li>
+                        <li><a class="dropdown-item" href="{{ route('pertamina.user') }}"><i class="bi bi-person-fill-gear"></i> Data User</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
 
@@ -34,7 +40,7 @@
                     <li><a class="dropdown-item" href="{{ route('pertamina.profil') }}"><i class="bi bi-person"></i> Profil</a></li>
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal"><i class="bi bi-gear"></i> Pengaturan</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item logout-link-dropdown" href="{{ route('landing') }}"><i class="bi bi-box-arrow-left"></i> Keluar</a></li>
+                    <li><a class="dropdown-item logout-link-dropdown" href="{{ route('logout') }}"><i class="bi bi-box-arrow-left"></i> Keluar</a></li>
                 </ul>
             </div>
 
