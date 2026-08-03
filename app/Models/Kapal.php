@@ -16,6 +16,7 @@ class Kapal extends Model
         'kode_vessel',
         'nama_kapal',
         'id_perusahaan',
+        'id_ftit',
     ];
 
     protected $appends = ['stok_bbm', 'status'];

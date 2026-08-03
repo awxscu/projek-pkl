@@ -21,9 +21,18 @@
                     <i class="bi bi-plus-circle"></i> Tambah Logbook
                 </a>
             </li>
+            @php
+                $pertaminaNotesCount = \App\Models\DokumenLogbook::where('id_user', auth()->id())
+                    ->whereNotNull('catatan_pertamina')
+                    ->where('catatan_pertamina', '!=', '')
+                    ->count();
+            @endphp
             <li class="nav-item">
-                <a href="{{ route('awak.upload-pdf') }}" class="nav-link {{ request()->routeIs('awak.upload-pdf') ? 'active' : '' }}">
-                    <i class="bi bi-file-earmark-pdf"></i> Upload PDF Logbook
+                <a href="{{ route('awak.upload-pdf') }}" class="nav-link {{ request()->routeIs('awak.upload-pdf') ? 'active' : '' }} d-flex align-items-center justify-content-between">
+                    <span><i class="bi bi-file-earmark-pdf"></i> Upload PDF Logbook</span>
+                    @if($pertaminaNotesCount > 0)
+                        <span class="badge bg-danger ms-1" style="font-size: 0.72rem; padding: 0.2rem 0.45rem; border-radius: 50px;">{{ $pertaminaNotesCount }}</span>
+                    @endif
                 </a>
             </li>
             <li class="nav-item">

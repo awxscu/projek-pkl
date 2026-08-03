@@ -16,6 +16,7 @@ class DokumenLogbook extends Model
         'file_path',
         'nama_file_original',
         'catatan',
+        'catatan_pertamina',
     ];
 
     public function user()

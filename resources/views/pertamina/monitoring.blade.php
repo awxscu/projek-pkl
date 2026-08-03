@@ -30,7 +30,7 @@
         <div class="col-md-2">
             <label class="form-label fw-semibold mb-1" style="font-size: 0.85rem;">Pilih Tahun</label>
             <select class="form-select" name="year" style="height: 38px; font-size: 0.875rem;">
-                @for ($y = 2024; $y <= 2026; $y++)
+                @for ($y = 2024; $y <= (int)date('Y') + 1; $y++)
                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                 @endfor
             </select>
@@ -59,14 +59,12 @@
             <input type="text" class="form-control" name="search_kapal" value="{{ $search_kapal }}" placeholder="Cari nama kapal atau kode vessel..." style="height: 38px; font-size: 0.875rem;">
         </div>
         <div class="col-md-2">
-            <label class="form-label d-block mb-1">&nbsp;</label>
-            <button type="button" onclick="window.location.href='{{ route('pertamina.monitoring') }}'" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500;">
+            <button type="button" onclick="window.location.href='{{ route('pertamina.monitoring') }}'" class="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500; padding-top: 0; padding-bottom: 0;">
                 <i class="bi bi-x-circle"></i> Reset
             </button>
         </div>
         <div class="col-md-2">
-            <label class="form-label d-block mb-1">&nbsp;</label>
-            <button type="submit" class="btn btn-pertamina w-100 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500;">
+            <button type="submit" class="btn btn-pertamina w-100 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500; padding-top: 0; padding-bottom: 0;">
                 <i class="bi bi-search"></i> Filter
             </button>
         </div>
@@ -84,6 +82,7 @@
                     <th>Nama Kapal</th>
                     <th>FT/IT</th>
                     <th>Status Pengisian</th>
+                    <th>Dokumen PDF</th>
                     <th>Hasil Monitoring (Selisih)</th>
                     <th style="width:120px;" class="text-center">Aksi</th>
                 </tr>
@@ -107,6 +106,24 @@
                             @endif
                         </td>
                         <td>
+                            @if ($ship->pdf_document)
+                                @if ($ship->pdf_document->file_path)
+                                    <a href="{{ route('pertamina.dokumen-pdf.download', $ship->pdf_document->id_dokumen) }}" target="_blank" class="btn btn-xs btn-outline-danger d-inline-flex align-items-center gap-1" style="font-size: 0.78rem; padding: 0.25rem 0.5rem; border-radius: 6px;">
+                                        <i class="bi bi-file-earmark-pdf-fill"></i> Lihat PDF
+                                    </a>
+                                @else
+                                    <span class="text-muted small"><i class="bi bi-file-earmark-lock text-secondary me-1"></i>Belum diunggah</span>
+                                @endif
+                                @if ($ship->pdf_document->catatan_pertamina)
+                                    <div class="mt-1 small text-danger fw-semibold" style="font-size: 0.72rem;">
+                                        <i class="bi bi-chat-left-dots"></i> Pertamina: "{{ $ship->pdf_document->catatan_pertamina }}"
+                                    </div>
+                                @endif
+                            @else
+                                <span class="text-muted small">Belum diunggah</span>
+                            @endif
+                        </td>
+                        <td>
                             @if ($ship->logbooks_count > 0)
                                 @if ($ship->total_discrepancy > 0)
                                     <span class="badge bg-danger text-white"><i class="bi bi-exclamation-triangle-fill me-1"></i>Selisih {{ number_format($ship->total_discrepancy) }} L</span>
@@ -118,14 +135,28 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-primary px-3" data-bs-toggle="modal" data-bs-target="#detailShipModal{{ $ship->kode_vessel }}">
-                                <i class="bi bi-eye"></i> Detail
-                            </button>
+                            <div class="d-flex align-items-center justify-content-center gap-1">
+                                <button class="btn btn-sm btn-outline-primary d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#detailShipModal{{ $ship->kode_vessel }}" title="Detail Logbook Harian" style="border-radius: 8px; padding: 0.4rem 0.55rem;">
+                                    <i class="bi bi-eye-fill fs-6"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-success d-inline-flex align-items-center btn-tulis-catatan" 
+                                        data-id-dokumen="{{ $ship->pdf_document->id_dokumen ?? '' }}"
+                                        data-kode-vessel="{{ $ship->kode_vessel }}"
+                                        data-month="{{ $month }}"
+                                        data-year="{{ $year }}"
+                                        data-nama-kapal="{{ $ship->nama_kapal }}"
+                                        data-periode="{{ $months[(int)$month] }} {{ $year }}"
+                                        data-catatan="{{ $ship->pdf_document->catatan_pertamina ?? '' }}"
+                                        title="Tulis Catatan untuk Awak Kapal"
+                                        style="border-radius: 8px; padding: 0.4rem 0.55rem;">
+                                    <i class="bi bi-chat-right-text-fill fs-6"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted">Data kapal tidak ditemukan.</td>
+                        <td colspan="7" class="text-center text-muted">Data kapal tidak ditemukan.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -177,6 +208,7 @@
                                 <th rowspan="3" class="align-middle" style="min-width: 80px; font-size: 0.72rem; border-bottom: 2px solid #ccc;">Tgl</th>
                                 <th colspan="8" class="align-middle bg-primary-subtle text-primary fw-bold" style="font-size: 0.75rem; border-bottom: 2px solid #0057B8;">Logbook Asli / Manual</th>
                                 <th colspan="5" class="align-middle bg-success-subtle text-success fw-bold" style="font-size: 0.75rem; border-bottom: 2px solid #198754;">Logbook Seharusnya (Sistem)</th>
+                                <th rowspan="3" class="align-middle bg-danger-subtle text-danger fw-bold" style="min-width: 85px; font-size: 0.72rem; border-bottom: 2px solid #dc3545;">Selisih</th>
                             </tr>
                             <tr>
                                 <th rowspan="2" class="align-middle" style="min-width: 85px; font-size: 0.7rem;">Sisa Kemarin</th>
@@ -281,11 +313,18 @@
                                         </td>
 
                                         @php
+                                            $row_selisih = abs(($fo->sisa_sekarang ?: 0) - $sys_sisa_sekarang) + abs(($fo->jumlah_sekarang ?: 0) - $sys_jumlah_sekarang);
+                                        @endphp
+                                        <td class="text-end @if($row_selisih > 0) bg-danger-subtle text-danger fw-bold @else bg-success-subtle text-success @endif" style="font-size: 0.72rem;">
+                                            {{ number_format($row_selisih) }} L
+                                        </td>
+
+                                        @php
                                             // Update sys_kemarin for next iterations
                                             $sys_kemarin = $sys_jumlah_sekarang;
                                         @endphp
                                     @else
-                                        <td colspan="13" class="text-center text-muted py-2 bg-light small"><em>Belum mengisi logbook</em></td>
+                                        <td colspan="14" class="text-center text-muted py-2 bg-light small"><em>Belum mengisi logbook</em></td>
                                     @endif
                                 </tr>
                             @endfor
@@ -300,5 +339,145 @@
     </div>
 </div>
 @endforeach
+
+<!-- MODAL TULIS CATATAN -->
+<div class="modal fade" id="tulisCatatanModal" tabindex="-1" aria-labelledby="tulisCatatanModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 20px; overflow: hidden;">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold text-pertamina-blue" id="tulisCatatanModalLabel">
+                    <i class="bi bi-chat-right-text-fill me-2"></i>Kirim Catatan ke Awak Kapal
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="tulisCatatanForm">
+                @csrf
+                <input type="hidden" id="catatan_id_dokumen">
+                <input type="hidden" id="catatan_kode_vessel">
+                <input type="hidden" id="catatan_month">
+                <input type="hidden" id="catatan_year">
+                <div class="modal-body p-4">
+                    <div class="mb-3 border-bottom pb-2">
+                        <small class="text-muted d-block">Kapal</small>
+                        <span class="fw-bold" id="catatan_nama_kapal">-</span>
+                    </div>
+                    <div class="mb-3 border-bottom pb-2">
+                        <small class="text-muted d-block">Periode</small>
+                        <span class="fw-bold" id="catatan_periode">-</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="catatan_pertamina" class="form-label fw-bold">Tulis Catatan / Pesan</label>
+                        <textarea class="form-control" id="catatan_pertamina" rows="4" required placeholder="Tulis catatan revisi, klarifikasi selisih, atau pesan lainnya untuk awak kapal..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light px-4 py-3 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-pertamina px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;">Kirim Catatan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle Tulis Catatan Click
+        document.querySelectorAll('.btn-tulis-catatan').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const idDokumen = this.getAttribute('data-id-dokumen') || '';
+                const kodeVessel = this.getAttribute('data-kode-vessel');
+                const month = this.getAttribute('data-month');
+                const year = this.getAttribute('data-year');
+                const namaKapal = this.getAttribute('data-nama-kapal');
+                const periode = this.getAttribute('data-periode');
+                const catatan = this.getAttribute('data-catatan') || '';
+                
+                document.getElementById('catatan_id_dokumen').value = idDokumen;
+                document.getElementById('catatan_kode_vessel').value = kodeVessel;
+                document.getElementById('catatan_month').value = month;
+                document.getElementById('catatan_year').value = year;
+                document.getElementById('catatan_nama_kapal').textContent = namaKapal;
+                document.getElementById('catatan_periode').textContent = periode;
+                document.getElementById('catatan_pertamina').value = catatan;
+                
+                const myModal = new bootstrap.Modal(document.getElementById('tulisCatatanModal'));
+                myModal.show();
+            });
+        });
+
+        // Form submit
+        const form = document.getElementById('tulisCatatanForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const idDokumen = document.getElementById('catatan_id_dokumen').value;
+            const kodeVessel = document.getElementById('catatan_kode_vessel').value;
+            const month = document.getElementById('catatan_month').value;
+            const year = document.getElementById('catatan_year').value;
+            const catatan = document.getElementById('catatan_pertamina').value;
+            
+            fetch(`{{ route('pertamina.monitoring.catatan') }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    id_dokumen: idDokumen || null,
+                    kode_vessel: kodeVessel,
+                    month: month,
+                    year: year,
+                    catatan_pertamina: catatan
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Hide Modal
+                    const modalEl = document.getElementById('tulisCatatanModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+                    
+                    // Show success toast or message, then reload page to update the notes column
+                    showToast('Catatan berhasil dikirim ke awak kapal!', 'success');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showToast('Gagal mengirim catatan', 'danger');
+                }
+            })
+            .catch(error => {
+                showToast('Terjadi kesalahan koneksi', 'danger');
+            });
+        });
+
+        function showToast(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            const isSuccess = type === 'success';
+            const alertClass = isSuccess ? 'alert-success' : 'alert-danger';
+            const iconClass = isSuccess ? 'bi-check-circle-fill text-success' : 'bi-exclamation-triangle-fill text-danger';
+            const borderStyle = isSuccess ? 'border-left: 5px solid #198754;' : 'border-left: 5px solid #dc3545;';
+
+            alertDiv.className = `alert ${alertClass} alert-dismissible fade show shadow-md`;
+            alertDiv.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 9999; border-radius: 12px; min-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); ${borderStyle}`;
+            alertDiv.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="bi ${iconClass} fs-5 me-2"></i>
+                    <div class="fw-semibold text-dark">${message}</div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alertDiv);
+                bsAlert.close();
+            }, 4000);
+        }
+    });
+</script>
+@endpush
 
 @endsection

@@ -23,6 +23,7 @@
                     <th>Nama Perusahaan</th>
                     <th>FTIT</th>
                     <th>Status</th>
+                    <th style="width: 150px;" class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody id="kapalTableBody">
@@ -30,15 +31,33 @@
                     @php
                         $badgeClass = $k->status === 'Aktif' ? 'badge-filled' : 'badge-pending';
                     @endphp
-                    <tr>
-                        <td><i class="bi bi-ship me-1 text-pertamina-blue"></i> {{ $k->nama_kapal }}</td>
-                        <td>{{ $k->perusahaan->nama_perusahaan ?? '—' }}</td>
-                        <td>{{ $k->ftit->nama_ftit ?? '—' }}</td>
+                    <tr id="vessel-row-{{ $k->kode_vessel }}">
+                        <td>
+                            <i class="bi bi-ship me-1 text-pertamina-blue"></i> 
+                            <span class="vessel-nama">{{ $k->nama_kapal }}</span>
+                            <br><small class="text-muted vessel-kode">{{ $k->kode_vessel }}</small>
+                        </td>
+                        <td class="vessel-perusahaan" data-id-perusahaan="{{ $k->id_perusahaan }}">{{ $k->perusahaan->nama_perusahaan ?? '—' }}</td>
+                        <td class="vessel-ftit" data-id-ftit="{{ $k->id_ftit }}">{{ $k->ftit->nama_ftit ?? '—' }}</td>
                         <td><span class="badge {{ $badgeClass }}">{{ $k->status }}</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-warning btn-edit-kapal me-1" 
+                                    data-kode="{{ $k->kode_vessel }}"
+                                    data-nama="{{ $k->nama_kapal }}"
+                                    data-perusahaan="{{ $k->id_perusahaan }}"
+                                    data-ftit="{{ $k->id_ftit }}">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger btn-delete-kapal" 
+                                    data-kode="{{ $k->kode_vessel }}"
+                                    data-nama="{{ $k->nama_kapal }}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center text-muted">Tidak ada data kapal.</td>
+                        <td colspan="5" class="text-center text-muted">Tidak ada data kapal.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -103,6 +122,69 @@
                 <div class="modal-footer bg-light px-4 py-3 d-flex justify-content-end gap-2">
                     <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-pertamina px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT KAPAL MODAL -->
+<div class="modal fade" id="editKapalModal" tabindex="-1" aria-labelledby="editKapalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius: 20px; overflow: hidden;">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold text-pertamina-blue" id="editKapalModalLabel">
+                    <i class="bi bi-pencil-square me-2"></i>Edit Data Kapal
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editKapalForm">
+                @csrf
+                <div class="modal-body p-4">
+                    <!-- KODE VESSEL (READONLY) -->
+                    <div class="mb-3">
+                        <label for="edit_kode_vessel" class="form-label fw-bold">Kode Vessel</label>
+                        <input type="text" class="form-control bg-light" id="edit_kode_vessel" readonly>
+                    </div>
+
+                    <!-- DROPDOWN NAMA PERUSAHAAN -->
+                    <div class="mb-3">
+                        <label for="edit_id_perusahaan" class="form-label fw-bold">Nama Perusahaan</label>
+                        <select id="edit_id_perusahaan" required style="width: 100%; display: none;">
+                            <option value="">-- Pilih Perusahaan --</option>
+                            @foreach ($companies as $company)
+                                <option value="{{ $company->id_perusahaan }}">{{ $company->nama_perusahaan }}</option>
+                            @endforeach
+                            <option value="lainnya">Lainnya (Tambah Baru)</option>
+                        </select>
+                    </div>
+
+                    <!-- KOTAK ISI MANUAL PERUSAHAAN BARU -->
+                    <div class="mb-3" id="edit_new_company_wrapper" style="display: none;">
+                        <label for="edit_nama_perusahaan_baru" class="form-label fw-bold text-pertamina-blue">Nama Perusahaan Baru</label>
+                        <input type="text" class="form-control" id="edit_nama_perusahaan_baru" placeholder="Masukkan nama perusahaan baru">
+                    </div>
+
+                    <!-- DROPDOWN FTIT -->
+                    <div class="mb-3">
+                        <label for="edit_id_ftit" class="form-label fw-bold">Depot / Terminal FTIT</label>
+                        <select id="edit_id_ftit" class="form-select" required>
+                            <option value="">-- Pilih Depot/Terminal FTIT --</option>
+                            @foreach ($ftits as $ft)
+                                <option value="{{ $ft->id_ftit }}">{{ $ft->nama_ftit }} ({{ $ft->id_ftit }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- NAMA KAPAL (MANUAL) -->
+                    <div class="mb-3">
+                        <label for="edit_nama_kapal" class="form-label fw-bold">Nama Kapal</label>
+                        <input type="text" class="form-control" id="edit_nama_kapal" required placeholder="Contoh: KM Samudera Jaya">
+                    </div>
+                </div>
+                <div class="modal-footer bg-light px-4 py-3 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-pertamina px-4 py-2 fw-semibold" style="font-size: 0.85rem; border-radius: 8px;">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
@@ -233,7 +315,7 @@
                 return;
             }
             
-            fetch('/dashboard/pertamina/kapal/tambah', {
+            fetch('{{ url('/dashboard/pertamina/kapal/tambah') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -269,6 +351,8 @@
                     if (perusahaanId === 'lainnya' && data.data.id_perusahaan) {
                         const newOption = new Option(dynamicCompany, data.data.id_perusahaan, false, false);
                         $('#id_perusahaan').prepend(newOption).trigger('change');
+                        const newOptionEdit = new Option(dynamicCompany, data.data.id_perusahaan, false, false);
+                        $('#edit_id_perusahaan').prepend(newOptionEdit).trigger('change');
                     }
 
                     // Create new row
@@ -280,6 +364,7 @@
                     }
 
                     const tr = document.createElement('tr');
+                    tr.id = `vessel-row-${kode}`;
                     tr.style.opacity = '0';
                     tr.style.transform = 'translateY(10px)';
                     tr.style.transition = 'all 0.4s ease';
@@ -287,10 +372,28 @@
                     const ftitNama = data.data.ftit ? data.data.ftit.nama_ftit : '—';
                     
                     tr.innerHTML = `
-                        <td><i class="bi bi-ship me-1 text-pertamina-blue"></i> ${nama}</td>
-                        <td>${dynamicCompany}</td>
-                        <td>${ftitNama}</td>
+                        <td>
+                            <i class="bi bi-ship me-1 text-pertamina-blue"></i>
+                            <span class="vessel-nama">${nama}</span>
+                            <br><small class="text-muted vessel-kode">${kode}</small>
+                        </td>
+                        <td class="vessel-perusahaan" data-id-perusahaan="${data.data.id_perusahaan}">${dynamicCompany}</td>
+                        <td class="vessel-ftit" data-id-ftit="${idFtit}">${ftitNama}</td>
                         <td><span class="badge badge-filled">Aktif</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-warning btn-edit-kapal me-1" 
+                                    data-kode="${kode}"
+                                    data-nama="${nama}"
+                                    data-perusahaan="${data.data.id_perusahaan}"
+                                    data-ftit="${idFtit}">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger btn-delete-kapal" 
+                                    data-kode="${kode}"
+                                    data-nama="${nama}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
                     `;
                     
                     // Insert at the beginning of the table body
@@ -320,6 +423,183 @@
                 showToast(error.message, 'danger');
             });
         });
+
+        // Initialize Select2 on Edit Modal
+        $('#edit_id_perusahaan').select2({
+            dropdownParent: $('#editKapalModal'),
+            placeholder: '-- Pilih Perusahaan --',
+            allowClear: true
+        });
+
+        $('#edit_id_perusahaan').on('change', function () {
+            if ($(this).val() === 'lainnya') {
+                $('#edit_new_company_wrapper').slideDown();
+                $('#edit_nama_perusahaan_baru').attr('required', true);
+            } else {
+                $('#edit_new_company_wrapper').slideUp();
+                $('#edit_nama_perusahaan_baru').removeAttr('required').val('');
+            }
+        });
+
+        // Handle Edit Click
+        $(document).on('click', '.btn-edit-kapal', function() {
+            const kode = $(this).attr('data-kode');
+            const nama = $(this).attr('data-nama');
+            const perusahaan = $(this).attr('data-perusahaan');
+            const ftit = $(this).attr('data-ftit');
+            
+            $('#edit_kode_vessel').val(kode);
+            $('#edit_nama_kapal').val(nama);
+            $('#edit_id_perusahaan').val(perusahaan).trigger('change');
+            $('#edit_id_ftit').val(ftit);
+            
+            const editModal = new bootstrap.Modal(document.getElementById('editKapalModal'));
+            editModal.show();
+        });
+
+        // Handle Edit Form Submit
+        const editForm = document.getElementById('editKapalForm');
+        editForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            
+            const kode = document.getElementById('edit_kode_vessel').value;
+            const nama = document.getElementById('edit_nama_kapal').value;
+            const perusahaanSelect = document.getElementById('edit_id_perusahaan');
+            const perusahaanId = perusahaanSelect.value;
+            const namaPerusahaanBaru = document.getElementById('edit_nama_perusahaan_baru').value;
+            const idFtit = document.getElementById('edit_id_ftit').value;
+            
+            if (!perusahaanId) {
+                showToast('Nama Perusahaan wajib dipilih!', 'danger');
+                return;
+            }
+            if (perusahaanId === 'lainnya' && !namaPerusahaanBaru.trim()) {
+                showToast('Nama Perusahaan Baru wajib diisi!', 'danger');
+                return;
+            }
+            if (!idFtit) {
+                showToast('Depot / Terminal FTIT wajib dipilih!', 'danger');
+                return;
+            }
+            if (!nama.trim()) {
+                showToast('Nama Kapal wajib diisi!', 'danger');
+                return;
+            }
+            
+            fetch(`{{ url('/dashboard/pertamina/kapal/edit') }}/${kode}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                },
+                body: JSON.stringify({
+                    nama_kapal: nama,
+                    id_perusahaan: perusahaanId,
+                    nama_perusahaan_baru: namaPerusahaanBaru,
+                    id_ftit: idFtit
+                })
+            })
+            .then(response => response.json().then(data => {
+                if (!response.ok) {
+                    let errMsg = 'Gagal mengubah kapal';
+                    if (data.errors) {
+                        errMsg = Object.values(data.errors).flat().join(', ');
+                    } else if (data.message) {
+                        errMsg = data.message;
+                    }
+                    throw new Error(errMsg);
+                }
+                return data;
+            }))
+            .then(data => {
+                if (data.success) {
+                    const dynamicCompany = data.data.perusahaan ? data.data.perusahaan.nama_perusahaan : '';
+                    const ftitNama = data.data.ftit ? data.data.ftit.nama_ftit : '—';
+                    
+                    // Add new company option dynamically to Select2 if it was added manually
+                    if (perusahaanId === 'lainnya' && data.data.id_perusahaan) {
+                        const newOptionEdit = new Option(dynamicCompany, data.data.id_perusahaan, false, false);
+                        $('#edit_id_perusahaan').prepend(newOptionEdit).trigger('change');
+                        const newOptionAdd = new Option(dynamicCompany, data.data.id_perusahaan, false, false);
+                        $('#id_perusahaan').prepend(newOptionAdd).trigger('change');
+                    }
+
+                    // Update Row in table
+                    const row = document.getElementById(`vessel-row-${kode}`);
+                    if (row) {
+                        row.querySelector('.vessel-nama').textContent = nama;
+                        const cellPerusahaan = row.querySelector('.vessel-perusahaan');
+                        cellPerusahaan.textContent = dynamicCompany;
+                        cellPerusahaan.setAttribute('data-id-perusahaan', data.data.id_perusahaan);
+                        
+                        const cellFtit = row.querySelector('.vessel-ftit');
+                        cellFtit.textContent = ftitNama;
+                        cellFtit.setAttribute('data-id-ftit', idFtit);
+
+                        // Update edit buttons data attrs
+                        const editBtn = row.querySelector('.btn-edit-kapal');
+                        editBtn.setAttribute('data-nama', nama);
+                        editBtn.setAttribute('data-perusahaan', data.data.id_perusahaan);
+                        editBtn.setAttribute('data-ftit', idFtit);
+                    }
+                    
+                    // Hide Modal
+                    const modalEl = document.getElementById('editKapalModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+                    
+                    // Reset edit form
+                    editForm.reset();
+                    $('#edit_id_perusahaan').val(null).trigger('change');
+                    
+                    showToast('Data Kapal berhasil diubah!', 'success');
+                }
+            })
+            .catch(error => {
+                showToast(error.message, 'danger');
+            });
+        });
+
+        // Handle Delete Click
+        $(document).on('click', '.btn-delete-kapal', function() {
+            const kode = $(this).attr('data-kode');
+            const nama = $(this).attr('data-nama');
+            
+            if (confirm(`Apakah Anda yakin ingin menghapus kapal "${nama}" (${kode})? Seluruh riwayat logbook terkait kapal ini juga akan terhapus.`)) {
+                fetch(`{{ url('/dashboard/pertamina/kapal/delete') }}/${kode}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const row = document.getElementById(`vessel-row-${kode}`);
+                        if (row) {
+                            row.style.transition = 'all 0.4s ease';
+                            row.style.opacity = '0';
+                            row.style.transform = 'translateY(-10px)';
+                            setTimeout(() => {
+                                row.remove();
+                                // If table body is empty, show empty message
+                                const tbody = document.getElementById('kapalTableBody');
+                                if (tbody.children.length === 0) {
+                                    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Tidak ada data kapal.</td></tr>`;
+                                }
+                            }, 400);
+                        }
+                        showToast('Kapal berhasil dihapus!', 'success');
+                    } else {
+                        showToast('Gagal menghapus kapal', 'danger');
+                    }
+                })
+                .catch(error => {
+                    showToast('Gagal menghubungi server', 'danger');
+                });
+            }
+        });
         
         function showToast(message, type = 'success') {
             const alertDiv = document.createElement('div');
@@ -327,7 +607,7 @@
             const alertClass = isSuccess ? 'alert-success' : 'alert-danger';
             const iconClass = isSuccess ? 'bi-check-circle-fill text-success' : 'bi-exclamation-triangle-fill text-danger';
             const borderStyle = isSuccess ? 'border-left: 5px solid #198754;' : 'border-left: 5px solid #dc3545;';
-
+ 
             alertDiv.className = `alert ${alertClass} alert-dismissible fade show shadow-md`;
             alertDiv.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 9999; border-radius: 12px; min-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); ${borderStyle}`;
             alertDiv.innerHTML = `

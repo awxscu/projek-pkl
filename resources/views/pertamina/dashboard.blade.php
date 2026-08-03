@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="welcome-banner mb-4">
-    <h4 id="welcomeGreetingTitle">Selamat Datang, Pertamina Patra Niaga</h4>
+    <h4 id="welcomeGreetingTitle">Selamat Datang, {{ auth()->user()->nama_user }}</h4>
     <p class="mb-0 mt-2 opacity-90" id="welcomeGreetingSubtitle">Tetap semangat dalam memonitor dan mengoptimalkan energi di setiap lini pelayaran nusantara!</p>
 </div>
 
@@ -70,7 +70,7 @@
                 </div>
                 <div>
                     <select class="form-select form-select-sm filter-c1-year border-primary" style="width: 85px; font-size: 0.72rem; border-radius: 6px;">
-                        @for ($y = 2024; $y <= 2026; $y++)
+                        @for ($y = 2024; $y <= (int)date('Y') + 1; $y++)
                             <option value="{{ $y }}" {{ $c1_year == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
                     </select>
@@ -95,7 +95,7 @@
                         @endforeach
                     </select>
                     <select class="form-select form-select-sm filter-c2-year border-primary" style="width: 85px; font-size: 0.72rem; border-radius: 6px;">
-                        @for ($y = 2024; $y <= 2026; $y++)
+                        @for ($y = 2024; $y <= (int)date('Y') + 1; $y++)
                             <option value="{{ $y }}" {{ $c2_year == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
                     </select>
@@ -122,7 +122,7 @@
                         @endforeach
                     </select>
                     <select class="form-select form-select-sm filter-c3-year border-primary" style="width: 80px; font-size: 0.72rem; border-radius: 6px;">
-                        @for ($y = 2024; $y <= 2026; $y++)
+                        @for ($y = 2024; $y <= (int)date('Y') + 1; $y++)
                             <option value="{{ $y }}" {{ $c3_year == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
                     </select>
@@ -147,7 +147,7 @@
                         @endforeach
                     </select>
                     <select class="form-select form-select-sm filter-c4-year border-primary" style="width: 85px; font-size: 0.72rem; border-radius: 6px;">
-                        @for ($y = 2024; $y <= 2026; $y++)
+                        @for ($y = 2024; $y <= (int)date('Y') + 1; $y++)
                             <option value="{{ $y }}" {{ $c4_year == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
                     </select>

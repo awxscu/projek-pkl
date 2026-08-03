@@ -32,9 +32,18 @@
             </button>
 
             <!-- User Dropdown (Avatar) -->
+            @php
+                $nameParts = explode(' ', auth()->user()->nama_user);
+                $initials = '';
+                if (count($nameParts) >= 2) {
+                    $initials = strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
+                } else {
+                    $initials = strtoupper(substr($nameParts[0], 0, 2));
+                }
+            @endphp
             <div class="dropdown">
                 <button class="user-avatar-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Profil User">
-                    <div class="user-avatar">PN</div>
+                    <div class="user-avatar">{{ $initials }}</div>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu animate slideIn">
                     <li><a class="dropdown-item" href="{{ route('pertamina.profil') }}"><i class="bi bi-person"></i> Profil</a></li>

@@ -54,7 +54,7 @@
             <label class="form-label fw-semibold">Tahun</label>
             <select class="form-select form-select-sm" id="filter_tahun">
                 <option value="">Semua Tahun</option>
-                @for ($y = 2024; $y <= 2026; $y++)
+                @for ($y = 2024; $y <= (int)date('Y') + 1; $y++)
                     <option value="{{ $y }}">{{ $y }}</option>
                 @endfor
             </select>

@@ -44,6 +44,7 @@
                     <th>Nama Kapal</th>
                     <th>Bulan Logbook</th>
                     <th>Catatan</th>
+                    <th>Catatan Pertamina</th>
                     <th>Tanggal Diunggah</th>
                     <th class="text-center">Aksi</th>
                 </tr>
@@ -52,26 +53,43 @@
                 @forelse ($dokumen as $dok)
                     <tr>
                         <td>
-                            <a href="{{ asset($dok->file_path) }}" target="_blank" class="text-pertamina-blue fw-semibold text-decoration-none">
-                                <i class="bi bi-filetype-pdf text-danger fs-5 me-2"></i>{{ $dok->nama_file_original }}
-                            </a>
+                            @if ($dok->file_path)
+                                <a href="{{ asset($dok->file_path) }}" target="_blank" class="text-pertamina-blue fw-semibold text-decoration-none">
+                                    <i class="bi bi-filetype-pdf text-danger fs-5 me-2"></i>{{ $dok->nama_file_original }}
+                                </a>
+                            @else
+                                <span class="text-muted small"><i class="bi bi-file-earmark-lock text-secondary me-2"></i>Belum Unggah PDF</span>
+                            @endif
                         </td>
                         <td><i class="bi bi-ship me-1 text-muted"></i> {{ $dok->kapal->nama_kapal ?? '—' }} ({{ $dok->kode_vessel }})</td>
                         <td><i class="bi bi-calendar3 me-1 text-muted"></i> {{ \Carbon\Carbon::parse($dok->tanggal_logbook)->translatedFormat('F Y') }}</td>
                         <td><span class="text-muted" style="font-size: 0.85rem;">{{ $dok->catatan ?: '—' }}</span></td>
+                        <td>
+                            @if ($dok->catatan_pertamina)
+                                <span class="badge bg-danger-subtle text-danger fw-semibold" style="font-size: 0.82rem; border: 1px solid #f5c2c7; padding: 0.35rem 0.65rem; white-space: normal; text-align: left;">
+                                    <i class="bi bi-chat-left-dots-fill me-1"></i>{{ $dok->catatan_pertamina }}
+                                </span>
+                            @else
+                                <span class="text-muted">—</span>
+                            @endif
+                        </td>
                         <td>{{ $dok->created_at->diffForHumans() }}</td>
                         <td class="text-center">
-                            <form action="{{ route('awak.upload-pdf.delete', $dok->id_dokumen) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus file PDF logbook ini?');" style="display:inline-block;">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-danger btn-xs" title="Hapus Dokumen" style="padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem;">
-                                    <i class="bi bi-trash"></i> Hapus
-                                </button>
-                            </form>
+                            @if ($dok->file_path)
+                                <form action="{{ route('awak.upload-pdf.delete', $dok->id_dokumen) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus file PDF logbook ini?');" style="display:inline-block;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-danger btn-xs" title="Hapus Dokumen" style="padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem;">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </form>
+                            @else
+                                <span class="text-muted small">—</span>
+                            @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted py-4">Belum ada dokumen PDF logbook yang diunggah.</td>
+                        <td colspan="7" class="text-center text-muted py-4">Belum ada dokumen PDF logbook yang diunggah.</td>
                     </tr>
                 @endforelse
             </tbody>

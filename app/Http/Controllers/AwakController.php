@@ -287,20 +287,11 @@ class AwakController extends Controller
             'pdf_file' => 'required|file|mimes:pdf|max:20480',
             'kode_vessel' => 'required|exists:kapal,kode_vessel',
             'bulan_logbook' => 'required|integer|min:1|max:12',
-            'tahun_logbook' => 'required|integer|min:2024|max:2030',
+            'tahun_logbook' => 'required|integer|min:2024|max:' . ((int)date('Y') + 1),
             'catatan' => 'nullable|string',
         ]);
 
         $dateStr = sprintf('%04d-%02d-01', $request->tahun_logbook, $request->bulan_logbook);
-
-        // Check if PDF already exists for this ship and month/year
-        $existing = DokumenLogbook::where('kode_vessel', $request->kode_vessel)
-            ->where('tanggal_logbook', $dateStr)
-            ->exists();
-
-        if ($existing) {
-            return redirect()->back()->withErrors(['pdf_file' => 'Logbook PDF untuk kapal ini pada bulan/tahun tersebut sudah diunggah!']);
-        }
 
         $file = $request->file('pdf_file');
         $originalName = $file->getClientOriginalName();
@@ -314,14 +305,39 @@ class AwakController extends Controller
         $file->move($destPath, $fileName);
         $filePath = 'uploads/pdf_logbooks/' . $fileName;
 
-        DokumenLogbook::create([
-            'id_user' => Auth::id(),
-            'kode_vessel' => $request->kode_vessel,
-            'tanggal_logbook' => $dateStr,
-            'file_path' => $filePath,
-            'nama_file_original' => $originalName,
-            'catatan' => $request->catatan,
-        ]);
+        // Check if a record already exists for this ship and month/year
+        $existing = DokumenLogbook::where('kode_vessel', $request->kode_vessel)
+            ->where('tanggal_logbook', $dateStr)
+            ->first();
+
+        if ($existing) {
+            // Delete the old physical file if it exists
+            if (!empty($existing->file_path)) {
+                $oldFilePath = public_path($existing->file_path);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
+            // Update the existing record and clear the Pertamina note
+            $existing->update([
+                'id_user' => Auth::id(),
+                'file_path' => $filePath,
+                'nama_file_original' => $originalName,
+                'catatan' => $request->catatan,
+                'catatan_pertamina' => null,
+            ]);
+        } else {
+            // Create a new record
+            DokumenLogbook::create([
+                'id_user' => Auth::id(),
+                'kode_vessel' => $request->kode_vessel,
+                'tanggal_logbook' => $dateStr,
+                'file_path' => $filePath,
+                'nama_file_original' => $originalName,
+                'catatan' => $request->catatan,
+            ]);
+        }
 
         return redirect()->back()->with('success', 'File PDF Logbook berhasil diunggah!');
     }

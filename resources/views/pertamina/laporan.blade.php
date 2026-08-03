@@ -14,7 +14,7 @@
         <div class="col-md-1">
             <label class="form-label fw-semibold mb-1" style="font-size: 0.85rem;">Tahun</label>
             <select class="form-select" name="year" style="height: 38px; font-size: 0.875rem;">
-                @for ($y = 2024; $y <= 2026; $y++)
+                @for ($y = 2024; $y <= (int)date('Y') + 1; $y++)
                     <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                 @endfor
             </select>
@@ -51,12 +51,11 @@
             <input type="text" class="form-control" name="search_kapal" value="{{ $search_kapal }}" placeholder="Cari nama kapal..." style="height: 38px; font-size: 0.875rem;">
         </div>
         <div class="col-md-3">
-            <label class="form-label d-block mb-1">&nbsp;</label>
             <div class="d-flex gap-2">
-                <button type="button" onclick="window.location.href='{{ route('pertamina.laporan') }}'" class="btn btn-outline-secondary w-50 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500;">
+                <button type="button" onclick="window.location.href='{{ route('pertamina.laporan') }}'" class="btn btn-outline-secondary w-50 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500; padding-top: 0; padding-bottom: 0;">
                     <i class="bi bi-x-circle"></i> Reset
                 </button>
-                <button type="submit" class="btn btn-pertamina w-50 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500;">
+                <button type="submit" class="btn btn-pertamina w-50 d-flex align-items-center justify-content-center gap-1" style="height: 38px; font-size: 0.875rem; font-weight: 500; padding-top: 0; padding-bottom: 0;">
                     <i class="bi bi-search"></i> Filter
                 </button>
             </div>
@@ -283,6 +282,7 @@
                                 <th rowspan="3" class="align-middle" style="min-width: 80px; font-size: 0.72rem; border-bottom: 2px solid #ccc;">Tgl</th>
                                 <th colspan="8" class="align-middle bg-primary-subtle text-primary fw-bold" style="font-size: 0.75rem; border-bottom: 2px solid #0057B8;">Logbook Asli / Manual</th>
                                 <th colspan="5" class="align-middle bg-success-subtle text-success fw-bold" style="font-size: 0.75rem; border-bottom: 2px solid #198754;">Logbook Seharusnya (Sistem)</th>
+                                <th rowspan="3" class="align-middle bg-danger-subtle text-danger fw-bold" style="min-width: 85px; font-size: 0.72rem; border-bottom: 2px solid #dc3545;">Selisih</th>
                             </tr>
                             <tr>
                                 <th rowspan="2" class="align-middle" style="min-width: 85px; font-size: 0.7rem;">Sisa Kemarin</th>
@@ -371,7 +371,7 @@
             
             if (logs.length === 0) {
                 const periodLabel = month ? 'bulan ini' : 'tahun {{ $year }}';
-                tbody.innerHTML = `<tr><td colspan="14" class="text-center text-muted py-3">Tidak ada data logbook harian untuk kapal ini di ${periodLabel}.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="15" class="text-center text-muted py-3">Tidak ada data logbook harian untuk kapal ini di ${periodLabel}.</td></tr>`;
             } else {
                 logs.forEach(log => {
                     const tr = document.createElement('tr');
@@ -405,6 +405,8 @@
                         <td class="text-end bg-success-subtle ${sysSisaTextClass}" style="font-size: 0.72rem;">${log.sys_sisa_sekarang.toLocaleString('id-ID')} L ${exclamationIconSisa}</td>
                         <td class="text-end bg-success-subtle text-success fw-semibold" style="font-size: 0.72rem;">${log.sys_tambah.toLocaleString('id-ID')} L</td>
                         <td class="text-end bg-success-subtle ${sysJumlahTextClass}" style="font-size: 0.72rem;">${log.sys_jumlah_sekarang.toLocaleString('id-ID')} L ${exclamationIconJumlah}</td>
+                        
+                        <td class="text-end ${log.row_selisih > 0 ? 'bg-danger-subtle text-danger fw-bold' : 'bg-success-subtle text-success'}" style="font-size: 0.72rem;">${log.row_selisih.toLocaleString('id-ID')} L</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -449,12 +451,12 @@
         csv += 'Perusahaan: ' + perusahaan + '\n';
         csv += 'FT/IT: ' + ftit + '\n\n';
         
-        csv += 'Tgl,Logbook Asli / Manual,,,,,,,,Logbook Seharusnya (Sistem),,,,\n';
-        csv += ',Sisa Kemarin,Penggunaan,,,Total Penggunaan,Sisa Sekarang,Ditambah,Jumlah Sekarang,Sisa Kemarin,Total Penggunaan,Sisa Sekarang,Ditambah,Jumlah Sekarang\n';
-        csv += ',,Mesin Induk,Mesin Bantu,Lain-Lain,,,,,,,,\n';
+        csv += 'Tgl,Logbook Asli / Manual,,,,,,,,Logbook Seharusnya (Sistem),,,,,Selisih\n';
+        csv += ',Sisa Kemarin,Penggunaan,,,Total Penggunaan,Sisa Sekarang,Ditambah,Jumlah Sekarang,Sisa Kemarin,Total Penggunaan,Sisa Sekarang,Ditambah,Jumlah Sekarang,Selisih\n';
+        csv += ',,Mesin Induk,Mesin Bantu,Lain-Lain,,,,,,,,,\n';
         
         filteredLogs.forEach(log => {
-            csv += `"${log.tanggal}",${log.manual_kemarin},${log.manual_induk},${log.manual_bantu},${log.manual_lain},${log.manual_total_penggunaan},${log.manual_sekarang},${log.manual_tambah},${log.manual_jumlah},${log.sys_kemarin},${log.sys_total_penggunaan},${log.sys_sisa_sekarang},${log.sys_tambah},${log.sys_jumlah_sekarang}\n`;
+            csv += `"${log.tanggal}",${log.manual_kemarin},${log.manual_induk},${log.manual_bantu},${log.manual_lain},${log.manual_total_penggunaan},${log.manual_sekarang},${log.manual_tambah},${log.manual_jumlah},${log.sys_kemarin},${log.sys_total_penggunaan},${log.sys_sisa_sekarang},${log.sys_tambah},${log.sys_jumlah_sekarang},${log.row_selisih}\n`;
         });
         
         const fileSuffix = month ? `Bulan_${month}` : `Tahun_${ {{ $year }} }`;
@@ -524,6 +526,7 @@
                         <th rowspan="3" class="align-middle">Tgl</th>
                         <th colspan="8" class="bg-primary text-white">Logbook Manual (Kru)</th>
                         <th colspan="5" class="bg-success text-white">Logbook Seharusnya (Sistem)</th>
+                        <th rowspan="3" class="align-middle bg-danger text-white">Selisih</th>
                     </tr>
                     <tr>
                         <th rowspan="2" class="align-middle">Sisa Kemarin</th>
@@ -548,9 +551,10 @@
         `;
         
         if (filteredLogs.length === 0) {
-            html += `<tr><td colspan="14" class="text-center text-muted py-3">Tidak ada data logbook.</td></tr>`;
+            html += `<tr><td colspan="15" class="text-center text-muted py-3">Tidak ada data logbook.</td></tr>`;
         } else {
             filteredLogs.forEach(log => {
+                const cellSelisihClass = log.row_selisih > 0 ? 'bg-danger-subtle fw-bold' : '';
                 html += `
                     <tr>
                         <td>${log.tanggal}</td>
@@ -568,6 +572,8 @@
                         <td class="text-end">${log.sys_sisa_sekarang.toLocaleString('id-ID')} L</td>
                         <td class="text-end">${log.sys_tambah.toLocaleString('id-ID')} L</td>
                         <td class="text-end">${log.sys_jumlah_sekarang.toLocaleString('id-ID')} L</td>
+                        
+                        <td class="text-end ${cellSelisihClass}">${log.row_selisih.toLocaleString('id-ID')} L</td>
                     </tr>
                 `;
             });

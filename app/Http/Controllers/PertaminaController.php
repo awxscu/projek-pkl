@@ -240,6 +240,12 @@ class PertaminaController extends Controller
         foreach ($ships as $ship) {
             $ship->pt_name = $ship->perusahaan->nama_perusahaan ?? 'PT Pelayaran Nasional';
             
+            // Find PDF for this ship, month, and year
+            $dateStr = sprintf('%04d-%02d-01', $year, $month);
+            $ship->pdf_document = DokumenLogbook::where('kode_vessel', $ship->kode_vessel)
+                ->where('tanggal_logbook', $dateStr)
+                ->first();
+            
             $monthlyLog = Logbook::where('kode_vessel', $ship->kode_vessel)
                 ->whereMonth('tanggal_pencatatan', $month)
                 ->whereYear('tanggal_pencatatan', $year)
@@ -433,6 +439,7 @@ class PertaminaController extends Controller
                     $has_discrepancy_kemarin = abs($manual_kemarin - $sys_kemarin) > 0;
                     $has_discrepancy_sisa = abs($manual_sekarang - $sys_sisa_sekarang) > 0;
                     $has_discrepancy_jumlah = abs($manual_jumlah - $sys_jumlah_sekarang) > 0;
+                    $row_selisih = abs($manual_sekarang - $sys_sisa_sekarang) + abs($manual_jumlah - $sys_jumlah_sekarang);
 
                     $logs[] = [
                         'tanggal' => $log->tanggal_pencataan->format('d/m/Y'),
@@ -462,6 +469,7 @@ class PertaminaController extends Controller
                         'has_discrepancy_kemarin' => $has_discrepancy_kemarin,
                         'has_discrepancy_sisa' => $has_discrepancy_sisa,
                         'has_discrepancy_jumlah' => $has_discrepancy_jumlah,
+                        'row_selisih' => $row_selisih,
                     ];
 
                     $sys_kemarin = $sys_jumlah_sekarang; // Update system kemarin for next entry
@@ -666,12 +674,12 @@ class PertaminaController extends Controller
             'nama_user' => 'required|string|max:100',
             'role' => 'required|in:admin,awak_kapal',
             'password' => 'required|string|min:6',
-            'id_perusahaan' => 'required_if:role,admin|nullable|string|max:10',
+            'id_perusahaan' => 'required_if:role,awak_kapal|nullable|string|max:10',
         ];
 
         if ($request->id_perusahaan === 'lainnya') {
             $rules['nama_perusahaan_baru'] = 'required|string|max:100';
-        } elseif ($request->role === 'admin') {
+        } elseif ($request->role === 'awak_kapal') {
             $rules['id_perusahaan'] .= '|exists:perusahaan,id_perusahaan';
         }
 
@@ -686,7 +694,7 @@ class PertaminaController extends Controller
         $lastNum = $lastUser ? (int) substr($lastUser->id_user, 2) : 0;
         $newId = $prefix . sprintf('%03d', $lastNum + 1);
 
-        $idPerusahaan = $validated['role'] === 'admin' ? ($validated['id_perusahaan'] ?? null) : null;
+        $idPerusahaan = $validated['role'] === 'awak_kapal' ? ($validated['id_perusahaan'] ?? null) : null;
 
         if ($idPerusahaan === 'lainnya') {
             $lastCompany = \App\Models\Perusahaan::where('id_perusahaan', 'LIKE', 'P%')
@@ -732,6 +740,228 @@ class PertaminaController extends Controller
             abort(404, 'File logbook PDF tidak ditemukan di server.');
         }
 
-        return response()->download($filePath, $dokumen->nama_file_original);
+        return response()->file($filePath);
+    }
+
+    public function updateKapal(Request $request, $kode_vessel)
+    {
+        $rules = [
+            'nama_kapal' => 'required|string|max:100',
+            'id_perusahaan' => 'required|string|max:10',
+            'id_ftit' => 'required|string|max:50|exists:ftit,id_ftit',
+        ];
+
+        if ($request->id_perusahaan !== 'lainnya') {
+            $rules['id_perusahaan'] .= '|exists:perusahaan,id_perusahaan';
+        } else {
+            $rules['nama_perusahaan_baru'] = 'required|string|max:100';
+        }
+
+        $validated = $request->validate($rules);
+
+        $idPerusahaan = $validated['id_perusahaan'];
+
+        if ($idPerusahaan === 'lainnya') {
+            $lastCompany = \App\Models\Perusahaan::where('id_perusahaan', 'LIKE', 'P%')
+                ->orderBy('id_perusahaan', 'desc')
+                ->first();
+            $lastNum = $lastCompany ? (int) substr($lastCompany->id_perusahaan, 1) : 0;
+            $newCompanyId = 'P' . sprintf('%03d', $lastNum + 1);
+
+            $perusahaan = \App\Models\Perusahaan::create([
+                'id_perusahaan' => $newCompanyId,
+                'nama_perusahaan' => $validated['nama_perusahaan_baru'],
+            ]);
+            $idPerusahaan = $newCompanyId;
+        }
+
+        $kapal = Kapal::findOrFail($kode_vessel);
+        $kapal->update([
+            'nama_kapal' => $validated['nama_kapal'],
+            'id_perusahaan' => $idPerusahaan,
+            'id_ftit' => $validated['id_ftit'],
+        ]);
+
+        $kapal->load(['perusahaan', 'ftit']);
+
+        return response()->json(['success' => true, 'data' => $kapal]);
+    }
+
+    public function deleteKapal($kode_vessel)
+    {
+        $kapal = Kapal::findOrFail($kode_vessel);
+        $perusahaanId = $kapal->id_perusahaan;
+        
+        // Delete related PDF files physically from server and delete record explicitly
+        $documents = DokumenLogbook::where('kode_vessel', $kode_vessel)->get();
+        foreach ($documents as $doc) {
+            if (!empty($doc->file_path)) {
+                $filePath = public_path($doc->file_path);
+                if (file_exists($oldFilePath = $filePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+            $doc->delete();
+        }
+
+        // Cascade delete logbooks and detail pemakaians
+        foreach ($kapal->logbooks as $log) {
+            $log->detailPemakaians()->delete();
+            $log->delete();
+        }
+
+        $kapal->delete();
+
+        // Clean up company if it no longer has any vessels or users associated with it
+        if ($perusahaanId) {
+            $otherShipsCount = Kapal::where('id_perusahaan', $perusahaanId)->count();
+            $usersCount = User::where('id_perusahaan', $perusahaanId)->count();
+            if ($otherShipsCount === 0 && $usersCount === 0) {
+                Perusahaan::where('id_perusahaan', $perusahaanId)->delete();
+            }
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function updateUser(Request $request, $id_user)
+    {
+        $rules = [
+            'nama_user' => 'required|string|max:100',
+            'role' => 'required|in:admin,awak_kapal',
+            'password' => 'nullable|string|min:6',
+            'id_perusahaan' => 'required_if:role,awak_kapal|nullable|string|max:10',
+        ];
+
+        if ($request->id_perusahaan === 'lainnya') {
+            $rules['nama_perusahaan_baru'] = 'required|string|max:100';
+        } elseif ($request->role === 'awak_kapal') {
+            $rules['id_perusahaan'] .= '|exists:perusahaan,id_perusahaan';
+        }
+
+        $validated = $request->validate($rules);
+
+        $idPerusahaan = $validated['role'] === 'awak_kapal' ? ($validated['id_perusahaan'] ?? null) : null;
+
+        if ($idPerusahaan === 'lainnya') {
+            $lastCompany = \App\Models\Perusahaan::where('id_perusahaan', 'LIKE', 'P%')
+                ->orderBy('id_perusahaan', 'desc')
+                ->first();
+            $lastNum = $lastCompany ? (int) substr($lastCompany->id_perusahaan, 1) : 0;
+            $newCompanyId = 'P' . sprintf('%03d', $lastNum + 1);
+
+            $perusahaan = \App\Models\Perusahaan::create([
+                'id_perusahaan' => $newCompanyId,
+                'nama_perusahaan' => $validated['nama_perusahaan_baru'],
+            ]);
+            $idPerusahaan = $newCompanyId;
+        }
+
+        $user = User::findOrFail($id_user);
+        
+        $updateData = [
+            'nama_user' => $validated['nama_user'],
+            'role' => $validated['role'],
+            'id_perusahaan' => $idPerusahaan,
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = bcrypt($validated['password']);
+        }
+
+        $user->update($updateData);
+        $user->load('perusahaan');
+
+        return response()->json(['success' => true, 'data' => $user]);
+    }
+
+    public function deleteUser($id_user)
+    {
+        $user = User::findOrFail($id_user);
+        $perusahaanId = $user->id_perusahaan;
+
+        // Delete related PDF files physically from server and delete record explicitly
+        $documents = DokumenLogbook::where('id_user', $id_user)->get();
+        foreach ($documents as $doc) {
+            if (!empty($doc->file_path)) {
+                $filePath = public_path($doc->file_path);
+                if (file_exists($oldFilePath = $filePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+            $doc->delete();
+        }
+
+        // Delete verifications and logbooks
+        $user->verifications()->delete();
+        foreach ($user->logbooks as $log) {
+            $log->detailPemakaians()->delete();
+            $log->delete();
+        }
+
+        $user->delete();
+
+        // Clean up company if it no longer has any vessels or users associated with it
+        if ($perusahaanId) {
+            $otherShipsCount = Kapal::where('id_perusahaan', $perusahaanId)->count();
+            $usersCount = User::where('id_perusahaan', $perusahaanId)->count();
+            if ($otherShipsCount === 0 && $usersCount === 0) {
+                Perusahaan::where('id_perusahaan', $perusahaanId)->delete();
+            }
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function storeOrUpdateCatatanPdf(Request $request)
+    {
+        $validated = $request->validate([
+            'id_dokumen' => 'nullable|integer',
+            'kode_vessel' => 'required|string|exists:kapal,kode_vessel',
+            'month' => 'required|integer|min:1|max:12',
+            'year' => 'required|integer|min:2024|max:2030',
+            'catatan_pertamina' => 'nullable|string',
+        ]);
+
+        $dateStr = sprintf('%04d-%02d-01', $validated['year'], $validated['month']);
+
+        if (!empty($validated['id_dokumen'])) {
+            $dokumen = DokumenLogbook::findOrFail($validated['id_dokumen']);
+        } else {
+            // Find if there is an existing document for this vessel and period
+            $dokumen = DokumenLogbook::where('kode_vessel', $validated['kode_vessel'])
+                ->where('tanggal_logbook', $dateStr)
+                ->first();
+            
+            if (!$dokumen) {
+                // Find crew user from logbook
+                $latestLog = Logbook::where('kode_vessel', $validated['kode_vessel'])
+                    ->orderBy('tanggal_pencatatan', 'desc')
+                    ->first();
+                $crewUserId = $latestLog ? $latestLog->id_user : null;
+
+                if (!$crewUserId) {
+                    // Fallback to first awak kapal user
+                    $fallbackUser = User::where('role', 'awak_kapal')->first();
+                    $crewUserId = $fallbackUser ? $fallbackUser->id_user : 'AK001';
+                }
+
+                $dokumen = new DokumenLogbook();
+                $dokumen->kode_vessel = $validated['kode_vessel'];
+                $dokumen->tanggal_logbook = $dateStr;
+                $dokumen->id_user = $crewUserId;
+                $dokumen->file_path = ''; // Empty since file is not uploaded yet
+                $dokumen->nama_file_original = ''; // Empty
+            }
+        }
+
+        $dokumen->catatan_pertamina = $validated['catatan_pertamina'];
+        $dokumen->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Catatan berhasil dikirim ke awak kapal.',
+            'data' => $dokumen
+        ]);
     }
 }

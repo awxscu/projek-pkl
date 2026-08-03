@@ -25,6 +25,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Kapal Management
     Route::get('/dashboard/pertamina/kapal', [PertaminaController::class, 'kapal'])->name('pertamina.kapal');
     Route::post('/dashboard/pertamina/kapal/tambah', [PertaminaController::class, 'storeKapal'])->name('pertamina.kapal.store');
+    Route::post('/dashboard/pertamina/kapal/edit/{kode_vessel}', [PertaminaController::class, 'updateKapal'])->name('pertamina.kapal.update');
+    Route::post('/dashboard/pertamina/kapal/delete/{kode_vessel}', [PertaminaController::class, 'deleteKapal'])->name('pertamina.kapal.delete');
 
     // Perusahaan Management
     Route::get('/dashboard/pertamina/perusahaan', [PertaminaController::class, 'perusahaan'])->name('pertamina.perusahaan');
@@ -37,10 +39,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // User Management
     Route::get('/dashboard/pertamina/user', [PertaminaController::class, 'user'])->name('pertamina.user');
     Route::post('/dashboard/pertamina/user/tambah', [PertaminaController::class, 'storeUser'])->name('pertamina.user.store');
+    Route::post('/dashboard/pertamina/user/edit/{id_user}', [PertaminaController::class, 'updateUser'])->name('pertamina.user.update');
+    Route::post('/dashboard/pertamina/user/delete/{id_user}', [PertaminaController::class, 'deleteUser'])->name('pertamina.user.delete');
 
     // PDF Logbook viewing/downloading for Pertamina
     Route::get('/dashboard/pertamina/dokumen-pdf', [PertaminaController::class, 'indexPdf'])->name('pertamina.dokumen-pdf');
     Route::get('/dashboard/pertamina/dokumen-pdf/download/{id}', [PertaminaController::class, 'downloadPdf'])->name('pertamina.dokumen-pdf.download');
+    Route::post('/dashboard/pertamina/monitoring/catatan', [PertaminaController::class, 'storeOrUpdateCatatanPdf'])->name('pertamina.monitoring.catatan');
 });
 
 // Dashboard Awak Kapal Group

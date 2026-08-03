@@ -7,11 +7,24 @@
         </a>
 
         <!-- NAV NAVIGATION MENU (HORIZONTAL) -->
+        @php
+            $pertaminaNotesCount = \App\Models\DokumenLogbook::where('id_user', auth()->id())
+                ->whereNotNull('catatan_pertamina')
+                ->where('catatan_pertamina', '!=', '')
+                ->count();
+        @endphp
         <div class="nav-menu-wrapper d-lg-flex" id="navMenu">
             <ul class="nav-menu">
                 <li><a href="{{ route('dashboard.awak') }}" class="nav-link {{ request()->routeIs('dashboard.awak') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
                 <li><a href="{{ route('logbook.create') }}" class="nav-link {{ request()->routeIs('logbook.create') ? 'active' : '' }}"><i class="bi bi-plus-circle"></i> Tambah Logbook</a></li>
-                <li><a href="{{ route('awak.upload-pdf') }}" class="nav-link {{ request()->routeIs('awak.upload-pdf') ? 'active' : '' }}"><i class="bi bi-file-earmark-pdf"></i> Upload PDF Logbook</a></li>
+                <li>
+                    <a href="{{ route('awak.upload-pdf') }}" class="nav-link {{ request()->routeIs('awak.upload-pdf') ? 'active' : '' }} d-inline-flex align-items-center gap-1">
+                        <i class="bi bi-file-earmark-pdf"></i> Upload PDF Logbook
+                        @if($pertaminaNotesCount > 0)
+                            <span class="badge bg-danger ms-1" style="font-size: 0.72rem; padding: 0.2rem 0.45rem; border-radius: 50px;">{{ $pertaminaNotesCount }}</span>
+                        @endif
+                    </a>
+                </li>
                 <li><a href="{{ route('awak.riwayat') }}" class="nav-link {{ request()->routeIs('awak.riwayat') ? 'active' : '' }}"><i class="bi bi-clock-history"></i> Riwayat Logbook</a></li>
             </ul>
         </div>
@@ -24,9 +37,18 @@
             </button>
 
             <!-- User Dropdown (Avatar) -->
+            @php
+                $nameParts = explode(' ', auth()->user()->nama_user);
+                $initials = '';
+                if (count($nameParts) >= 2) {
+                    $initials = strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
+                } else {
+                    $initials = strtoupper(substr($nameParts[0], 0, 2));
+                }
+            @endphp
             <div class="dropdown">
                 <button class="user-avatar-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Profil User">
-                    <div class="user-avatar">BS</div>
+                    <div class="user-avatar">{{ $initials }}</div>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end profile-dropdown-menu animate slideIn">
                     <li><a class="dropdown-item" href="{{ route('awak.profil') }}"><i class="bi bi-person"></i> Profil</a></li>
