@@ -746,6 +746,7 @@ class PertaminaController extends Controller
     public function updateKapal(Request $request, $kode_vessel)
     {
         $rules = [
+            'kode_vessel' => 'required|string|max:50|unique:kapal,kode_vessel,' . $kode_vessel . ',kode_vessel',
             'nama_kapal' => 'required|string|max:100',
             'id_perusahaan' => 'required|string|max:10',
             'id_ftit' => 'required|string|max:50|exists:ftit,id_ftit',
@@ -776,11 +777,45 @@ class PertaminaController extends Controller
         }
 
         $kapal = Kapal::findOrFail($kode_vessel);
-        $kapal->update([
-            'nama_kapal' => $validated['nama_kapal'],
-            'id_perusahaan' => $idPerusahaan,
-            'id_ftit' => $validated['id_ftit'],
-        ]);
+        $old_kode_vessel = $kapal->kode_vessel;
+        $new_kode_vessel = $validated['kode_vessel'];
+
+        DB::transaction(function() use ($kapal, $old_kode_vessel, $new_kode_vessel, $validated, $idPerusahaan) {
+            if ($old_kode_vessel !== $new_kode_vessel) {
+                if (DB::getDriverName() === 'sqlite') {
+                    DB::statement('PRAGMA foreign_keys = OFF;');
+                } else {
+                    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                }
+
+                // Update related tables: logbook, dokumen_logbook, jadwal_perjalanan
+                DB::table('logbook')->where('kode_vessel', $old_kode_vessel)->update(['kode_vessel' => $new_kode_vessel]);
+                DB::table('dokumen_logbook')->where('kode_vessel', $old_kode_vessel)->update(['kode_vessel' => $new_kode_vessel]);
+                DB::table('jadwal_perjalanan')->where('kode_vessel', $old_kode_vessel)->update(['kode_vessel' => $new_kode_vessel]);
+
+                // Update the kapal table itself
+                DB::table('kapal')->where('kode_vessel', $old_kode_vessel)->update([
+                    'kode_vessel' => $new_kode_vessel,
+                    'nama_kapal' => $validated['nama_kapal'],
+                    'id_perusahaan' => $idPerusahaan,
+                    'id_ftit' => $validated['id_ftit'],
+                ]);
+
+                if (DB::getDriverName() === 'sqlite') {
+                    DB::statement('PRAGMA foreign_keys = ON;');
+                } else {
+                    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                }
+
+                $kapal->kode_vessel = $new_kode_vessel;
+            } else {
+                $kapal->update([
+                    'nama_kapal' => $validated['nama_kapal'],
+                    'id_perusahaan' => $idPerusahaan,
+                    'id_ftit' => $validated['id_ftit'],
+                ]);
+            }
+        });
 
         $kapal->load(['perusahaan', 'ftit']);
 
@@ -827,6 +862,7 @@ class PertaminaController extends Controller
     public function updateUser(Request $request, $id_user)
     {
         $rules = [
+            'id_user' => 'required|string|max:50|unique:user,id_user,' . $id_user . ',id_user',
             'nama_user' => 'required|string|max:100',
             'role' => 'required|in:admin,awak_kapal',
             'password' => 'nullable|string|min:6',
@@ -858,6 +894,8 @@ class PertaminaController extends Controller
         }
 
         $user = User::findOrFail($id_user);
+        $old_id_user = $user->id_user;
+        $new_id_user = $validated['id_user'];
         
         $updateData = [
             'nama_user' => $validated['nama_user'],
@@ -869,7 +907,35 @@ class PertaminaController extends Controller
             $updateData['password'] = bcrypt($validated['password']);
         }
 
-        $user->update($updateData);
+        DB::transaction(function() use ($user, $old_id_user, $new_id_user, $updateData) {
+            if ($old_id_user !== $new_id_user) {
+                if (DB::getDriverName() === 'sqlite') {
+                    DB::statement('PRAGMA foreign_keys = OFF;');
+                } else {
+                    DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                }
+
+                // Update related tables: logbook, dokumen_logbook, verifikasi
+                DB::table('logbook')->where('id_user', $old_id_user)->update(['id_user' => $new_id_user]);
+                DB::table('dokumen_logbook')->where('id_user', $old_id_user)->update(['id_user' => $new_id_user]);
+                DB::table('verifikasi')->where('id_user', $old_id_user)->update(['id_user' => $new_id_user]);
+
+                // Update user table
+                $updateData['id_user'] = $new_id_user;
+                DB::table('user')->where('id_user', $old_id_user)->update($updateData);
+
+                if (DB::getDriverName() === 'sqlite') {
+                    DB::statement('PRAGMA foreign_keys = ON;');
+                } else {
+                    DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                }
+
+                $user->id_user = $new_id_user;
+            } else {
+                $user->update($updateData);
+            }
+        });
+
         $user->load('perusahaan');
 
         return response()->json(['success' => true, 'data' => $user]);

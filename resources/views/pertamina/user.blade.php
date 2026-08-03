@@ -34,7 +34,7 @@
                         $roleLabel = $u->role === 'admin' ? 'Admin' : 'Awak Kapal';
                     @endphp
                     <tr id="user-row-{{ $u->id_user }}">
-                        <td><strong>{{ $u->id_user }}</strong></td>
+                        <td class="user-id-cell"><strong>{{ $u->id_user }}</strong></td>
                         <td><i class="bi bi-person me-2 text-pertamina-blue"></i> <span class="user-nama">{{ $u->nama_user }}</span></td>
                         <td class="user-perusahaan" data-id-perusahaan="{{ $u->id_perusahaan }}">{{ $u->perusahaan->nama_perusahaan ?? '—' }}</td>
                         <td class="user-role-cell"><span class="badge {{ $roleBadge }}">{{ $roleLabel }}</span></td>
@@ -138,10 +138,10 @@
             <form id="editUserForm">
                 @csrf
                 <div class="modal-body p-4">
-                    <!-- ID USER (READONLY) -->
+                    <!-- ID USER -->
                     <div class="mb-3">
                         <label for="edit_id_user" class="form-label fw-bold">ID User</label>
-                        <input type="text" class="form-control bg-light" id="edit_id_user" readonly>
+                        <input type="text" class="form-control" id="edit_id_user" required placeholder="Contoh: AK010">
                     </div>
 
                     <!-- NAMA USER -->
@@ -468,6 +468,8 @@
             }
         });
 
+        let originalUserId = '';
+
         // Handle Edit Click
         $(document).on('click', '.btn-edit-user', function() {
             const id = $(this).attr('data-id');
@@ -475,6 +477,7 @@
             const role = $(this).attr('data-role');
             const perusahaan = $(this).attr('data-perusahaan');
             
+            originalUserId = id;
             $('#edit_id_user').val(id);
             $('#edit_nama_user').val(nama);
             $('#edit_role').val(role).trigger('change');
@@ -501,6 +504,10 @@
             const perusahaanId = document.getElementById('edit_id_perusahaan').value;
             const namaPerusahaanBaru = document.getElementById('edit_nama_perusahaan_baru').value;
             
+            if (!id.trim()) {
+                showToast('ID User wajib diisi!', 'danger');
+                return;
+            }
             if (!nama.trim()) {
                 showToast('Nama User wajib diisi!', 'danger');
                 return;
@@ -522,13 +529,14 @@
                 return;
             }
             
-            fetch(`{{ url('/dashboard/pertamina/user/edit') }}/${id}`, {
+            fetch(`{{ url('/dashboard/pertamina/user/edit') }}/${originalUserId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                 },
                 body: JSON.stringify({
+                    id_user: id,
                     nama_user: nama,
                     role: role,
                     password: password || null,
@@ -560,8 +568,14 @@
                     }
 
                     // Update Row in table
-                    const row = document.getElementById(`user-row-${id}`);
+                    const row = document.getElementById(`user-row-${originalUserId}`);
                     if (row) {
+                        row.id = `user-row-${data.data.id_user}`;
+                        const idCell = row.querySelector('.user-id-cell');
+                        if (idCell) {
+                            idCell.innerHTML = `<strong>${data.data.id_user}</strong>`;
+                        }
+                        
                         row.querySelector('.user-nama').textContent = nama;
                         
                         const cellPerusahaan = row.querySelector('.user-perusahaan');
@@ -574,9 +588,17 @@
 
                         // Update edit buttons data attrs
                         const editBtn = row.querySelector('.btn-edit-user');
+                        editBtn.setAttribute('data-id', data.data.id_user);
                         editBtn.setAttribute('data-nama', nama);
                         editBtn.setAttribute('data-role', role);
                         editBtn.setAttribute('data-perusahaan', data.data.id_perusahaan || '');
+
+                        // Update delete button data attrs
+                        const deleteBtn = row.querySelector('.btn-delete-user');
+                        if (deleteBtn) {
+                            deleteBtn.setAttribute('data-id', data.data.id_user);
+                            deleteBtn.setAttribute('data-nama', nama);
+                        }
                     }
                     
                     // Hide Modal

@@ -141,10 +141,10 @@
             <form id="editKapalForm">
                 @csrf
                 <div class="modal-body p-4">
-                    <!-- KODE VESSEL (READONLY) -->
+                    <!-- KODE VESSEL -->
                     <div class="mb-3">
                         <label for="edit_kode_vessel" class="form-label fw-bold">Kode Vessel</label>
-                        <input type="text" class="form-control bg-light" id="edit_kode_vessel" readonly>
+                        <input type="text" class="form-control" id="edit_kode_vessel" required placeholder="Contoh: VSL-007">
                     </div>
 
                     <!-- DROPDOWN NAMA PERUSAHAAN -->
@@ -441,6 +441,8 @@
             }
         });
 
+        let originalVesselCode = '';
+
         // Handle Edit Click
         $(document).on('click', '.btn-edit-kapal', function() {
             const kode = $(this).attr('data-kode');
@@ -448,6 +450,7 @@
             const perusahaan = $(this).attr('data-perusahaan');
             const ftit = $(this).attr('data-ftit');
             
+            originalVesselCode = kode;
             $('#edit_kode_vessel').val(kode);
             $('#edit_nama_kapal').val(nama);
             $('#edit_id_perusahaan').val(perusahaan).trigger('change');
@@ -469,6 +472,10 @@
             const namaPerusahaanBaru = document.getElementById('edit_nama_perusahaan_baru').value;
             const idFtit = document.getElementById('edit_id_ftit').value;
             
+            if (!kode.trim()) {
+                showToast('Kode Vessel wajib diisi!', 'danger');
+                return;
+            }
             if (!perusahaanId) {
                 showToast('Nama Perusahaan wajib dipilih!', 'danger');
                 return;
@@ -486,13 +493,14 @@
                 return;
             }
             
-            fetch(`{{ url('/dashboard/pertamina/kapal/edit') }}/${kode}`, {
+            fetch(`{{ url('/dashboard/pertamina/kapal/edit') }}/${originalVesselCode}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                 },
                 body: JSON.stringify({
+                    kode_vessel: kode,
                     nama_kapal: nama,
                     id_perusahaan: perusahaanId,
                     nama_perusahaan_baru: namaPerusahaanBaru,
@@ -525,9 +533,12 @@
                     }
 
                     // Update Row in table
-                    const row = document.getElementById(`vessel-row-${kode}`);
+                    const row = document.getElementById(`vessel-row-${originalVesselCode}`);
                     if (row) {
+                        row.id = `vessel-row-${data.data.kode_vessel}`;
                         row.querySelector('.vessel-nama').textContent = nama;
+                        row.querySelector('.vessel-kode').textContent = data.data.kode_vessel;
+                        
                         const cellPerusahaan = row.querySelector('.vessel-perusahaan');
                         cellPerusahaan.textContent = dynamicCompany;
                         cellPerusahaan.setAttribute('data-id-perusahaan', data.data.id_perusahaan);
@@ -538,9 +549,17 @@
 
                         // Update edit buttons data attrs
                         const editBtn = row.querySelector('.btn-edit-kapal');
+                        editBtn.setAttribute('data-kode', data.data.kode_vessel);
                         editBtn.setAttribute('data-nama', nama);
                         editBtn.setAttribute('data-perusahaan', data.data.id_perusahaan);
                         editBtn.setAttribute('data-ftit', idFtit);
+
+                        // Update delete button data attrs
+                        const deleteBtn = row.querySelector('.btn-delete-kapal');
+                        if (deleteBtn) {
+                            deleteBtn.setAttribute('data-kode', data.data.kode_vessel);
+                            deleteBtn.setAttribute('data-nama', nama);
+                        }
                     }
                     
                     // Hide Modal
