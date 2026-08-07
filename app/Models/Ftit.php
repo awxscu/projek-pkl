@@ -21,4 +21,9 @@ class Ftit extends Model
     {
         return $this->hasMany(DetailPemakaian::class, 'id_ftit', 'id_ftit');
     }
+
+    public function kapals()
+    {
+        return $this->belongsToMany(Kapal::class, 'kapal_ftit', 'id_ftit', 'kode_vessel');
+    }
 }

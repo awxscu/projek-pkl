@@ -48,6 +48,11 @@ class Kapal extends Model
         return $this->belongsTo(Ftit::class, 'id_ftit', 'id_ftit');
     }
 
+    public function depots()
+    {
+        return $this->belongsToMany(Ftit::class, 'kapal_ftit', 'kode_vessel', 'id_ftit');
+    }
+
     public function logbooks()
     {
         return $this->hasMany(Logbook::class, 'kode_vessel', 'kode_vessel');

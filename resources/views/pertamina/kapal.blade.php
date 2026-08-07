@@ -38,14 +38,14 @@
                             <br><small class="text-muted vessel-kode">{{ $k->kode_vessel }}</small>
                         </td>
                         <td class="vessel-perusahaan" data-id-perusahaan="{{ $k->id_perusahaan }}">{{ $k->perusahaan->nama_perusahaan ?? '—' }}</td>
-                        <td class="vessel-ftit" data-id-ftit="{{ $k->id_ftit }}">{{ $k->ftit->nama_ftit ?? '—' }}</td>
+                        <td class="vessel-ftit" data-id-ftit="{{ $k->depots->pluck('id_ftit')->implode(',') }}">{{ $k->depots->pluck('nama_ftit')->implode(', ') ?: '—' }}</td>
                         <td><span class="badge {{ $badgeClass }}">{{ $k->status }}</span></td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-outline-warning btn-edit-kapal me-1" 
                                     data-kode="{{ $k->kode_vessel }}"
                                     data-nama="{{ $k->nama_kapal }}"
                                     data-perusahaan="{{ $k->id_perusahaan }}"
-                                    data-ftit="{{ $k->id_ftit }}">
+                                    data-ftit="{{ $k->depots->pluck('id_ftit')->implode(',') }}">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                             <button class="btn btn-sm btn-outline-danger btn-delete-kapal" 
@@ -99,8 +99,7 @@
                     <!-- DROPDOWN FTIT -->
                     <div class="mb-3">
                         <label for="id_ftit" class="form-label fw-bold">Depot / Terminal FTIT</label>
-                        <select id="id_ftit" class="form-select" required>
-                            <option value="">-- Pilih Depot/Terminal FTIT --</option>
+                        <select id="id_ftit" class="form-select" multiple="multiple" required>
                             @foreach ($ftits as $ft)
                                 <option value="{{ $ft->id_ftit }}">{{ $ft->nama_ftit }} ({{ $ft->id_ftit }})</option>
                             @endforeach
@@ -168,8 +167,7 @@
                     <!-- DROPDOWN FTIT -->
                     <div class="mb-3">
                         <label for="edit_id_ftit" class="form-label fw-bold">Depot / Terminal FTIT</label>
-                        <select id="edit_id_ftit" class="form-select" required>
-                            <option value="">-- Pilih Depot/Terminal FTIT --</option>
+                        <select id="edit_id_ftit" class="form-select" multiple="multiple" required>
                             @foreach ($ftits as $ft)
                                 <option value="{{ $ft->id_ftit }}">{{ $ft->nama_ftit }} ({{ $ft->id_ftit }})</option>
                             @endforeach
@@ -269,6 +267,12 @@
             allowClear: true
         });
 
+        $('#id_ftit').select2({
+            dropdownParent: $('#tambahKapalModal'),
+            placeholder: '-- Pilih Depot/Terminal FTIT --',
+            allowClear: true
+        });
+
         // Show/hide manual company name field based on choice
         $('#id_perusahaan').on('change', function () {
             if ($(this).val() === 'lainnya') {
@@ -291,7 +295,7 @@
             const perusahaanSelect = document.getElementById('id_perusahaan');
             const perusahaanId = perusahaanSelect.value;
             const namaPerusahaanBaru = document.getElementById('nama_perusahaan_baru').value;
-            const idFtit = document.getElementById('id_ftit').value;
+            const idFtit = $('#id_ftit').val();
             
             // Strict Validation
             if (!perusahaanId) {
@@ -302,7 +306,7 @@
                 showToast('Nama Perusahaan Baru wajib diisi!', 'danger');
                 return;
             }
-            if (!idFtit) {
+            if (!idFtit || idFtit.length === 0) {
                 showToast('Depot / Terminal FTIT wajib dipilih!', 'danger');
                 return;
             }
@@ -319,6 +323,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                 },
                 body: JSON.stringify({
@@ -369,7 +374,12 @@
                     tr.style.transform = 'translateY(10px)';
                     tr.style.transition = 'all 0.4s ease';
                     
-                    const ftitNama = data.data.ftit ? data.data.ftit.nama_ftit : '—';
+                    let ftitNama = '—';
+                    let ftitIds = '';
+                    if (data.data.depots && data.data.depots.length > 0) {
+                        ftitNama = data.data.depots.map(d => d.nama_ftit).join(', ');
+                        ftitIds = data.data.depots.map(d => d.id_ftit).join(',');
+                    }
                     
                     tr.innerHTML = `
                         <td>
@@ -378,14 +388,14 @@
                             <br><small class="text-muted vessel-kode">${kode}</small>
                         </td>
                         <td class="vessel-perusahaan" data-id-perusahaan="${data.data.id_perusahaan}">${dynamicCompany}</td>
-                        <td class="vessel-ftit" data-id-ftit="${idFtit}">${ftitNama}</td>
+                        <td class="vessel-ftit" data-id-ftit="${ftitIds}">${ftitNama}</td>
                         <td><span class="badge badge-filled">Aktif</span></td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-outline-warning btn-edit-kapal me-1" 
                                     data-kode="${kode}"
                                     data-nama="${nama}"
                                     data-perusahaan="${data.data.id_perusahaan}"
-                                    data-ftit="${idFtit}">
+                                    data-ftit="${ftitIds}">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                             <button class="btn btn-sm btn-outline-danger btn-delete-kapal" 
@@ -407,7 +417,7 @@
                     // Reset form and Select2
                     form.reset();
                     $('#id_perusahaan').val(null).trigger('change');
-                    $('#id_ftit').val('');
+                    $('#id_ftit').val(null).trigger('change');
                     
                     // Trigger animation
                     setTimeout(() => {
@@ -428,6 +438,12 @@
         $('#edit_id_perusahaan').select2({
             dropdownParent: $('#editKapalModal'),
             placeholder: '-- Pilih Perusahaan --',
+            allowClear: true
+        });
+
+        $('#edit_id_ftit').select2({
+            dropdownParent: $('#editKapalModal'),
+            placeholder: '-- Pilih Depot/Terminal FTIT --',
             allowClear: true
         });
 
@@ -454,7 +470,12 @@
             $('#edit_kode_vessel').val(kode);
             $('#edit_nama_kapal').val(nama);
             $('#edit_id_perusahaan').val(perusahaan).trigger('change');
-            $('#edit_id_ftit').val(ftit);
+            
+            if (ftit) {
+                $('#edit_id_ftit').val(ftit.split(',')).trigger('change');
+            } else {
+                $('#edit_id_ftit').val(null).trigger('change');
+            }
             
             const editModal = new bootstrap.Modal(document.getElementById('editKapalModal'));
             editModal.show();
@@ -470,7 +491,7 @@
             const perusahaanSelect = document.getElementById('edit_id_perusahaan');
             const perusahaanId = perusahaanSelect.value;
             const namaPerusahaanBaru = document.getElementById('edit_nama_perusahaan_baru').value;
-            const idFtit = document.getElementById('edit_id_ftit').value;
+            const idFtit = $('#edit_id_ftit').val();
             
             if (!kode.trim()) {
                 showToast('Kode Vessel wajib diisi!', 'danger');
@@ -484,7 +505,7 @@
                 showToast('Nama Perusahaan Baru wajib diisi!', 'danger');
                 return;
             }
-            if (!idFtit) {
+            if (!idFtit || idFtit.length === 0) {
                 showToast('Depot / Terminal FTIT wajib dipilih!', 'danger');
                 return;
             }
@@ -497,6 +518,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                 },
                 body: JSON.stringify({
@@ -521,8 +543,12 @@
             }))
             .then(data => {
                 if (data.success) {
-                    const dynamicCompany = data.data.perusahaan ? data.data.perusahaan.nama_perusahaan : '';
-                    const ftitNama = data.data.ftit ? data.data.ftit.nama_ftit : '—';
+                    let ftitNama = '—';
+                    let ftitIds = '';
+                    if (data.data.depots && data.data.depots.length > 0) {
+                        ftitNama = data.data.depots.map(d => d.nama_ftit).join(', ');
+                        ftitIds = data.data.depots.map(d => d.id_ftit).join(',');
+                    }
                     
                     // Add new company option dynamically to Select2 if it was added manually
                     if (perusahaanId === 'lainnya' && data.data.id_perusahaan) {
@@ -545,14 +571,14 @@
                         
                         const cellFtit = row.querySelector('.vessel-ftit');
                         cellFtit.textContent = ftitNama;
-                        cellFtit.setAttribute('data-id-ftit', idFtit);
+                        cellFtit.setAttribute('data-id-ftit', ftitIds);
 
                         // Update edit buttons data attrs
                         const editBtn = row.querySelector('.btn-edit-kapal');
                         editBtn.setAttribute('data-kode', data.data.kode_vessel);
                         editBtn.setAttribute('data-nama', nama);
                         editBtn.setAttribute('data-perusahaan', data.data.id_perusahaan);
-                        editBtn.setAttribute('data-ftit', idFtit);
+                        editBtn.setAttribute('data-ftit', ftitIds);
 
                         // Update delete button data attrs
                         const deleteBtn = row.querySelector('.btn-delete-kapal');
@@ -589,6 +615,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
                     }
                 })

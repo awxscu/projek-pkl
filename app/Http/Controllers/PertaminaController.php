@@ -67,7 +67,7 @@ class PertaminaController extends Controller
             'VSL-008' => 'Depot Kalabahi',
         ];
 
-        $ships = Kapal::with(['perusahaan'])->get();
+        $ships = Kapal::with(['perusahaan', 'ftit', 'depots'])->get();
         $vesselCodes = $ships->pluck('kode_vessel')->toArray();
         $kapalSelisihCount = 0;
 
@@ -80,7 +80,9 @@ class PertaminaController extends Controller
                 ->orderBy('tanggal_pencatatan', 'desc')
                 ->first();
             $monthlyDetail = $monthlyLog ? $monthlyLog->detailPemakaians()->first() : null;
-            if ($monthlyDetail && $monthlyDetail->ftit) {
+            if ($ship->depots && $ship->depots->isNotEmpty()) {
+                $ship->depot_name = $ship->depots->pluck('nama_ftit')->implode(', ');
+            } elseif ($monthlyDetail && $monthlyDetail->ftit) {
                 $ship->depot_name = $monthlyDetail->ftit->nama_ftit;
             } else {
                 $latestLog = $ship->logbooks()->orderBy('tanggal_pencatatan', 'desc')->first();
@@ -215,11 +217,11 @@ class PertaminaController extends Controller
         $depots = \App\Models\Ftit::orderBy('nama_ftit', 'asc')->get();
         $companies = \App\Models\Perusahaan::orderBy('nama_perusahaan', 'asc')->get();
 
-        $query = Kapal::with(['perusahaan']);
+        $query = Kapal::with(['perusahaan', 'ftit', 'depots']);
         
         if ($ft_it) {
-            $query->whereHas('logbooks.detailPemakaians', function($q) use ($ft_it) {
-                $q->where('id_ftit', $ft_it);
+            $query->whereHas('depots', function($q) use ($ft_it) {
+                $q->where('ftit.id_ftit', $ft_it);
             });
         }
 
@@ -252,7 +254,9 @@ class PertaminaController extends Controller
                 ->orderBy('tanggal_pencatatan', 'desc')
                 ->first();
             $monthlyDetail = $monthlyLog ? $monthlyLog->detailPemakaians()->first() : null;
-            if ($monthlyDetail && $monthlyDetail->ftit) {
+            if ($ship->depots && $ship->depots->isNotEmpty()) {
+                $ship->depot_name = $ship->depots->pluck('nama_ftit')->implode(', ');
+            } elseif ($monthlyDetail && $monthlyDetail->ftit) {
                 $ship->depot_name = $monthlyDetail->ftit->nama_ftit;
             } else {
                 $latestLog = $ship->logbooks()->orderBy('tanggal_pencatatan', 'desc')->first();
@@ -352,7 +356,7 @@ class PertaminaController extends Controller
             'VSL-008' => 'Depot Kalabahi',
         ];
 
-        $query = Kapal::with(['perusahaan', 'ftit']);
+        $query = Kapal::with(['perusahaan', 'ftit', 'depots']);
 
         if ($id_perusahaan) {
             $query->where('id_perusahaan', $id_perusahaan);
@@ -366,7 +370,9 @@ class PertaminaController extends Controller
         }
 
         if ($ft_it) {
-            $query->where('id_ftit', $ft_it);
+            $query->whereHas('depots', function($q) use ($ft_it) {
+                $q->where('ftit.id_ftit', $ft_it);
+            });
         }
 
         $ships = $query->get();
@@ -386,7 +392,9 @@ class PertaminaController extends Controller
                 ->orderBy('tanggal_pencatatan', 'desc')
                 ->first();
             $monthlyDetail = $monthlyLog ? $monthlyLog->detailPemakaians()->first() : null;
-            if ($monthlyDetail && $monthlyDetail->ftit) {
+            if ($ship->depots && $ship->depots->isNotEmpty()) {
+                $ship->depot_name = $ship->depots->pluck('nama_ftit')->implode(', ');
+            } elseif ($monthlyDetail && $monthlyDetail->ftit) {
                 $ship->depot_name = $monthlyDetail->ftit->nama_ftit;
             } else {
                 $latestLog = $ship->logbooks()->orderBy('tanggal_pencatatan', 'desc')->first();
@@ -563,7 +571,7 @@ class PertaminaController extends Controller
 
     public function kapal()
     {
-        $kapal = Kapal::with('ftit')->orderBy('kode_vessel', 'desc')->get();
+        $kapal = Kapal::with(['ftit', 'depots'])->orderBy('kode_vessel', 'desc')->get();
         $companies = \App\Models\Perusahaan::orderBy('nama_perusahaan', 'asc')->get();
         $ftits = \App\Models\Ftit::orderBy('nama_ftit', 'asc')->get();
         return view('pertamina.kapal', compact('kapal', 'companies', 'ftits'));
@@ -575,7 +583,8 @@ class PertaminaController extends Controller
             'kode_vessel' => 'required|string|max:50|unique:kapal,kode_vessel',
             'nama_kapal' => 'required|string|max:100',
             'id_perusahaan' => 'required|string|max:10',
-            'id_ftit' => 'required|string|max:50|exists:ftit,id_ftit',
+            'id_ftit' => 'required|array',
+            'id_ftit.*' => 'string|exists:ftit,id_ftit',
         ];
 
         if ($request->id_perusahaan !== 'lainnya') {
@@ -606,10 +615,12 @@ class PertaminaController extends Controller
             'kode_vessel' => $validated['kode_vessel'],
             'nama_kapal' => $validated['nama_kapal'],
             'id_perusahaan' => $idPerusahaan,
-            'id_ftit' => $validated['id_ftit'],
+            'id_ftit' => $validated['id_ftit'][0] ?? null,
         ]);
 
-        $kapal->load(['perusahaan', 'ftit']);
+        $kapal->depots()->sync($validated['id_ftit']);
+
+        $kapal->load(['perusahaan', 'ftit', 'depots']);
 
         return response()->json(['success' => true, 'data' => $kapal]);
     }
@@ -749,7 +760,8 @@ class PertaminaController extends Controller
             'kode_vessel' => 'required|string|max:50|unique:kapal,kode_vessel,' . $kode_vessel . ',kode_vessel',
             'nama_kapal' => 'required|string|max:100',
             'id_perusahaan' => 'required|string|max:10',
-            'id_ftit' => 'required|string|max:50|exists:ftit,id_ftit',
+            'id_ftit' => 'required|array',
+            'id_ftit.*' => 'string|exists:ftit,id_ftit',
         ];
 
         if ($request->id_perusahaan !== 'lainnya') {
@@ -791,14 +803,16 @@ class PertaminaController extends Controller
                 // Update related tables: logbook, dokumen_logbook, jadwal_perjalanan
                 DB::table('logbook')->where('kode_vessel', $old_kode_vessel)->update(['kode_vessel' => $new_kode_vessel]);
                 DB::table('dokumen_logbook')->where('kode_vessel', $old_kode_vessel)->update(['kode_vessel' => $new_kode_vessel]);
-                DB::table('jadwal_perjalanan')->where('kode_vessel', $old_kode_vessel)->update(['kode_vessel' => $new_kode_vessel]);
+                if (\Illuminate\Support\Facades\Schema::hasTable('jadwal_perjalanan')) {
+                    DB::table('jadwal_perjalanan')->where('kode_vessel', $old_kode_vessel)->update(['kode_vessel' => $new_kode_vessel]);
+                }
 
                 // Update the kapal table itself
                 DB::table('kapal')->where('kode_vessel', $old_kode_vessel)->update([
                     'kode_vessel' => $new_kode_vessel,
                     'nama_kapal' => $validated['nama_kapal'],
                     'id_perusahaan' => $idPerusahaan,
-                    'id_ftit' => $validated['id_ftit'],
+                    'id_ftit' => $validated['id_ftit'][0] ?? null,
                 ]);
 
                 if (DB::getDriverName() === 'sqlite') {
@@ -812,12 +826,15 @@ class PertaminaController extends Controller
                 $kapal->update([
                     'nama_kapal' => $validated['nama_kapal'],
                     'id_perusahaan' => $idPerusahaan,
-                    'id_ftit' => $validated['id_ftit'],
+                    'id_ftit' => $validated['id_ftit'][0] ?? null,
                 ]);
             }
+
+            // Sync depots
+            $kapal->depots()->sync($validated['id_ftit']);
         });
 
-        $kapal->load(['perusahaan', 'ftit']);
+        $kapal->load(['perusahaan', 'ftit', 'depots']);
 
         return response()->json(['success' => true, 'data' => $kapal]);
     }
@@ -918,7 +935,9 @@ class PertaminaController extends Controller
                 // Update related tables: logbook, dokumen_logbook, verifikasi
                 DB::table('logbook')->where('id_user', $old_id_user)->update(['id_user' => $new_id_user]);
                 DB::table('dokumen_logbook')->where('id_user', $old_id_user)->update(['id_user' => $new_id_user]);
-                DB::table('verifikasi')->where('id_user', $old_id_user)->update(['id_user' => $new_id_user]);
+                if (\Illuminate\Support\Facades\Schema::hasTable('verifikasi')) {
+                    DB::table('verifikasi')->where('id_user', $old_id_user)->update(['id_user' => $new_id_user]);
+                }
 
                 // Update user table
                 $updateData['id_user'] = $new_id_user;
@@ -959,7 +978,9 @@ class PertaminaController extends Controller
         }
 
         // Delete verifications and logbooks
-        $user->verifications()->delete();
+        if (\Illuminate\Support\Facades\Schema::hasTable('verifikasi')) {
+            $user->verifications()->delete();
+        }
         foreach ($user->logbooks as $log) {
             $log->detailPemakaians()->delete();
             $log->delete();
